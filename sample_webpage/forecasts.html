@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather Forecasts - Weather AI Platform</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://earthengine.googleapis.com/v1/earthengine_api.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f8fffe;
+            color: #1f2d3d;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #d4edda;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(40, 167, 69, 0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #155724;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: "🌱";
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: #495057;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #155724;
+            background-color: #d4edda;
+        }
+
+        .nav-link::before {
+            content: attr(data-number);
+            background: #28a745;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-right: 8px;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .hero-section {
+            padding: 4rem 0;
+            text-align: center;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 50%, #17a2b8 100%);
+            color: white;
+            margin-bottom: 4rem;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            font-weight: 400;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(40, 167, 69, 0.1);
+            border: 1px solid #d4edda;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #155724;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #d4edda;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #495057;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-input,
+        .form-select {
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            background-color: #ffffff;
+            color: #1f2d3d;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #28a745;
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #218838;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #138496;
+            transform: translateY(-1px);
+        }
+
+        .btn-tertiary {
+            background-color: #20c997;
+            color: white;
+        }
+
+        .btn-tertiary:hover {
+            background-color: #1ea888;
+            transform: translateY(-1px);
+        }
+
+        .forecast-display {
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .map-container {
+            background: white;
+            border: 1px solid #d4edda;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        #forecastMap {
+            height: 400px;
+            border-radius: 6px;
+            background: #f8fffe;
+        }
+
+        .forecast-panel {
+            background: #f8fffe;
+            border: 1px solid #d4edda;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .weather-card {
+            background: white;
+            border: 1px solid #d4edda;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .weather-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.15);
+        }
+
+        .weather-date {
+            font-weight: 600;
+            color: #155724;
+            margin-bottom: 0.5rem;
+        }
+
+        .weather-temp {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #28a745;
+            margin-bottom: 0.5rem;
+        }
+
+        .weather-conditions {
+            color: #495057;
+            font-size: 0.9rem;
+        }
+
+        .agricultural-alerts {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .alert-title {
+            font-weight: 600;
+            color: #856404;
+            margin-bottom: 0.5rem;
+        }
+
+        .alert-content {
+            color: #856404;
+            font-size: 0.9rem;
+        }
+
+        .chart-container {
+            background: white;
+            border: 1px solid #d4edda;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            height: 400px;
+        }
+
+        .page-link {
+            color: #28a745;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+            border: 1px solid #28a745;
+            display: inline-block;
+            margin: 0.25rem;
+        }
+
+        .page-link:hover {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .footer {
+            background: #155724;
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #b8daff;
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 0 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .main-container {
+                padding: 0 1rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .forecast-display {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">Weather AI Platform</div>
+            <nav class="nav-links">
+                <a href="evaluation.html" class="nav-link" data-number="1">Evaluate & Compare Models</a>
+                <a href="tuning.html" class="nav-link" data-number="2">Tune with Local Data</a>
+                <a href="forecasts.html" class="nav-link active" data-number="3">Generate Forecasts</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <div class="main-container">
+            <h1 class="hero-title">Agricultural Weather Forecasts</h1>
+            <p class="hero-subtitle">
+                AI-powered weather forecasts tailored for agricultural decisions. 
+                Get precise, location-specific predictions for optimal farming operations.
+            </p>
+        </div>
+    </section>
+
+    <main class="main-container">
+        <!-- Quick Navigation Section -->
+        <div class="section">
+            <h2 class="section-title">Navigation</h2>
+            <p style="margin-bottom: 1rem; color: #495057;">Access other sections of the platform:</p>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a href="index.html" class="page-link">🏠 Go to Home</a>
+                <a href="evaluation.html" class="page-link">📊 Go to Model Evaluation & Comparison</a>
+                <a href="tuning.html" class="page-link">🔧 Go to Model Tuning</a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Forecast Configuration</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label" for="forecast-region">Forecast Region</label>
+                    <select class="form-select" id="forecast-region">
+                        <option value="">Select forecast region...</option>
+                        <option value="ethiopia">🇪🇹 Ethiopia</option>
+                        <option value="kenya">🇰🇪 Kenya</option>
+                        <option value="nigeria">🇳🇬 Nigeria</option>
+                        <option value="bangladesh">🇧🇩 Bangladesh</option>
+                        <option value="chile">🇨🇱 Chile</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="forecast-model">AI Forecast Model</label>
+                    <select class="form-select" id="forecast-model">
+                        <option value="tuned-local">Locally Tuned Model</option>
+                        <option value="graphcast">GraphCast</option>
+                        <option value="pangu">Pangu-Weather</option>
+                        <option value="ensemble">Ensemble Model</option>
+                        <option value="hybrid">Hybrid AI-Physics</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="forecast-range">Forecast Lead Time</label>
+                    <select class="form-select" id="forecast-range">
+                        <option value="3-7-day">3-7 Day Detailed</option>
+                        <option value="7-14-day">7-14 Day Outlook</option>
+                        <option value="subseasonal">Subseasonal Forecast</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="variable-alert">Variable Alert</label>
+                    <select class="form-select" id="variable-alert">
+                        <option value="">Select variable to monitor...</option>
+                        <option value="precipitation">Precipitation Extremes</option>
+                        <option value="temperature">Temperature Extremes</option>
+                        <option value="drought">Drought Conditions</option>
+                        <option value="humidity">High Humidity</option>
+                        <option value="wind">Strong Winds</option>
+                        <option value="combined">Combined Variables</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="forecast-start">Start Date</label>
+                    <input type="date" class="form-input" id="forecast-start">
+                </div>
+            </div>
+
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <button class="btn btn-primary" onclick="generateForecast()" style="margin-right: 1rem;">Generate Forecast</button>
+                <button class="btn btn-secondary" onclick="downloadForecast()">Download Report</button>
+            </div>
+        </div>
+
+        <div class="section" id="forecast-results" style="display: none;">
+            <h2 class="section-title">Agricultural Weather Forecast</h2>
+            
+            <div class="forecast-display">
+                <div class="map-container">
+                    <h3 style="color: #155724; margin-bottom: 1rem; font-weight: 600;">Regional Forecast Map</h3>
+                    <div id="forecastMap"></div>
+                </div>
+                
+                <div class="forecast-panel">
+                    <h3 style="color: #155724; margin-bottom: 1rem; font-weight: 600;">7-Day Outlook</h3>
+                    <div id="weather-cards">
+                        <!-- Weather cards will be populated here -->
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="forecastChart"></canvas>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <h3 class="footer-title">Agricultural Weather Intelligence</h3>
+            <p style="color: #c3e6cb;">
+                Precision weather forecasts for agricultural decision-making. 
+                Supporting sustainable farming through AI-powered weather intelligence.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        function generateForecast() {
+            const region = document.getElementById('forecast-region').value;
+            const model = document.getElementById('forecast-model').value;
+            const range = document.getElementById('forecast-range').value;
+            
+            if (!region) {
+                alert('Please select a forecast region to generate forecasts.');
+                return;
+            }
+
+            // Show results section
+            document.getElementById('forecast-results').style.display = 'block';
+            document.getElementById('forecast-results').scrollIntoView({ behavior: 'smooth' });
+            
+            // Generate forecast data
+            generateWeatherCards();
+            initializeForecastMap();
+            initializeForecastChart();
+        }
+
+        function generateWeatherCards() {
+            const weatherCards = document.getElementById('weather-cards');
+            const days = ['Today', 'Tomorrow', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+            const conditions = ['Sunny', 'Partly Cloudy', 'Cloudy', 'Light Rain', 'Sunny', 'Partly Cloudy', 'Thunderstorms'];
+            
+            let html = '';
+            for (let i = 0; i < 7; i++) {
+                const temp = Math.floor(Math.random() * 20) + 75;
+                const humidity = Math.floor(Math.random() * 30) + 50;
+                const precipitation = Math.random() * 0.5;
+                
+                html += `
+                    <div class="weather-card">
+                        <div class="weather-date">${days[i]}</div>
+                        <div class="weather-temp">${temp}°F</div>
+                        <div class="weather-conditions">
+                            ${conditions[i]}<br>
+                            Humidity: ${humidity}%<br>
+                            Precipitation: ${precipitation.toFixed(2)}"
+                        </div>
+                    </div>
+                `;
+            }
+            
+            weatherCards.innerHTML = html;
+        }
+
+        function initializeForecastMap() {
+            const mapDiv = document.getElementById('forecastMap');
+            mapDiv.innerHTML = `
+                <div style="height: 100%; background: linear-gradient(135deg, #d4edda, #b8daff); display: flex; align-items: center; justify-content: center; border-radius: 6px; color: #155724;">
+                    <div style="text-align: center;">
+                        🌦️<br>
+                        Interactive Forecast Map<br>
+                        <small>(Precipitation and temperature overlay would display here)</small>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initializeForecastChart() {
+            const ctx = document.getElementById('forecastChart').getContext('2d');
+            
+            // Generate sample forecast data
+            const dates = [];
+            const temperatures = [];
+            const precipitation = [];
+            
+            for (let i = 0; i < 7; i++) {
+                const date = new Date();
+                date.setDate(date.getDate() + i);
+                dates.push(date.toLocaleDateString());
+                temperatures.push(Math.floor(Math.random() * 20) + 70);
+                precipitation.push(Math.random() * 2);
+            }
+            
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: dates,
+                    datasets: [{
+                        label: 'Temperature (°F)',
+                        data: temperatures,
+                        borderColor: '#28a745',
+                        backgroundColor: 'rgba(40, 167, 69, 0.1)',
+                        yAxisID: 'y',
+                        tension: 0.4
+                    }, {
+                        label: 'Precipitation (inches)',
+                        data: precipitation,
+                        borderColor: '#17a2b8',
+                        backgroundColor: 'rgba(23, 162, 184, 0.1)',
+                        yAxisID: 'y1',
+                        type: 'bar'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#495057'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#495057'
+                            },
+                            grid: {
+                                color: 'rgba(73, 80, 87, 0.1)'
+                            }
+                        },
+                        y: {
+                            type: 'linear',
+                            display: true,
+                            position: 'left',
+                            ticks: {
+                                color: '#495057'
+                            },
+                            grid: {
+                                color: 'rgba(73, 80, 87, 0.1)'
+                            },
+                            title: {
+                                display: true,
+                                text: 'Temperature (°F)',
+                                color: '#495057'
+                            }
+                        },
+                        y1: {
+                            type: 'linear',
+                            display: true,
+                            position: 'right',
+                            ticks: {
+                                color: '#495057'
+                            },
+                            grid: {
+                                drawOnChartArea: false,
+                            },
+                            title: {
+                                display: true,
+                                text: 'Precipitation (inches)',
+                                color: '#495057'
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function setLocation(coordinates) {
+            // Extract location names for display
+            const locationNames = {
+                '40.7128,-74.0060': 'Iowa Corn Belt',
+                '39.7391,-104.9847': 'Colorado Wheat Fields',
+                '33.7490,-84.3880': 'Georgia Peach Orchards',
+                '36.7783,-119.4179': 'California Central Valley',
+                '29.7604,-95.3698': 'Texas Rice Country',
+                '44.9778,-93.2650': 'Minnesota Dairy Region'
+            };
+            
+            document.getElementById('forecast-location').value = locationNames[coordinates] || coordinates;
+        }
+
+        function downloadForecast() {
+            alert('Forecast report will be downloaded as PDF with detailed agricultural recommendations.');
+        }
+
+        function subscribeAlerts() {
+            alert('Alert subscription setup will allow you to receive notifications for critical weather conditions affecting your crops.');
+        }
+
+        // Set current date for forecast start input
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('forecast-start').value = today;
+        });
+    </script>
+</body>
+</html>
