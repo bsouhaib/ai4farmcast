@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materials - Aim for Scale AI Weather Training Program</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1f2d3d;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 50%, #17a2b8 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #28a745;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-placeholder {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #2d5a27, #4a7c59);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2d5a27;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #2d5a27;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: #4a7c59;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: #2d5a27;
+            color: white;
+        }
+
+        main {
+            margin-top: 90px;
+            padding: 2rem 0;
+        }
+
+        .page {
+            background: white;
+            border-radius: 15px;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #2d5a27 0%, #4a7c59 50%, #6b8e5a 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+            opacity: 0.1;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-content {
+            padding: 3rem 2rem;
+        }
+
+        .page-content h2 {
+            color: #2d5a27;
+            margin: 2rem 0 1rem 0;
+            border-bottom: 2px solid #6b8e5a;
+            padding-bottom: 0.5rem;
+        }
+
+        .video-item {
+            margin: 1.5rem 0;
+            padding: 2rem;
+            background: linear-gradient(145deg, #f8fdf8, #e8f5e8);
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(45, 90, 39, 0.1);
+        }
+
+        .video-item h3 {
+            color: #2d5a27;
+            margin-bottom: 1rem;
+        }
+
+        .download-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .download-btn {
+            padding: 0.6rem 1.2rem;
+            background: linear-gradient(135deg, #4a7c59, #2d5a27);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            box-shadow: 0 3px 10px rgba(45, 90, 39, 0.2);
+        }
+
+        .download-btn:hover {
+            background: linear-gradient(135deg, #2d5a27, #1a3d1a);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(45, 90, 39, 0.3);
+        }
+
+        .template-section {
+            margin: 2rem 0;
+        }
+
+        .template-card {
+            background: linear-gradient(145deg, #e8f5ff, #f0f9f0);
+            border: 2px solid #6b8e5a;
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 1rem 0;
+            box-shadow: 0 5px 15px rgba(45, 90, 39, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .template-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .template-card h3 {
+            color: #2d5a27;
+            margin-bottom: 1rem;
+        }
+
+        .weather-icon {
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .logo-section {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo-section">
+                <div class="logo-placeholder">AFS</div>
+                <div class="logo-text">Aim for Scale</div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Overview</a></li>
+                <li><a href="bios.html">Team</a></li>
+                <li><a href="agenda.html">Agenda</a></li>
+                <li><a href="materials.html" class="active">Pretraining Materials</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="page">
+            <div class="page-header">
+                <h1><span class="weather-icon"></span>Pre-training Resources</h1>
+                <p>Essential preparation materials for maximum workshop benefit</p>
+            </div>
+            <div class="page-content">
+                <h2><span class="weather-icon"></span>Required Pre-workshop Videos</h2>
+                <div class="video-item">
+                    <h3>1. What to expect in your pretraining and beyond</h3>
+                    <p>Intro video.</p>
+                    <div class="download-links">
+                        <a href="#" class="download-btn">Watch Video Short</a>
+                        <a href="#" class="download-btn">Learn More</a>
+                    </div>
+                </div>
+                
+                <div class="video-item">
+                    <h3>2. Why is forecasting so hard?</h3>
+                    <p>DESCRIPTOR</p>
+                    <div class="download-links">
+                        <a href="#" class="download-btn">Watch Video Short</a>
+                        <a href="#" class="download-btn">Learn More</a>
+                    </div>
+                </div>
+
+                <div class="video-item">
+                    <h3>3. Forecasting across timescales</h3>
+                    <p>DESCRIPTOR</p>
+                    <div class="download-links">
+                        <a href="#" class="download-btn">Watch Video Short</a>
+                        <a href="#" class="download-btn">Learn More</a>
+                    </div>
+                </div>
+
+                <div class="video-item">
+                    <h3>4. Ensemble forecasting, why one forecast isn't enough</h3>
+                    <p>DESCRIPTOR</p>
+                    <div class="download-links">
+                        <a href="#" class="download-btn">Watch Video Short</a>
+                        <a href="#" class="download-btn">Learn More</a>
+                    </div>
+                </div>
+
+                <div class="video-item">
+                    <h3>5. Historical evolution of forecasting</h3>
+                    <p>DESCRIPTOR</p>
+                    <div class="download-links">
+                        <a href="#" class="download-btn">Watch Video Short</a>
+                        <a href="#" class="download-btn">Learn More</a>
+                    </div>
+                </div>
+
+                <div class="video-item">
+                    <h3>6. Some basics of AI for weather forecasting</h3>
+                    <p>DESCRIPTOR</p>
+                    <div class="download-links">
+                        <a href="#" class="download-btn">Watch Video Short</a>
+                        <a href="#" class="download-btn">Learn More</a>
+                    </div>
+                </div>
+
+                <div class="video-item">
+                    <h3>7. What you need to run AI weather models</h3>
+                    <p>DESCRIPTOR</p>
+                    <div class="download-links">
+                        <a href="#" class="download-btn">Watch Video Short</a>
+                        <a href="#" class="download-btn">Learn More</a>
+                    </div>
+                </div>
+
+                <div class="video-item">
+                    <h3>8. Importance of benchmarking before using AI weather forecasts</h3>
+                    <p>DESCRIPTOR</p>
+                    <div class="download-links">
+                        <a href="#" class="download-btn">Watch Video Short</a>
+                        <a href="#" class="download-btn">Learn More</a>
+                    </div>
+                </div>
+                
+                <div class="video-item">
+                    <h3>9. Does AI replace traditional forecasting?</h3>
+                    <p>DESCRIPTOR</p>
+                    <div class="download-links">
+                        <a href="#" class="download-btn">Watch Video Short</a>
+                        <a href="#" class="download-btn">Learn More</a>
+                    </div>
+                </div>
+
+                <div class="video-item">
+                    <h3>10. Impact-based forecasting to save lives and livelihoods</h3>
+                    <p>DESCRIPTOR</p>
+                    <div class="download-links">
+                        <a href="#" class="download-btn">Watch Video Short</a>
+                        <a href="#" class="download-btn">Learn More</a>
+                    </div>
+                </div>
+
+                <div class="video-item">
+                    <h3>11. Forecasts for decision support in agriculture</h3>
+                    <p>DESCRIPTOR</p>
+                    <div class="download-links">
+                        <a href="#" class="download-btn">Watch Video Short</a>
+                        <a href="#" class="download-btn">Learn More</a>
+                    </div>
+                </div>
+
+                <div class="video-item">
+                    <h3>12. What is a Concept of Operations or CONOPS?</h3>
+                    <p>DESCRIPTOR</p>
+                    <div class="download-links">
+                        <a href="#" class="download-btn">Watch Video Short</a>
+                        <a href="#" class="download-btn">Learn More</a>
+                    </div>
+                </div>
+
+                <h2><span class="weather-icon"></span>Knowledge Assessment</h2>
+                <div class="template-card">
+                    <h3>Pre-workshop Preparation Quiz</h3>
+                    <p>Test your understanding of the foundational concepts covered in the pre-training videos. Complete this assessment before attending to ensure you're ready for the technical sessions.</p>
+                    <div class="download-links">
+                        <a href="#" class="download-btn">Take Assessment (20 min)</a>
+                    </div>
+                </div>
+                
+                <h2><span class="weather-icon">📝</span>Workshop Templates & Tools</h2>
+                
+                <div class="template-section">
+                    <div class="template-card">
+                        <h3>CONOPS Development Template</h3>
+                        <p>Structured template for developing your country-specific Concept of Operations, including stakeholder mapping, workflow design, and implementation planning.</p>
+                        <div class="download-links">
+                            <a href="#" class="download-btn">📄 CONOPS Template</a>
+                        </div>
+                    </div>
+
+                    <div class="template-card">
+                        <h3>Country Climate Services Presentation Template</h3>
+                        <p>Standardized format for presenting your country's current weather and climate services for agriculture.</p>
+                        <div class="download-links">
+                            <a href="#" class="download-btn">NMHS PowerPoint Template</a>
+                            <a href="#" class="download-btn">NMHS Presentation Guidelines</a>
+                        </div>
+                        <div class="download-links">
+                            <a href="#" class="download-btn">Ag Expert PowerPoint Template</a>
+                            <a href="#" class="download-btn">Ag Expert Presentation Guidelines</a>
+                        </div>
+
+                        
+                    </div>
+                </div>
+
+                <div class="template-card">
+                    <h3>Workshop Collaboration Tools</h3>
+                    <p>Access to shared workspaces, collaborative documents, and communication platforms for workshop participants.</p>
+                    <div class="download-links">
+                        <a href="#" class="download-btn">📝 Shared Google Drive</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>

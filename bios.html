@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team - Aim for Scale AI Weather Training Program</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1f2d3d;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 50%, #17a2b8 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #28a745;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-placeholder {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #155724, #28a745);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #155724;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #155724;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: #28a745;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: #155724;
+            color: white;
+        }
+
+        main {
+            margin-top: 90px;
+            padding: 2rem 0;
+        }
+
+        .page {
+            background: white;
+            border-radius: 15px;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 50%, #17a2b8 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+            opacity: 0.1;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-content {
+            padding: 3rem 2rem;
+        }
+
+        .bios-header {
+            padding: 1.5rem;
+            display: none;
+        }
+
+        .bio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .bio-card {
+            background: linear-gradient(145deg, #f8fffe, #d4edda);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(21, 87, 36, 0.1);
+        }
+
+        .bio-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(21, 87, 36, 0.15);
+        }
+
+        .bio-image {
+            width: 100%;
+            height: 220px;
+            background: linear-gradient(135deg, #20c997, #28a745);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.1rem;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .bio-content {
+            padding: 1.5rem;
+        }
+
+        .bio-content h3 {
+            color: #155724;
+            margin-bottom: 0.5rem;
+        }
+
+        .bio-content p strong {
+            color: #28a745;
+        }
+
+        .weather-icon {
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .logo-section {
+                flex-direction: column;
+                gap: 8px;
+                text-align: center;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo-section">
+                <div class="logo-placeholder">AFS</div>
+                <div class="logo-text">Aim for Scale</div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="index.html">Overview</a></li>
+                <li><a href="bios.html" class="active">Team</a></li>
+                <li><a href="agenda.html">Agenda</a></li>
+                <li><a href="materials.html">Pretraining Materials</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container">
+        <section class="page">
+            <div class="page-header">
+                <h1><span class="weather-icon"></span>Meet Our Team</h1>
+                <p>Leading researchers, practitioners & weather service professionals</p>
+            </div>
+            <div class="page-content">
+                <h2><span class="weather-icon"></span>Organizing Committee</h2>
+                <div class="bio-grid">
+                    <div class="bio-card">
+                        <div class="bio-image">
+                            <span class="weather-icon" style="font-size: 2rem;">🌾</span>
+                            <span>Photo Coming Soon</span>
+                        </div>
+                        <div class="bio-content">
+                            <h3>Imara Salas</h3>
+                            <p><strong>Aim for Scale Initiative Leader</strong></p>
+                            <p>Leading the Aim for Scale initiative overview and agricultural services value chain analysis. Imara brings extensive experience in connecting AI weather research with practical agricultural applications and scaling innovations for farmer impact.</p>
+                        </div>
+                    </div>
+                    <div class="bio-card">
+                        <div class="bio-image">
+                            <span class="weather-icon" style="font-size: 2rem;"></span>
+                            <span>Photo Coming Soon</span>
+                        </div>
+                        <div class="bio-content">
+                            <h3>Katie Kowal</h3>
+                            <p><strong>UChicago Weather Forecast Lead</strong></p>
+                            <p>AI weather forecasting operational lead for Indian Monsoon Onset, training program curriculum coordinator leading technical sessions on recent advances in AI for medium-range to subseasonal forecasts. Katie focuses on making cutting-edge weather AI accessible and useful for agricultural decision-making.</p>
+                        </div>
+                    </div>
+                    <div class="bio-card">
+                        <div class="bio-image">
+                            <span class="weather-icon" style="font-size: 2rem;"></span>
+                            <span>Photo Coming Soon</span>
+                        </div>
+                        <div class="bio-content">
+                            <h3>Tufa Dinku</h3>
+                            <p><strong>IRI Columbia University</strong></p>
+                            <p>Climate services expert with deep knowledge in agricultural applications. Specializing in converting climate data into actionable information for farming decisions and building effective extension services.</p>
+                        </div>
+                    </div>
+                </div>
+                <h2><span class="weather-icon"></span>Trainers</h2>
+                <div class="bio-grid">
+                    <div class="bio-card">
+                        <div class="bio-image">
+                            <span class="weather-icon" style="font-size: 2rem;">⚡</span>
+                            <span>Photo Coming Soon</span>
+                        </div>
+                        <div class="bio-content">
+                            <h3>Pedram Hassanzadeh</h3>
+                            <p><strong>UChicago Associate Professor</strong></p>
+                            <p>AI weather modeling specialist leading sessions on AI vs NWP comparisons and operational benchmarking, including real-world examples from the Indian Monsoon forecasting system implementation.</p>
+                        </div>
+                    </div>
+                    <div class="bio-card">
+                        <div class="bio-image">
+                            <span class="weather-icon" style="font-size: 2rem;">🌍</span>
+                            <span>Photo Coming Soon</span>
+                        </div>
+                        <div class="bio-content">
+                            <h3>Erkin Isaev</h3>
+                            <p><strong>World Meteorological Organization (WMO)</strong></p>
+                            <p>Expert in impact-based forecasting and concepts of operations (CONOPS). Leading sessions on establishing operational frameworks for integrating AI weather services into national meteorological systems.</p>
+                        </div>
+                    </div>
+                    <div class="bio-card">
+                        <div class="bio-image">
+                            <span class="weather-icon" style="font-size: 2rem;">📊</span>
+                            <span>Photo Coming Soon</span>
+                        </div>
+                        <div class="bio-content">
+                            <h3>George Sserwadd</h3>
+                            <p><strong>TAHMO (Trans-African Hydro-Meteorological Observatory)</strong></p>
+                            <p>Observational data quality specialist focusing on verification processes and the critical role of local observations in improving AI model skill for African agricultural contexts.</p>
+                        </div>
+                    </div>
+                    <div class="bio-card">
+                        <div class="bio-image">
+                            <span class="weather-icon" style="font-size: 2rem;">🧪</span>
+                            <span>Photo Coming Soon</span>
+                        </div>
+                        <div class="bio-content">
+                            <h3>Adam Marchakitus</h3>
+                            <p><strong>University of Chicago</strong></p>
+                            <p>Technical specialist providing guidance on running AI models locally, comparing implementation options, and supporting hands-on tutorials for weather model deployment.</p>
+                        </div>
+                    </div>
+                    <div class="bio-card">
+                        <div class="bio-image">
+                            <span class="weather-icon" style="font-size: 2rem;">📈</span>
+                            <span>Photo Coming Soon</span>
+                        </div>
+                        <div class="bio-content">
+                            <h3>Amir Jina</h3>
+                            <p><strong>UChicago Assistant Professor</strong></p>
+                            <p>Expert in empirically testing communication strategies, including A/B message testing for weather information dissemination, with focus on Indian monsoon onset communication to farmers.</p>
+                        </div>
+                    </div>
+                </div>
+                <h2><span class="weather-icon"></span>External Speakers</h2>
+                    <div class="bio-grid">
+                         <div class="bio-card">
+                            <div class="bio-image">
+                                <span class="weather-icon" style="font-size: 2rem;">📈</span>
+                                <span>Photo Coming Soon</span>
+                            </div>
+                            <div class="bio-content">
+                                <h3>Elinor Kruse</h3>
+                                <p><strong>Google Deepmind</strong></p>
+                                <p>DESCRIPTOR.</p>
+                            </div>
+                        </div>
+                    </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
