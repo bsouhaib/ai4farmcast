@@ -166,10 +166,10 @@
           <label><strong>8.</strong> Arrange these in the correct historical order of forecasting methods (1 = earliest):</label>
           <p class="hint">Enter the number (1–4) next to each method to indicate order.</p>
 
-          <label>Pattern recognition from direct observation: <input name="q8_pat" size="2" placeholder="e.g., 1"></label>
-          <label>Numerical Weather Prediction (NWP): <input name="q8_nwp" size="2" placeholder="e.g., 2"></label>
-          <label>Ensemble forecasting: <input name="q8_ens" size="2" placeholder="e.g., 3"></label>
-          <label>AI-based models: <input name="q8_ai" size="2" placeholder="e.g., 4"></label>
+          <!-- <label>Pattern recognition from direct observation: <input name="q8_pat" size="2" placeholder="e.g., 1"></label> -->
+          <label>Numerical Weather Prediction (NWP): <input name="q8_nwp" size="2" placeholder="e.g., 1"></label>
+          <label>Ensemble forecasting: <input name="q8_ens" size="2" placeholder="e.g., 2"></label>
+          <label>AI-based models: <input name="q8_ai" size="2" placeholder="e.g., 3"></label>
         </div>
 
         <div style="margin-top:12px">
@@ -195,7 +195,7 @@
           <label><strong>11.</strong> Which timescale is typically the hardest to predict because atmospheric memory fades before oceanic memory takes over?</label>
           <label><input type="radio" name="q11" value="a"> Short-range</label>
           <label><input type="radio" name="q11" value="b"> Medium-range</label>
-          <label><input type="radio" name="q11" value="c"> Subseasonal (S2S)</label>
+          <label><input type="radio" name="q11" value="c"> Subseasonal</label>
           <label><input type="radio" name="q11" value="d"> Seasonal</label>
         </div>
 
@@ -229,12 +229,12 @@
         </div>
 
         <div style="margin-top:12px">
-          <label><strong>15.</strong> Short Answer: Why is regional validation important before using AI forecasts for agricultural decisions?</label>
+          <label><strong>15.</strong> Why is regional validation important before using AI forecasts for agricultural decisions? <span class="hint">(Short answer)</span></label>
           <textarea name="q15" class="short-answer" rows="3"></textarea>
         </div>
 
         <div style="margin-top:12px">
-          <label><strong>16.</strong> What does ConOps stand for, and what is its main purpose in forecasting systems? (Short answer)</label>
+          <label><strong>16.</strong> What does ConOps stand for, and what is its main purpose in forecasting systems? <span class="hint">(Short answer)</span></label>
           <input name="q16" class="short-answer">
         </div>
 
@@ -274,13 +274,13 @@
       q5: 'c',
       // q6 open-ended
       q7: 'c',
-      q8_pat: '1',
+      // q8_pat: '1',
       q8_nwp: '2',
       q8_ens: '3',
       q8_ai: '4',
       q9: 'c',
       q10: 'false',
-      q11: 'd',
+      q11: 'c',
       q12: 'b',
       q13: 'd',
       q14: 'a',
@@ -353,16 +353,17 @@
         details.push('<div class="incorrect">Q6: Incorrect — e.g: bias correction, downscaling, data assimilation, anomaly detection.<br>Your answer: <strong>' + escapeHtml(q6raw) + '</strong></div>');
         }
 
-        // Q
+        // Q7
         possible++; const q7v = (document.querySelector('input[name="q7"]:checked')||{}).value;
         if(q7v === answers.q7){ correctCount++; details.push('<div class="correct">Q7: Correct</div>'); } else { details.push('<div class="incorrect">Q7: Incorrect — correct: NeuralGCM</div>'); }
 
         // Q8
-        possible++; const q8_pat = (document.querySelector('[name="q8_pat"]').value||'').trim();
+        possible++; 
+        // const q8_pat = (document.querySelector('[name="q8_pat"]').value||'').trim();
         const q8_nwp = (document.querySelector('[name="q8_nwp"]').value||'').trim();
         const q8_ens = (document.querySelector('[name="q8_ens"]').value||'').trim();
         const q8_ai = (document.querySelector('[name="q8_ai"]').value||'').trim();
-        if(q8_pat===answers.q8_pat && q8_nwp===answers.q8_nwp && q8_ens===answers.q8_ens && q8_ai===answers.q8_ai){ correctCount++; details.push('<div class="correct">Q8: Correct</div>'); } else { details.push('<div class="incorrect">Q8: Incorrect — correct order: Pattern recognition (1), NWP (2), Ensemble (3), AI (4)</div>'); }
+        if(q8_nwp===answers.q8_nwp && q8_ens===answers.q8_ens && q8_ai===answers.q8_ai){ correctCount++; details.push('<div class="correct">Q8: Correct</div>'); } else { details.push('<div class="incorrect">Q8: Incorrect — correct order: NWP (1), Ensemble (2), AI (3)</div>'); }
 
         // Q9
         possible++; const q9v = (document.querySelector('input[name="q9"]:checked')||{}).value;
@@ -419,7 +420,7 @@
         const q17v = (document.querySelector('input[name="q17"]:checked')||{}).value;
         const q17labels = {a: 'It makes it faster to produce forecasts', b: 'It improves the alignment of outputs with local conditions', c: 'It replaces ensemble forecasts entirely', d: 'It removes the need for observational data'};
         const q17selectedText = q17labels[q17v] || '';
-        if(q17v === answers.q17){ correctCount++; details.push('<div class="correct">Q17: Correct — Your selection: <strong>' + escapeHtml(q17selectedText) + '</strong></div>'); } else { details.push('<div class="incorrect">Q17: Incorrect — correct: It improves the alignment with local conditions<br>Your selection: <strong>' + escapeHtml(q17selectedText) + '</strong></div>'); }
+        if(q17v === answers.q17){ correctCount++; details.push('<div class="correct">Q17: Correct </div>'); } else { details.push('<div class="incorrect">Q17: Incorrect — correct: It improves the alignment with local conditions</div>'); }
 
       const scoreEl = document.getElementById('score');
       scoreEl.textContent = `Score: ${correctCount} / ${possible}`;
