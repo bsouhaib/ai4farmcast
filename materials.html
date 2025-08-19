@@ -283,7 +283,6 @@
                             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                             allowfullscreen
                             loading="lazy"></iframe>
-                        </div>
                     </div>
 
                     <!-- Buttons outside frame -->
@@ -835,32 +834,6 @@
         </section>
     </main>
     <script>
-    document.querySelectorAll('.video-container').forEach(container => {
-        const video = container.querySelector('.video-player');
-        const source = video.querySelector('source');
-        const shortUrl = container.dataset.short;
-        const fullUrl = container.dataset.full;
-
-        const watchShort = container.querySelector('.watch-short');
-        if (watchShort) {
-            watchShort.addEventListener('click', e => {
-                e.preventDefault();
-                source.src = shortUrl;
-                video.load();
-                video.play();
-            });
-        }
-
-        const watchFull = container.querySelector('.watch-full');
-        if (watchFull) {
-            watchFull.addEventListener('click', e => {
-                e.preventDefault();
-                source.src = fullUrl;
-                video.load();
-                video.play();
-            });
-        }
-    });
 
     // Separate handler for ALL Learn More / Show Less buttons
     document.addEventListener('click', e => {
