@@ -1162,7 +1162,9 @@
                 alert(`📁 Loading materials for: ${sessionId}\n\n🔗 This will connect to your Google Drive folder with:\n• Session slides & recordings\n• Hands-on tutorial materials\n• Additional reading resources\n• Interactive demos & tools`);
             }, 1000);
         }
-
+        // Suppress this function once materials linkedd
+        function showMaterials(sessionId) {
+        }
         // Initialize first day as expanded
         document.addEventListener('DOMContentLoaded', function() {
             const firstDay = document.querySelector('.agenda-day .day-content');
