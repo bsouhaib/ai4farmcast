@@ -159,25 +159,25 @@
 
         .track-btn {
             padding: 1rem 2rem;
-            border: 2px solid #4a7c59;
+            border: none;
             border-radius: 25px;
             cursor: pointer;
             font-size: 1.1rem;
             font-weight: 500;
             transition: all 0.3s ease;
-            background: white;
-            color: #4a7c59;
+            background: linear-gradient(135deg, #4a7c59, #2d5a27);
+            transition: all 0.3s ease;
+            color: white;
         }
 
         .track-btn:hover {
-            background: #4a7c59;
-            color: white;
+            background:linear-gradient(135deg, #2d5a27, #1a3d1a);
             transform: translateY(-3px);
             box-shadow: 0 5px 15px rgba(74, 124, 89, 0.3);
         }
 
         .track-btn.active {
-            background: #2d5a27;
+            background: linear-gradient(135deg, #28a745, #20c997);
             color: white;
             border-color: #2d5a27;
         }
@@ -346,13 +346,18 @@
             display: inline-block;
             margin-left: 10px;
         }
-
+        .track-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
 
-        @media (max-width: 768px) {
+        /* @media (max-width: 768px) {
             .nav-links {
                 flex-direction: column;
                 gap: 1rem;
@@ -372,7 +377,7 @@
                 flex-direction: column;
                 align-items: center;
             }
-        }
+        } */
     </style>
 </head>
 <body>
@@ -396,6 +401,9 @@
             <div class="page-header">
                 <h1><span class="weather-icon">📅</span>Training Program Schedule</h1>
                 <p>5-Day Intensive Workshop | September 22-26, 2025</p>
+                <p style="color: #e07b00; font-weight: bold; margin-top: 0.5rem;">
+                    🚧 NOT FINAL — UNDER CONSTRUCTION 🚧
+                </p>
             </div>
             <div class="page-content">
                 <div class="track-buttons">
@@ -1354,7 +1362,6 @@
     </main>
 
     <script>
-        // Agenda day toggle functionality
         function toggleDay(element) {
             const content = element.nextElementSibling;
             const arrow = element.querySelector('span:last-child');
@@ -1368,20 +1375,17 @@
             }
         }
 
-        // Track filtering functionality
         function showTrack(trackType) {
-            // Update button states
+
             document.querySelectorAll('.track-btn').forEach(btn => {
                 btn.classList.remove('active');
             });
             event.target.classList.add('active');
 
-            // Hide all agenda sections
             document.querySelectorAll('.agenda-section').forEach(section => {
                 section.style.display = 'none';
             });
 
-            // Show selected track
             if (trackType === 'full') {
                 document.getElementById('full-agenda').style.display = 'block';
             } else if (trackType === 'technical') {
@@ -1389,8 +1393,6 @@
             } else if (trackType === 'applied') {
                 document.getElementById('applied-agenda').style.display = 'block';
             }
-
-            // Re-initialize first day as expanded for newly shown agenda
             setTimeout(() => {
                 const visibleAgenda = document.querySelector('.agenda-section[style*="block"]');
                 if (visibleAgenda) {
@@ -1404,7 +1406,6 @@
             }, 100);
         }
 
-        // Materials download functionality with loading state
         function showMaterials(sessionId) {
             const originalText = event.target.innerHTML;
             event.target.innerHTML = originalText + '<span class="loading-spinner"></span>';
@@ -1414,17 +1415,17 @@
                 alert(`📁 Loading materials for: ${sessionId}\n\n🔗 This will connect to your Google Drive folder with:\n• Session slides & recordings\n• Hands-on tutorial materials\n• Additional reading resources\n• Interactive demos & tools`);
             }, 1000);
         }
-        // Suppress this function once materials linkedd
         function showMaterials(sessionId) {
         }
-        // Initialize first day as expanded
+
         document.addEventListener('DOMContentLoaded', function() {
-            const firstDay = document.querySelector('.agenda-day .day-content');
-            if (firstDay) {
-                firstDay.classList.add('show');
-                const arrow = firstDay.previousElementSibling.querySelector('span:last-child');
-                if (arrow) arrow.textContent = '▲';
-            }
+            document.querySelectorAll('.day-content').forEach(day => {
+                day.classList.remove('show');
+                const arrow = day.previousElementSibling.querySelector('span:last-child');
+                if (arrow) arrow.textContent = '▼';
+            });
+
+            document.getElementById('full-agenda').style.display = 'block';
         });
     </script>
 </body>

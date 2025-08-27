@@ -14,6 +14,19 @@
         background: linear-gradient(135deg, #28a745 0%, #20c997 50%, #17a2b8 100%);
         min-height: 100vh;
     }
+    .back-button {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background: #2d5a27;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: background 0.3s ease;
+    }
+    .back-button:hover {
+      background: #4a7c59;
+    }
     .template-card{background:var(--card-bg); border-radius:12px; padding:20px; box-shadow:0 6px 18px rgba(16,24,40,0.06); max-width:900px; margin:0 auto}
     h1{font-size:20px;margin:0 0 6px}
     p.lead{color:var(--muted); margin-top:0}
@@ -35,11 +48,13 @@
   </style>
 </head>
 <body>
+    <header>
+      <a href="materials.html" class="back-button">← Back</a>
+  </header>
+
   <div class="template-card">
     <h1>Pre-workshop Preparation Quiz</h1>
     <p class="lead">Test your understanding of the foundational concepts covered in the pre-training videos.</p>
-
-
     <form id="quiz" aria-live="polite">
       <fieldset>
         <legend>Climate and Forecasting</legend>
