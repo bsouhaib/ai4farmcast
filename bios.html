@@ -176,6 +176,10 @@
             display: inline-block;
             object-fit: contain;
             vertical-align: middle;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 8px 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
         }
         .section.organizers .section-logos img {
             max-height: 120px;
@@ -431,21 +435,21 @@
 
                         <div class="bio-card watermark" style="--watermark-url: url('assets/logos/mbzuai.png')">
                             <div class="bio-content">
-                                <h3>Jad Zakharia</h3>
-                                <p><strong>MBZUAI</strong></p>
-                            </div>
-                            <div class="bio-avatar">
-                                <img src="assets/people/jad.jpeg" alt="Jad Zakharia">
-                            </div>
-                        </div>
-
-                        <div class="bio-card watermark" style="--watermark-url: url('assets/logos/mbzuai.png')">
-                            <div class="bio-content">
                                 <h3>Elnura Zhalieva</h3>
                                 <p><strong>MBZUAI</strong></p>
                             </div>
                             <div class="bio-avatar">
                                 <img src="assets/people/elnura.jpeg" alt="Elnura Zhalieva">
+                            </div>
+                        </div>
+
+                        <div class="bio-card watermark" style="--watermark-url: url('assets/logos/mbzuai.png')">
+                            <div class="bio-content">
+                                <h3>Jad Zakharia</h3>
+                                <p><strong>MBZUAI</strong></p>
+                            </div>
+                            <div class="bio-avatar">
+                                <img src="assets/people/jad.jpeg" alt="Jad Zakharia">
                             </div>
                         </div>
 
@@ -455,9 +459,9 @@
                 <div class="section collaborators">
                     <h2 class="section-title">Collaborators</h2>
                     <div class="section-logos">
-                        <img src="assets/logos/rhiza.png" alt="Rhiza logo">
-                        <img src="assets/logos/wmo.png" alt="WMO logo">
                         <img src="assets/logos/ncmuae.png" alt="NCM UAE logo">
+                        <img src="assets/logos/wmo.png" alt="WMO logo">
+                        <img src="assets/logos/rhiza.png" alt="Rhiza logo">
                         <img src="assets/logos/tahmo.png" alt="TAHMO logo">
                         <img src="assets/logos/ecmwf.png" alt="ECMWF logo">
                         <img src="assets/logos/metnorway.png" alt="MET Norway logo">
@@ -466,6 +470,15 @@
                         <img src="assets/logos/africlimate.png" alt="AfriClimate AI logo">
                     </div>
                     <div class="bio-grid" style="margin-top: 1.5rem;">
+                        <div class="bio-card watermark" style="--watermark-url: url('assets/logos/male.png')">
+                            <div class="bio-content">
+                                <h3>Mohamed Abudalla Al Ebri</h3>
+                                <p><strong>NCM</strong></p>
+                            </div>
+                            <div class="bio-avatar">
+                                <img src="assets/logos/male.png" alt="NCM">
+                            </div>
+                        </div>
 
                         <div class="bio-card watermark" style="--watermark-url: url('assets/logos/rhiza.png')">
                             <div class="bio-content">
@@ -514,16 +527,6 @@
                             </div>
                             <div class="bio-avatar">
                                 <img src="assets/people/yuki.jpeg" alt="Yuki Honda">
-                            </div>
-                        </div>
-
-                        <div class="bio-card watermark" style="--watermark-url: url('assets/logos/ncmuae.png')">
-                            <div class="bio-content">
-                                <h3>NCM</h3>
-                                <p><strong>NCM UAE</strong></p>
-                            </div>
-                            <div class="bio-avatar">
-                                <img src="assets/logos/male.png" alt="NCM">
                             </div>
                         </div>
 
@@ -608,7 +611,13 @@
 
                     </div>
                 </div>
-
+                <div class="section hosts">
+                    <h2 class="section-title">Hosts</h2>
+                    <div class="section-logos">
+                        <img src="assets/logos/mbzuai.png" alt="MBZUAI logo">
+                        <img src="assets/logos/ncmuae.png" alt="NCM logo">
+                    </div>
+                </div>
                 <div class="section">
                     <h2 class="section-title">Participants</h2>
                     <div class="section-logos" aria-hidden="true"></div>
@@ -622,7 +631,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
         </section>
     </main>
