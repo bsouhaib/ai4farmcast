@@ -1386,13 +1386,13 @@
         }
 
         function showMaterials(sessionId) {
-            const originalText = event.target.innerHTML;
-            event.target.innerHTML = originalText + '<span class="loading-spinner"></span>';
+            // const originalText = event.target.innerHTML;
+            // event.target.innerHTML = originalText + '<span class="loading-spinner"></span>';
             
-            setTimeout(() => {
-                event.target.innerHTML = originalText;
-                alert(`📁 Loading materials for: ${sessionId}\n\n🔗 This will connect to your Google Drive folder with:\n• Session slides & recordings\n• Hands-on tutorial materials\n• Additional reading resources\n• Interactive demos & tools`);
-            }, 1000);
+            // setTimeout(() => {
+            //     event.target.innerHTML = originalText;
+            //     alert(`📁 Loading materials for: ${sessionId}\n\n🔗 This will connect to your Google Drive folder with:\n• Session slides & recordings\n• Hands-on tutorial materials\n• Additional reading resources\n• Interactive demos & tools`);
+            // }, 1000);
         }
 
         document.addEventListener('DOMContentLoaded', function() {
