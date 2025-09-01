@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Team - Aim for Scale AI Weather Training Program</title>
+    <base href="../">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1f2d3d;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 50%, #17a2b8 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #28a745;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-placeholder {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #155724, #28a745);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #155724;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #155724;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: #28a745;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: #155724;
+            color: white;
+        }
+
+        main {
+            margin-top: 90px;
+            padding: 2rem 0;
+        }
+
+        .page {
+            background: white;
+            border-radius: 15px;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #2d5a27 0%, #4a7c59 50%, #6b8e5a 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+            opacity: 0.1;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-content {
+            padding: 3rem 2rem;
+        }
+
+        .section {
+            margin-bottom: 1.00rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            margin: 1.25rem 0 0.25rem;
+            text-align: left;
+            color: #155724;
+            font-weight: 700;
+            display: block;
+        }
+
+        .section-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-top: 0.25rem;
+            flex-wrap: wrap;
+        }
+
+        .section-logos img {
+            max-height: 110px;
+            max-width: 1000px;
+            height: auto;
+            width: auto;
+            display: inline-block;
+            object-fit: contain;
+            vertical-align: middle;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 8px 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+        .section.organizers .section-logos img {
+            max-height: 120px;
+            margin: 0 20px;
+        }
+        .section.collaborators .section-logos { 
+            justify-content: center; 
+            flex-wrap: wrap; 
+            gap: 4px; 
+            margin-top: 0.85rem; 
+        }
+        .section.collaborators .section-logos img { 
+            max-height: 80px; 
+            flex: 0.1 0.1 19%; 
+            object-fit: contain; 
+        }
+        .bios-header {
+            padding: 1.5rem;
+            display: none;
+        }
+        .bio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .bio-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 1rem;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(21, 87, 36, 0.1);
+            position: relative;
+        }
+
+        .bio-avatar {
+            flex: 0 0 auto; 
+            width: 96px;
+            height: 96px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            background: #f6f6f6;
+        }
+
+        .bio-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+
+        .bio-content {
+            flex: 1 1 auto;
+            padding: 0;
+            color: #155724;
+        }
+
+        @media (max-width: 600px) {
+        .bio-card {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .bio-avatar {
+            width: 72px;
+            height: 72px;
+        }
+        }
+
+        .watermark::after {
+        z-index: 0;
+        opacity: 0.12;
+        }
+        .bio-content, .bio-avatar {
+        position: relative;
+        z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { flex-direction: column; gap: 1rem; }
+            .logo-section { flex-direction: column; gap: 8px; text-align: center; }
+            .page-header h1 { font-size: 2rem; }
+
+            .section-logos img { max-height: 56px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="logo-section">
+                <div class="logo-placeholder">AFS</div>
+                <div class="logo-text">Aim for Scale</div>
+            </div>
+            <ul class="nav-links">
+                <li><a href="Training2025/bios.html">Team</a></li>
+                <li><a href="Training2025/speakers.html">Speakers</a></li>
+                <li><a href="Training2025/participants.html" class="active">Participants</a></li>
+                <li><a href="Training2025/agenda.html">Agenda</a></li>
+                <li><a href="Training2025/materials.html">Pre-Training Resources</a></li>
+            </ul>
+        </nav>
+    </header>
+    
+    <main class="container">
+        <section class="page">
+            <div class="page-header">
+                <h1><span class="weather-icon"></span>Meet the Speakers</h1>
+                <p style="color: #e07b00; font-weight: bold; margin-top: 0.5rem;">
+                    🚧 UNDER CONSTRUCTION 🚧
+                </p>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
