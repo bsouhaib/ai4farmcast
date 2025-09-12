@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Materials - Aim for Scale AI Weather Training Program</title>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #1f2d3d;
+        background: linear-gradient(135deg, #28a745 0%, #20c997 50%, #17a2b8 100%);
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    header {
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        border-bottom: 3px solid #28a745;
+        height: 50px;
+    }
+
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 50px;
+        padding: 0rem 2rem;
+    }
+
+    .logo-section {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+    }
+
+    .logo-placeholder {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #2d5a27, #4a7c59);
+        border-radius: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: bold;
+        font-size: 18px;
+    }
+
+    .logo-text {
+        font-size: 1.5rem;
+        font-weight: bold;
+        color: #2d5a27;
+    }
+
+    .nav-links {
+        display: flex;
+        list-style: none;
+        gap: 2rem;
+    }
+
+    .nav-links a {
+        text-decoration: none;
+        color: #2d5a27;
+        font-weight: 500;
+        padding: 0.5rem 1rem;
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+
+    .nav-links a:hover {
+        background: #4a7c59;
+        color: white;
+        transform: translateY(-2px);
+    }
+
+    .nav-links a.active {
+        background: #2d5a27;
+        color: white;
+    }
+
+    main {
+        margin-top: 90px;
+        padding: 2rem 0;
+    }
+
+    .page {
+        background: white;
+        border-radius: 15px;
+        margin: 2rem 0;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        overflow: hidden;
+        animation: fadeIn 0.5s ease-in;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .page-header {
+        background: linear-gradient(135deg, #2d5a27 0%, #4a7c59 50%, #6b8e5a 100%);
+        color: white;
+        padding: 3rem 2rem;
+        text-align: center;
+        position: relative;
+    }
+
+    .page-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+        opacity: 0.1;
+    }
+
+    .page-header h1 {
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        position: relative;
+        z-index: 1;
+    }
+
+    .page-header p {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        position: relative;
+        z-index: 1;
+    }
+
+    .page-content {
+        padding: 3rem 2rem;
+    }
+
+    .page-content h2 {
+        color: #2d5a27;
+        margin: 2rem 0 1rem 0;
+        border-bottom: 2px solid #6b8e5a;
+        padding-bottom: 0.5rem;
+    }
+
+    .video-item {
+        margin: 1.5rem 0;
+        padding: 2rem;
+        background: linear-gradient(145deg, #f8fdf8, #e8f5e8);
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(45, 90, 39, 0.1);
+    }
+
+    .video-item h3 {
+        color: #2d5a27;
+        margin-bottom: 1rem;
+    }
+
+    .download-links {
+        display: flex;
+        gap: 1rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .download-btn {
+        padding: 0.6rem 1.2rem;
+        background: linear-gradient(135deg, #4a7c59, #2d5a27);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        transition: all 0.3s ease;
+        font-weight: 500;
+        box-shadow: 0 3px 10px rgba(45, 90, 39, 0.2);
+    }
+
+    .download-btn:hover {
+        background: linear-gradient(135deg, #2d5a27, #1a3d1a);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(45, 90, 39, 0.3);
+    }
+
+    .template-section {
+        margin: 2rem 0;
+    }
+
+    .template-card {
+        background: linear-gradient(145deg, #e8f5ff, #f0f9f0);
+        border: 2px solid #6b8e5a;
+        border-radius: 15px;
+        padding: 2rem;
+        margin: 1rem 0;
+        box-shadow: 0 5px 15px rgba(45, 90, 39, 0.1);
+        transition: transform 0.3s ease;
+    }
+
+    .template-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .template-card h3 {
+        color: #2d5a27;
+        margin-bottom: 1rem;
+    }
+
+    .weather-icon {
+        display: inline-block;
+        margin-right: 0.5rem;
+    }
+
+    .tabs-container {
+        margin: 2rem 0;
+    }
+
+    .tabs-buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1.5rem;
+        flex-wrap: wrap;
+        margin-bottom: 0.1rem;
+    }
+
+    .tab-btn {
+        padding: 1rem 2rem;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #4a7c59, #2d5a27);
+        color: white;
+        font-weight: 600;
+        font-size: 1.1rem;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        min-width: 180px;
+        text-align: center;
+    }
+
+    .tab-btn:hover {
+        background: linear-gradient(135deg, #2d5a27, #1a3d1a);
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(45, 90, 39, 0.4);
+    }
+
+    .tab-btn.active {
+        background: linear-gradient(135deg, #28a745, #20c997);
+        color: white;
+        box-shadow: 0 5px 15px rgba(45, 90, 39, 0.3);
+        transform: translateY(-2px);
+    }
+
+    .tabs-body .tab-content {
+        display: none;
+        animation: fadeIn 0.5s ease;
+    }
+
+    .tabs-body .tab-content.active {
+        display: block;
+    }
+    .tabs-body .tab-content .page-content {
+        padding-top: 0.1rem;
+        padding-bottom: 2rem;
+    }
+    @media (max-width: 768px) {
+        .nav-links {
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .logo-section {
+            flex-direction: column;
+            gap: 8px;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2rem;
+        }
+
+        .tabs-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .tab-btn {
+            width: 100%;
+            max-width: 280px;
+            text-align: center;
+        }
+    }
+</style>
+
+</head>
+<body style="padding-top:160px;">
+   <header style="background:rgba(255,255,255,0.96); backdrop-filter:blur(10px); box-shadow:0 2px 20px rgba(0,0,0,0.15); position:fixed; width:100%; top:0; z-index:1000; border-bottom:3px solid #28a745; height:auto;">
+  <nav class="container" style="display:flex; justify-content:center; align-items:center; padding:8px 12px; height:auto;">
+    <ul class="nav-links"
+        style="display:flex; flex-direction:row; flex-wrap:wrap; list-style:none; gap:12px; justify-content:center; align-items:center; margin:0; padding:0;">
+      <li><a href="index.html"  style="text-decoration:none; color:#155724; font-weight:500; padding:8px 12px; border-radius:25px; display:inline-block; ">Overview</a></li>
+      <li><a href="bios.html" style="text-decoration:none; color:#155724; font-weight:500; padding:8px 12px; border-radius:25px; display:inline-block;">Team</a></li>
+      <li><a href="speakers.html" style="text-decoration:none; color:#155724; font-weight:500; padding:8px 12px; border-radius:25px; display:inline-block;">Speakers</a></li>
+      <li><a href="participants.html" style="text-decoration:none; color:#155724; font-weight:500; padding:8px 12px; border-radius:25px; display:inline-block;">Participants</a></li>
+      <li><a href="agenda.html" style="text-decoration:none; color:#155724; font-weight:500; padding:8px 12px; border-radius:25px; display:inline-block;">Agenda</a></li>
+      <li><a href="materials.html" class="active" style="text-decoration:none; color:#155724; font-weight:500; padding:8px 12px; border-radius:25px; display:inline-block; background:#155724; color:#fff;">Pre-Training Resources</a></li>
+    </ul>
+  </nav>
+</header>
+    <main class="container">
+        <section class="page">
+            <div class="page-header">
+                <h1><span class="weather-icon"></span>Pre-Training Resources</h1>
+                <p>Essential preparation materials for maximum workshop benefit</p>
+            </div>
+            <div class="tabs-container">
+
+            <div class="tabs-buttons">
+                <button class="tab-btn active" data-tab="videos">Pre-Training Series</button>
+                <button class="tab-btn" data-tab="quiz">Knowledge Assessment</button>
+                <button class="tab-btn" data-tab="templates">Workshop Templates & Tools</button>
+            </div>
+
+            <div class="tabs-body">
+                <div class="tab-content active" id="videos">
+                    <div class="page-content">
+                        <h2><span class="weather-icon"></span>Pre-Training Series</h2>
+                        <div class="video-item">
+                            <h3>1. What to Expect in Your Pre-Training and Beyond</h3>
+                            <p>Welcome to the series! In this first video, we set the stage for why this journey matters. 
+                                You will get a glimpse of what's ahead - tackling forecasting challenges, 
+                                uncovering how AI is transforming weather prediction, and preparing for real-world applications. 
+                                Along the way, short quizzes will help you reflect and retain what you've learned. 
+                                And if your curiosity takes you further, we will point you toward public resources to dive even deeper.</p>
+                            <div class="video-container"
+                                    data-short="https://www.youtube.com/shorts/IzKBjbbti9o"
+                                    style="max-width: 400px; margin: 0 auto; border: 3px solid #ccc; border-radius: 8px; overflow: hidden;">
+                                <div style="position:relative; width:100%; padding-top:150%;">
+                                    <iframe
+                                    src="https://www.youtube.com/embed/IzKBjbbti9o"
+                                    title="YouTube Short - 1"
+                                    style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen
+                                    loading="lazy"></iframe>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="video-item">
+                            <h3>2. Why Forecasting is So Hard</h3>
+                            <p>Weather may seem predictable at times, but the atmosphere is a chaotic system - where even the smallest change can lead to dramatically different outcomes. 
+                                Forecasting is further challenged by data gaps, measurement errors, and the sheer complexity of processes like cloud formation and land-atmosphere interactions. 
+                                And as forecasts look further ahead, their accuracy naturally declines, making long-range predictions especially difficult. 
+                                For more details, watch the video below.</p>
+                                <div class="video-container"
+                                        data-short="https://youtube.com/shorts/B2lgQBXXfXk"
+                                        style="max-width: 400px; margin: 0 auto; border: 3px solid #ccc; border-radius: 8px; overflow: hidden;">
+                                    <div style="position:relative; width:100%; padding-top:150%;">
+                                        <iframe
+                                        src="https://youtube.com/embed/B2lgQBXXfXk"
+                                        title="YouTube Short - 2"
+                                        style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                        allowfullscreen
+                                        loading="lazy"></iframe>
+                                    </div>
+                                </div>
+
+                            <div class="download-links" style="margin-top: 10px; text-align: center;">
+                                <a href="#" class="download-btn toggle-btn">Learn More</a>
+                            </div>
+
+                            <div class="learn-more-content" style="display: none; margin-top: 10px; font-size: 14px;">
+                                Explore more on AI in weather forecasting with these resources:<br>
+                                <a href="https://learn.meted.ucar.edu/#/online-courses/15f06f2d-a446-4cfc-9a9b-34da37e1249d" target="_blank">
+                                    NWP Essentials: NWP and Forecasting (2015)
+                                </a><br>
+                                <a href="https://learn.meted.ucar.edu/#/curricula/74359266-dc61-4234-ba61-462385b35e66" target="_blank">
+                                    Applied NWP (2023)
+                                </a><br>
+                                <a href="https://learn.meted.ucar.edu/#/online-courses/327c0930-349d-4e07-bf20-0f7527d6eb05" target="_blank">
+                                    Introduction to Ensemble Prediction (2005)
+                                </a><br>
+                                <a href="https://learn.meted.ucar.edu/#/online-courses/c9c1c9ff-5b8f-4214-93bf-b074032c4622" target="_blank">
+                                    Ensemble Forecasting Explained (2004)
+                                </a>
+                            </div>
+
+                        </div>
+
+                    <div class="video-item">
+                        <h3>3. Forecasting Aross Timescales</h3>
+                        <p>Weather forecasts operate on different timescales - from nowcasting that focuses on the next few hours, 
+                            to short-range, medium-range, subseasonal (S2S), and even seasonal outlooks. 
+                            But no matter the timescale, one thing remains true: forecast confidence often 
+                            declines the further ahead we look.</p>
+                        
+                            <div class="video-container"
+                                    data-short="https://youtube.com/shorts/ngji5TPoop4"
+                                    style="max-width: 400px; margin: 0 auto; border: 3px solid #ccc; border-radius: 8px; overflow: hidden;">
+                                <div style="position:relative; width:100%; padding-top:150%;">
+                                    <iframe
+                                    src="https://youtube.com/embed/ngji5TPoop4"
+                                    title="YouTube Short - 3"
+                                    style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen
+                                    loading="lazy"></iframe>
+                                </div>
+                            </div>
+
+                        <div class="download-links" style="margin-top: 10px; text-align: center;">
+                            <a href="#" class="download-btn toggle-btn">Learn More</a>
+                        </div>
+
+                        <div class="learn-more-content" style="display: none; margin-top: 10px; font-size: 14px;">
+                            Recommended courses for deeper understanding:<br>
+                            <a href="https://learn.meted.ucar.edu/#/online-courses/8eb1712c-0c64-4e22-9129-32af134e6cfa" target="_blank">
+                                Communicating Probabilistic Forecasts (2022)
+                            </a><br>
+                            <a href="https://learn.meted.ucar.edu/#/online-courses/19b7273b-cd44-456e-a38b-03a15d0d64b0" target="_blank">
+                                Communicating Subseasonal to Seasonal Impacts: ENSO (2023)
+                            </a><br>
+                            <a href="https://learn.meted.ucar.edu/#/online-courses/8eb1712c-0c64-4e22-9129-32af134e6cfa" target="_blank">
+                                Communicating Subseasonal to Seasonal Impacts: Drought (2022)
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <div class="video-item">
+                        <h3>4. Ensemble Forecasting, Why One Forecast Isn't Enough</h3>
+                        <p>This video breaks down ensemble forecasting in simple terms - showing how running multiple simulations helps 
+                            capture uncertainty in weather predictions. You’ll learn the difference between deterministic 
+                            and probabilistic forecasts, how probability-based insights support better decision-making, 
+                            and see a real-world example of using rain forecast probabilities to plan ahead.</p>
+                        
+                        <div class="video-container"
+                                    data-short="https://youtube.com/shorts/maptUliNiIY"
+                                    style="max-width: 400px; margin: 0 auto; border: 3px solid #ccc; border-radius: 8px; overflow: hidden;">
+                                <div style="position:relative; width:100%; padding-top:150%;">
+                                    <iframe
+                                    src="https://youtube.com/embed/maptUliNiIY"
+                                    title="YouTube Short - 3"
+                                    style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen
+                                    loading="lazy"></iframe>
+                                </div>
+                            </div>
+
+                        <div class="download-links" style="margin-top: 10px; text-align: center;">
+                            <a href="#" class="download-btn toggle-btn">Learn More</a>
+                        </div>
+
+                        <div class="learn-more-content" style="display: none; margin-top: 10px; font-size: 14px;">
+                            Continue learning with these courses:<br>
+                            <a href="https://learn.meted.ucar.edu/#/online-courses/327c0930-349d-4e07-bf20-0f7527d6eb05" target="_blank">
+                                Introduction to Ensemble Prediction (2005)
+                            </a><br>
+                            <a href="https://learn.meted.ucar.edu/#/online-courses/c9c1c9ff-5b8f-4214-93bf-b074032c4622" target="_blank">
+                                Ensemble Forecasting Explained (2004)
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <div class="video-item">
+                        <h3>5. Historical Evolution of Forecasting</h3>
+                        <p>From the early days of weather prediction - built on observations and pattern recognition - to the rise of Numerical Weather Prediction (NWP), 
+                            forecasting has continually evolved. Ensemble forecasting brought a way to account for uncertainty, 
+                            and now AI models represent the latest step forward, working alongside physics-based approaches to push 
+                            forecasting capabilities even further.</p>
+                        
+                            <div class="video-container"
+                                    data-short="https://youtube.com/shorts/JK0WWIWnn3w"
+                                    style="max-width: 400px; margin: 0 auto; border: 3px solid #ccc; border-radius: 8px; overflow: hidden;">
+                                <div style="position:relative; width:100%; padding-top:150%;"> 
+                                    <iframe
+                                    src="https://youtube.com/embed/JK0WWIWnn3w"
+                                    title="YouTube Short - 5"
+                                    style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen
+                                    loading="lazy"></iframe>
+                                </div>
+                            </div>
+
+                        <div class="download-links" style="margin-top: 10px; text-align: center;">
+                            <a href="#" class="download-btn toggle-btn">Learn More</a>
+                        </div>
+
+                        <div class="learn-more-content" style="display: none; margin-top: 10px; font-size: 14px;">
+                            Deepen your knwoledge with these related courses:<br>
+                            <a href="https://learn.meted.ucar.edu/#/online-courses/15f06f2d-a446-4cfc-9a9b-34da37e1249d" target="_blank">
+                                NWP Essentials: NWP and Forecasting (2015)
+                            </a><br>
+                            <a href="https://learn.meted.ucar.edu/#/curricula/74359266-dc61-4234-ba61-462385b35e66" target="_blank">
+                                Applied NWP (2023)
+                            </a><br>
+                            <a href = "https://learn.meted.ucar.edu/#/online-courses/327c0930-349d-4e07-bf20-0f7527d6eb05" target = "_blank">
+                                Introduction to Ensemble Prediction (2005)
+                            </a><br>
+                            <a href = "https://learn.meted.ucar.edu/#/online-courses/c9c1c9ff-5b8f-4214-93bf-b074032c4622" target = "_blank">
+                                Ensemble Forecasting Explained (2004)
+                            </a><br>
+                            <a href = "https://learning.ecmwf.int/enrol/index.php?id=46" target = "_blank">
+                                MOOC MLWC - 1. ML in Weather & Climate
+                            </a><br>
+                            <a href = "https://learning.ecmwf.int/enrol/index.php?id=48" target = "_blank">
+                                MOOC MLWC - 3. Practical ML applications in Weather & Climate
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <div class="video-item">
+                        <h3>6. Basics of AI for Weather Forecasting</h3>
+                        <p>AI brings a new dimension to weather forecasting by learning patterns from large datasets. 
+                            Rather than replacing physics-based models, it works alongside them - offering strengths 
+                            in fast updates, downscaling, and pattern recognition. Like any tool, its value comes with 
+                            limits, it works best when supported by high-quality data, backed by rigorous validation, and guided by careful interpretation.</p>
+                        
+                            <div class="video-container"
+                                    data-short="https://youtube.com/shorts/Qs2nsFnRif8"
+                                    style="max-width: 400px; margin: 0 auto; border: 3px solid #ccc; border-radius: 8px; overflow: hidden;">
+                                <div style="position:relative; width:100%; padding-top:150%;"> 
+                                    <iframe
+                                    src="https://youtube.com/embed/Qs2nsFnRif8"
+                                    title="YouTube Short - 6"
+                                    style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen
+                                    loading="lazy"></iframe>
+                                </div>
+                            </div>
+
+                        <div class="download-links" style="margin-top: 10px; text-align: center;">
+                            <a href="#" class="download-btn toggle-btn">Learn More</a>
+                        </div>
+
+                        <div class="learn-more-content" style="display: none; margin-top: 10px; font-size: 14px;">
+                            For a short overview of AI terminology, including deep learning, machine learning and generative AI, refer to this
+                            <a href="https://www.youtube.com/watch?v=qYNweeDHiyU" target="_blank">
+                                short video.
+                            </a><br>
+                            For an introduction to AIFS Single when it was released from the ECMWF director Florian Pappenburg please refer 
+                            to <a href="https://www.youtube.com/watch?v=xp0wiDO6bz0" target="_blank">
+                                this video
+                            </a> to see more about their operational efforts and the model.<br>
+                            For an overview of NeuralGCM and how the dynamical core works see <a href = "https://www.youtube.com/watch?v=ngJAFoXdTLA" target = "_blank">
+                                Stephen Hoyer’s talk
+                            </a> from Google Research team.<br>
+                            For an overview of Graphcast and how they are applying a graph neural network that is more of a data-driven approach, 
+                            see <a href = "https://www.youtube.com/watch?v=PD1v5PCJs_o" target = "_blank">
+                                this video
+                            </a> from Ferran Alet at Google DeepMind.<br>
+                            Some more additional links to related courses: <br>
+                            <a href = "https://www.elementsofai.com/" target = "_blank">
+                                Elements of AI
+                            </a><br>
+                            <a href = "https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+S-FX-31+V1" target = "_blank">
+                                Applying AI Weather Models with NVIDIA Earth-2
+                            </a><br>
+                            <a href = "https://learning.ecmwf.int/enrol/index.php?id=46" target="_blank">
+                                MOOC MLWC - 1. ML in Weather & Climate
+                            </a><br>
+                            <a href = "https://learning.ecmwf.int/enrol/index.php?id=47" target="_blank">
+                                MOOC MLWC - 2. Concepts of Machine Learning
+                            </a><br>
+                            <a href = "https://learning.ecmwf.int/enrol/index.php?id=48" target="_blank">
+                                MOOC MLWC - 3. Practical ML applications in Weather & Climate
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <div class="video-item">
+                        <h3>7. Requirements to Run AI Weather Models</h3>
+                        <p>This video walks you through the essentials, starting with high-quality, well-prepared data and the right tools, 
+                            whether that’s Python with GPUs, cloud resources, or local setups. We’ll cover how to validate your models, 
+                            interpret outputs, and make sure they truly support decision-making. 
+                            You’ll also see how accessible AI forecasts can be today, from running simple deterministic models on a 
+                            laptop to leveraging clusters for advanced probabilistic runs and bias correction.</p>
+                        
+                            <div class="video-container"
+                                    data-short="https://youtube.com/shorts/w_lLIFkVO98"
+                                    style="max-width: 400px; margin: 0 auto; border: 3px solid #ccc; border-radius: 8px; overflow: hidden;">
+                                <div style="position:relative; width:100%; padding-top:150%;"> 
+                                    <iframe
+                                    src="https://youtube.com/embed/w_lLIFkVO98"
+                                    title="YouTube Short - 7"
+                                    style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreenout
+                                    
+                                    loading="lazy"></iframe>
+                                </div>
+                            </div>
+
+                        <div class="download-links" style="margin-top: 10px; text-align: center;">
+                            <a href="#" class="download-btn toggle-btn">Learn More</a>
+                        </div>
+
+                        <div class="learn-more-content" style="display: none; margin-top: 10px; font-size: 14px;">
+                            List of related courses:<br>
+                            <a href="https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+S-FX-31+V1" target="_blank">
+                                Applying AI Weather Models with NVIDIA Earth-2
+                            </a><br>
+                            <a href="https://learning.ecmwf.int/enrol/index.php?id=46" target="_blank">
+                                MOOC MLWC - 1. ML in Weather & Climate
+                            </a><br>
+                            <a href = "https://learning.ecmwf.int/enrol/index.php?id=48" target = "_blank">
+                                MOOC MLWC - 3. Practical ML applications in Weather & Climate
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <div class="video-item">
+                        <h3>8. Importance of Benchmarking Before Using AI Weather Forecasts</h3>
+                        <p>Bringing AI into weather forecasting isn’t just about running models - it’s about asking the right 
+                            questions before you even begin. In this video, we set the stage for a conversation on what it 
+                            takes to ensure AI delivers meaningful, trustworthy insights in forecasting. From understanding 
+                            the data you’re working with to making sure model outputs align with real-world needs, we’ll 
+                            explore the mindset and preparation that can make all the difference.</p>
+                        
+                            <div class="video-container"
+                                    data-short="https://youtube.com/shorts/2fNuRSpDxRM"
+                                    style="max-width: 400px; margin: 0 auto; border: 3px solid #ccc; border-radius: 8px; overflow: hidden;">
+                                <div style="position:relative; width:100%; padding-top:150%;"> 
+                                    <iframe
+                                    src="https://youtube.com/embed/2fNuRSpDxRM"
+                                    title="YouTube Short - 8"
+                                    style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen
+                                    loading="lazy"></iframe>
+                                </div>
+                            </div>
+
+                        <div class="download-links" style="margin-top: 10px; text-align: center;">
+                            <a href="#" class="download-btn toggle-btn">Learn More</a>
+                        </div>
+
+                        <div class="learn-more-content" style="display: none; margin-top: 10px; font-size: 14px;">
+                            Courses to build on this topic:<br>
+                            <a href="https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+S-FX-31+V1" target="_blank">
+                                Applying AI Weather Models with NVIDIA Earth-2
+                            </a><br>
+                            <a href="https://learning.ecmwf.int/enrol/index.php?id=46" target="_blank">
+                                MOOC MLWC - 1. ML in Weather & Climate
+                            </a><br>
+                            <a href = "https://learning.ecmwf.int/enrol/index.php?id=48" target = "_blank">
+                                MOOC MLWC - 3. Practical ML applications in Weather & Climate
+                            </a>
+                        </div>
+
+                    </div>
+                    
+                    <div class="video-item">
+                        <h3>9. Can AI Replace Traditional Forecasting</h3>
+                        <p>AI is changing the way we forecast the weather, but it’s not here to take over the role of meteorologists. 
+                            In this segment, we explore how AI fits into the broader forecasting workflow, why human expertise 
+                            remains indispensable, and how both can work together to deliver better forecasts.</p>
+                        
+                            <div class="video-container"
+                                    data-short="https://youtube.com/shorts/XEQiQd_vp14"
+                                    style="max-width: 400px; margin: 0 auto; border: 3px solid #ccc; border-radius: 8px; overflow: hidden;">
+                                <div style="position:relative; width:100%; padding-top:150%;"> 
+                                    <iframe
+                                    src="https://youtube.com/embed/XEQiQd_vp14"
+                                    title="YouTube Short - 9"
+                                    style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen
+                                    loading="lazy"></iframe>
+                                </div>
+                            </div>
+
+                        <div class="download-links" style="margin-top: 10px; text-align: center;">
+                            <a href="#" class="download-btn toggle-btn">Learn More</a>
+                        </div>
+
+                        <div class="learn-more-content" style="display: none; margin-top: 10px; font-size: 14px;">
+                            Courses to build on this topic:<br>
+                            <a href="https://learn.nvidia.com/courses/course-detail?course_id=course-v1:DLI+S-FX-31+V1" target="_blank">
+                                Applying AI Weather Models with NVIDIA Earth-2
+                            </a><br>
+                            <a href="https://learning.ecmwf.int/enrol/index.php?id=46" target="_blank">
+                                MOOC MLWC - 1. ML in Weather & Climate
+                            </a><br>
+                            <a href = "https://learning.ecmwf.int/enrol/index.php?id=48" target = "_blank">
+                                MOOC MLWC - 3. Practical ML applications in Weather & Climate
+                            </a>
+                        </div>
+
+
+                    </div>
+
+                    <div class="video-item">
+                        <h3>10. Impact-Based Forecasting to Save Lives and Livelihoods</h3>
+                        <p>Forecasts are most powerful when they focus on what the weather will do, not just what it will be. 
+                            This video introduces impact-based forecasting - a people-centered approach that translates 
+                            raw weather data into meaningful, actionable insights that help communities prepare, respond, and stay safe.</p>
+                        
+                            <div class="video-container"
+                                    data-short="https://youtube.com/shorts/GPmjyXbKTWU"
+                                    style="max-width: 400px; margin: 0 auto; border: 3px solid #ccc; border-radius: 8px; overflow: hidden;">
+                                <div style="position:relative; width:100%; padding-top:150%;"> 
+                                    <iframe
+                                    src="https://youtube.com/embed/GPmjyXbKTWU"
+                                    title="YouTube Short - 10"
+                                    style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen
+                                    loading="lazy"></iframe>
+                                </div>
+                            </div>
+
+                        <div class="download-links" style="margin-top: 10px; text-align: center;">
+                            <a href="#" class="download-btn toggle-btn">Learn More</a>
+                        </div>
+
+                        <div class="learn-more-content" style="display: none; margin-top: 10px; font-size: 14px;">
+                            <a href="https://etrp.wmo.int/course/view.php?id=253#section-1" target="_blank">
+                                Introduction to Impact-Based Forecast Warning Services (IBFWS)
+                            </a><br>
+                            <a href="https://learn.meted.ucar.edu/#/online-courses/23ec986f-6f65-422d-b197-b8cb3c2c6a75" target="_blank">
+                                An Approach to Impact-based Weather Forecasts in Africa (2024)
+                            </a><br>
+                            <a href = "https://learn.meted.ucar.edu/#/online-courses/f9b99349-53a0-44fd-a5ee-d727964f8f66" target = "_blank">
+                                Impact-Based Forecasting: Identifying Hazards and Constructing Impacts Tables (2021)
+                            </a><br>
+                            <a href = "https://learn.meted.ucar.edu/#/online-courses/5a041c85-16a5-4e1c-ba00-f431f2d46ab9" target = "_blank">
+                                Forecasting Impact-based Rainfall Alerts for South Africa (2023)
+                            </a><br>
+                            <a href = "https://learn.meted.ucar.edu/#/online-courses/b11165c1-5de5-48bf-8f85-c8127e3092ea" target = "_blank">
+                                The Process for Implementing Impact-based Forecast and Warning Services (2021)
+                            </a><br>
+                            <a href = "https://learn.meted.ucar.edu/#/online-courses/d68e7525-fe0a-4a36-b69b-009c9129fe83" target = "_blank">
+                                Communicating Risk: The Impact-based Forecast and Warning Services Approach (2019)
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <div class="video-item">
+                        <h3>11. Forecasts for Decision Support in Agriculture</h3>
+                        <p>In agriculture, timing and context can make the difference between a good harvest and a failed crop. 
+                            This video looks at how forecasts can be tailored to farmers’ specific decision-making needs - linking climate 
+                            information to crop thresholds, planting and harvest calendars, and the capacity to act - so weather insights become clear, 
+                            actionable guidance in the field.</p>
+                        
+                            <div class="video-container"
+                                    data-short="https://youtube.com/shorts/dbPnuDDUp1E"
+                                    style="max-width: 400px; margin: 0 auto; border: 3px solid #ccc; border-radius: 8px; overflow: hidden;">
+                                <div style="position:relative; width:100%; padding-top:150%;"> 
+                                    <iframe
+                                    src="https://youtube.com/embed/dbPnuDDUp1E"
+                                    title="YouTube Short - 11"
+                                    style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen
+                                    loading="lazy"></iframe>
+                                </div>
+                            </div>
+
+                        <div class="download-links" style="margin-top: 10px; text-align: center;">
+                            <a href="#" class="download-btn toggle-btn">Learn More</a>
+                        </div>
+
+                        <div class="learn-more-content" style="display: none; margin-top: 10px; font-size: 14px;">
+                            <a href="https://etrp.wmo.int/course/view.php?id=253#section-1" target="_blank">
+                                Introduction to Impact-Based Forecast Warning Services (IBFWS) (Module 4)
+                            </a><br>
+                            <a href="https://learn.meted.ucar.edu/#/online-courses/b11165c1-5de5-48bf-8f85-c8127e3092ea" target="_blank">
+                                The Process for Implementing Impact-based Forecast and Warning Services (2021)
+                            </a><br>
+                            <a href = "https://learn.meted.ucar.edu/#/online-courses/d68e7525-fe0a-4a36-b69b-009c9129fe83" target = "_blank">
+                                Communicating Risk: The Impact-based Forecast and Warning Services Approach (2019)
+                            </a><br>
+                            <a href = "https://learn.meted.ucar.edu/#/online-courses/8eb1712c-0c64-4e22-9129-32af134e6cfa" target = "_blank">
+                                Communicating Subseasonal to Seasonal Impacts: Drough (2022)
+                            </a><br>
+                            <a href = "https://learn.meted.ucar.edu/#/online-courses/19b7273b-cd44-456e-a38b-03a15d0d64b0" target = "_blank">
+                                Communicating Subseasonal to Seasonal Impacts: ENSO (2023)
+                            </a>
+                        </div>
+
+                    </div>
+
+                    <div class="video-item">
+                        <h3>12. Concept of Operations (CONOPS) in Forecasting</h3>
+                        <p>A Concept of Operations, or ConOps, is your system’s game plan - defining how people, tools, 
+                            and processes come together from start to finish. In this video, we look at how ConOps clarifies roles, 
+                            workflows, and user needs, creating a solid foundation before implementing or modernizing forecasting and advisory systems.</p>
+                        
+                            <div class="video-container"
+                                    data-short="https://youtube.com/shorts/eLz8d3N1e1k"
+                                    style="max-width: 400px; margin: 0 auto; border: 3px solid #ccc; border-radius: 8px; overflow: hidden;">
+                                <div style="position:relative; width:100%; padding-top:150%;">
+                                    <iframe
+                                    src="https://youtube.com/embed/eLz8d3N1e1k"
+                                    title="YouTube Short - 12"
+                                    style="position:absolute; top:0; left:0; width:100%; height:100%; border:0;"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen
+                                    loading="lazy"></iframe>
+                                </div>
+                            </div>
+                        
+                        <div class="download-links" style="margin-top: 12px; text-align: center;">
+                            <a href="assets\CONOPS description.pdf" target="_blank" class="download-btn" style="display:inline-block; padding:8px 14px; background:#0056b3; color:#fff; border-radius:6px; text-decoration:none;">
+                                Download CONOPS description (PDF)
+                            </a>
+                        </div>
+                        <div class="download-links" style="margin-top: 10px; text-align: center;">
+                            <a href="#" class="download-btn toggle-btn">Learn More</a>
+                        </div>
+
+                        <div class="learn-more-content" style="display: none; margin-top: 10px; font-size: 14px;">
+                            <a href="https://community.wmo.int/en/meetings/regional-technical-meeting-and-user-conops-workshop" target="_blank">
+                                Regional Technical Meeting and User / CONOPS Workshop
+                            </a>
+                        </div>
+
+                    </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="quiz">
+                    <div class="page-content">
+                        <h2><span class="weather-icon"></span>Knowledge Assessment</h2>
+                        <div class="template-card">
+                            <h3>Pre-workshop Preparation Quiz</h3>
+                            <p>Test your understanding of the foundational concepts covered in the pre-training videos. Complete this assessment before attending to ensure you're ready for the technical sessions.</p>
+                            <div class="download-links">
+                                <a href="quiz.html" class="download-btn">Take Assessment (20 min)</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="tab-content" id="templates">
+                    <div class="page-content">
+                        <h2><span class="weather-icon"></span>Workshop Templates & Tools</h2>
+                        <div class="template-section">
+                            <div class="template-card">
+                                <h3>CONOPS Development Template</h3>
+                                <p>Structured template for developing your country-specific Concept of Operations, including stakeholder mapping, workflow design, and implementation planning.</p>
+                                <div class="download-links">
+                                    <a href="assets/CONOP.pdf" class="download-btn">Guidelines</a>
+                                    <a href="assets/CONOPS template.pptx" class="download-btn">CONOPS Template</a>
+                                </div>
+                                
+                            </div>
+
+                            <div class="template-card">
+                                <h3>Country Climate Services Presentation Template</h3>
+                                <p>Standardized format for presenting your country's current weather and climate services for agriculture. Please follow the instructions as shown in templates.</p>
+                                <div class="download-links">
+                                    <a href="assets/Training program_Agr presentation_Template.pptx" class="download-btn">NMHS PowerPoint Template</a>
+                                    <a href="assets/Training program_Agr presentation_Template.pptx" class="download-btn">Ag Expert PowerPoint Template</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="template-card">
+                            <h3>Data Submission Requirements</h3>
+                            <p>Access to technical specifications for the data files.</p>
+                            <div class="download-links">
+                                <a href="data.html" target="_blank" class="download-btn">Data Specifications</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </section>
+    </main>
+    
+    <script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabButtons = document.querySelectorAll('.tab-btn');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabContents.forEach(content => {
+            content.style.display = 'none';
+        });
+        document.querySelector('.tab-content.active').style.display = 'block';
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabId = button.getAttribute('data-tab');
+                
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                tabContents.forEach(content => {
+                    content.classList.remove('active');
+                    content.style.display = 'none';
+                });
+                
+                const activeContent = document.getElementById(tabId);
+                activeContent.classList.add('active');
+                activeContent.style.display = 'block';
+            });
+        });
+        
+        document.addEventListener('click', e => {
+            const btn = e.target.closest('.toggle-btn');
+            if (!btn) return;
+
+            e.preventDefault();
+            const content = btn.closest('.download-links').nextElementSibling;
+            const isHidden = getComputedStyle(content).display === 'none';
+
+            content.style.display = isHidden ? 'block' : 'none';
+            btn.textContent = isHidden ? 'Show Less' : 'Learn More';
+        });
+    });
+    </script>
+</body>
+</html>

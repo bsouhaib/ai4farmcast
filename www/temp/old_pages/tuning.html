@@ -1,0 +1,1220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Tuning - Weather AI Platform</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script src="https://earthengine.googleapis.com/v1/earthengine_api.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f8fffe;
+            color: #1f2d3d;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #d4edda;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(40, 167, 69, 0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #155724;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: "🌱";
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: #495057;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #155724;
+            background-color: #d4edda;
+        }
+
+        .nav-link::before {
+            content: attr(data-number);
+            background: #28a745;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-right: 8px;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .hero-section {
+            padding: 4rem 0;
+            text-align: center;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 50%, #17a2b8 100%);
+            color: white;
+            margin-bottom: 4rem;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-subtitle {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            font-weight: 400;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(40, 167, 69, 0.1);
+            border: 1px solid #d4edda;
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #155724;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #d4edda;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-label {
+            font-weight: 500;
+            color: #495057;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .form-input,
+        .form-select {
+            padding: 0.75rem;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            background-color: #ffffff;
+            color: #1f2d3d;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .form-input:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: #28a745;
+            box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+        }
+
+        .form-select[multiple] {
+            min-height: 120px;
+        }
+
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 2rem 0;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 6px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #218838;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background-color: #17a2b8;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #138496;
+            transform: translateY(-1px);
+        }
+
+        .btn-tertiary {
+            background-color: #20c997;
+            color: white;
+        }
+
+        .btn-tertiary:hover {
+            background-color: #1ea888;
+            transform: translateY(-1px);
+        }
+
+        .status-card {
+            background: linear-gradient(135deg, #f8fffe 0%, #e8f5e8 100%);
+            border: 1px solid #d4edda;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-indicator {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: #28a745;
+        }
+
+        .status-text {
+            font-weight: 500;
+            color: #155724;
+        }
+
+        .results-section {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .results-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .progress-container {
+            margin-bottom: 2rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            text-align: center;
+            color: #495057;
+            font-size: 0.9rem;
+            margin-top: 0.5rem;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .metric-card {
+            background: white;
+            border: 1px solid #d4edda;
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .metric-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(40, 167, 69, 0.15);
+        }
+
+        .metric-name {
+            font-weight: 500;
+            color: #495057;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-value {
+            font-size: 2rem;
+            color: #155724;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .metric-unit {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .chart-container {
+            background: white;
+            border: 1px solid #d4edda;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            height: 400px;
+        }
+
+        .forecast-section {
+            display: none;
+            margin-top: 2rem;
+        }
+
+        .forecast-controls {
+            background: #f8fffe;
+            border: 1px solid #d4edda;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .controls-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .map-container {
+            background: white;
+            border: 1px solid #d4edda;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        #forecastMap {
+            height: 400px;
+            border-radius: 6px;
+            background: #f8fffe;
+        }
+
+        .region-selector {
+            background: white;
+            border: 1px solid #d4edda;
+            border-radius: 8px;
+            padding: 1.5rem;
+        }
+
+        .region-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .region-btn {
+            padding: 0.75rem 1rem;
+            background: #f8fffe;
+            border: 1px solid #d4edda;
+            border-radius: 6px;
+            color: #495057;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            font-size: 0.9rem;
+        }
+
+        .region-btn:hover {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+
+        .region-btn.active {
+            background: #28a745;
+            border-color: #28a745;
+            color: white;
+        }
+
+        .region-info {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: #d4edda;
+            border-radius: 6px;
+            display: none;
+        }
+
+        .region-info.active {
+            display: block;
+        }
+
+        .climate-info {
+            font-size: 0.9rem;
+            color: #155724;
+            line-height: 1.5;
+        }
+
+        .footer {
+            background: #155724;
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .footer-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #b8daff;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section {
+            color: #c3e6cb;
+        }
+
+        .footer-section h4 {
+            color: #b8daff;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .two-column {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .page-link {
+            color: #28a745;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+            border: 1px solid #28a745;
+            display: inline-block;
+            margin: 0.25rem;
+        }
+
+        .page-link:hover {
+            background-color: #28a745;
+            color: white;
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 0 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .main-container {
+                padding: 0 1rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .button-group {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .two-column {
+                grid-template-columns: 1fr;
+            }
+
+            .controls-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">Weather AI Platform</div>
+            <nav class="nav-links">
+                <a href="evaluation.html" class="nav-link" data-number="1">Evaluate & Compare Models</a>
+                <a href="tuning.html" class="nav-link active" data-number="2">Tune with Local Data</a>
+                <a href="forecasts.html" class="nav-link" data-number="3">Generate Forecasts</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <div class="main-container">
+            <h1 class="hero-title">AI Weather Model Tuning for Agricultural Applications</h1>
+            <p class="hero-subtitle">
+                Fine-tune state-of-the-art weather prediction models with local agricultural data. 
+                Optimize performance for climate-sensitive farming regions worldwide.
+            </p>
+        </div>
+    </section>
+
+    <main class="main-container">
+        <div class="status-card">
+            <div class="status-indicator">
+                <div class="status-dot" id="statusDot"></div>
+                <span class="status-text" id="statusText">System Ready for Tuning</span>
+            </div>
+            <div>
+                <span style="color: #6c757d; font-size: 0.9rem;">Last updated: 5 minutes ago</span>
+            </div>
+        </div>
+
+        <!-- Quick Navigation Section -->
+        <div class="section">
+            <h2 class="section-title">Navigation</h2>
+            <p style="margin-bottom: 1rem; color: #495057;">Access different sections of the platform:</p>
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <a href="index.html" class="page-link">🏠 Go to Home</a>
+                <a href="evaluation.html" class="page-link">📊 Go to Model Evaluation & Comparison</a>
+                <a href="forecasts.html" class="page-link">🌍 Go to Forecast Generation</a>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Model Tuning Configuration</h2>
+            
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label" for="ai-model">Base AI Weather Model</label>
+                    <select class="form-select" id="ai-model">
+                        <option value="">Choose a base model...</option>
+                        <option value="graphcast">GraphCast (DeepMind)</option>
+                        <option value="pangu">Pangu-Weather</option>
+                        <option value="fuxi">FuXi S2S</option>
+                        <option value="neuralgcm">NeuralGCM</option>
+                        <option value="fourcastnet">FourCastNet</option>
+                        <option value="keisler">Keisler GNN</option>
+                        <option value="sphericalcnn">Spherical CNN</option>
+                        <option value="weatherbench">WeatherBench Baseline</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="local-dataset">Local Agricultural Dataset</label>
+                    <select class="form-select" id="local-dataset">
+                        <option value="">Select local dataset...</option>
+                        <option value="farm-weather-stations">Farm Weather Stations</option>
+                        <option value="agricultural-surveys">Agricultural Survey Data</option>
+                        <option value="crop-yield-data">Crop Yield Records</option>
+                        <option value="soil-moisture">Soil Moisture Sensors</option>
+                        <option value="irrigation-data">Irrigation System Data</option>
+                        <option value="satellite-ndvi">Satellite NDVI Data</option>
+                        <option value="phenology-observations">Crop Phenology Observations</option>
+                        <option value="custom-upload">Upload Custom Dataset</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="tuning-region">Target Agricultural Region</label>
+                    <select class="form-select" id="tuning-region">
+                        <option value="">Select region...</option>
+                        <option value="ethiopia">Ethiopia</option>
+                        <option value="kenya">Kenya</option>
+                        <option value="nigeria">Nigeria</option>
+                        <option value="bangladesh">Bangladesh</option>
+                        <option value="chile">Chile</option>
+                        <option value="custom-region">Define Custom Region</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-grid">
+                <div class="form-group">
+                    <label class="form-label" for="tuning-objective">Tuning Objective</label>
+                    <select class="form-select" id="tuning-objective">
+                        <option value="precipitation-accuracy">Precipitation Accuracy</option>
+                        <option value="temperature-extremes">Temperature Extremes</option>
+                        <option value="drought-prediction">Drought Prediction</option>
+                        <option value="frost-detection">Frost Detection</option>
+                        <option value="growing-season">Growing Season Optimization</option>
+                        <option value="crop-water-stress">Crop Water Stress</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="validation-metrics">Validation Metrics</label>
+                    <select class="form-select" id="validation-metrics" multiple>
+                        <option value="rmse">Root Mean Squared Error (RMSE)</option>
+                        <option value="mae">Mean Absolute Error (MAE)</option>
+                        <option value="bias">Bias Correction</option>
+                        <option value="skill-score">Skill Score vs Climatology</option>
+                        <option value="extreme-event-detection">Extreme Event Detection</option>
+                        <option value="false-alarm-rate">False Alarm Rate</option>
+                        <option value="hit-rate">Hit Rate</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="tuning-period">Historical Tuning Period</label>
+                    <select class="form-select" id="tuning-period">
+                        <option value="1year">Last 1 Year</option>
+                        <option value="3years">Last 3 Years</option>
+                        <option value="5years">Last 5 Years</option>
+                        <option value="10years">Last 10 Years</option>
+                        <option value="custom">Custom Date Range</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button class="btn btn-primary" onclick="startTuning()">Start Model Tuning</button>
+                <button class="btn btn-secondary" onclick="validateTuning()">Validate Tuning</button>
+                <button class="btn btn-tertiary" onclick="showForecastMaps()">Generate Local Forecasts</button>
+            </div>
+        </div>
+
+        <div class="section results-section" id="results">
+            <h2 class="section-title">Tuning & Validation Results</h2>
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress"></div>
+                </div>
+                <div class="progress-text" id="progress-text">Ready to start tuning...</div>
+            </div>
+            <div class="metrics-grid" id="metrics-display">
+                <!-- Metrics will be populated here -->
+            </div>
+            <div class="chart-container" id="chart-container" style="display: none;">
+                <canvas id="tuningChart"></canvas>
+            </div>
+        </div>
+
+        <div class="section forecast-section" id="forecast-section">
+            <h2 class="section-title">Local Agricultural Forecasts</h2>
+            
+            <div class="forecast-controls">
+                <div class="controls-grid">
+                    <div class="form-group">
+                        <label class="form-label" for="forecast-variable">Agricultural Variable</label>
+                        <select class="form-select" id="forecast-variable">
+                            <option value="precipitation">Daily Precipitation</option>
+                            <option value="temperature">Min/Max Temperature</option>
+                            <option value="humidity">Relative Humidity</option>
+                            <option value="wind">Wind Speed</option>
+                            <option value="evapotranspiration">Reference Evapotranspiration</option>
+                            <option value="soil-moisture">Soil Moisture Index</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="forecast-day">Forecast Day</label>
+                        <select class="form-select" id="forecast-day">
+                            <option value="1">Day 1</option>
+                            <option value="3">Day 3</option>
+                            <option value="7" selected>Day 7</option>
+                            <option value="14">Day 14</option>
+                            <option value="30">Monthly Outlook</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label" for="forecast-date">Forecast Date</label>
+                        <input type="date" class="form-input" id="forecast-date" value="2020-07-15">
+                    </div>
+                    <div class="form-group">
+                        <button class="btn btn-primary" onclick="generateForecastMaps()">Generate Local Forecast</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="two-column">
+                <div class="map-container">
+                    <h3 style="color: #155724; margin-bottom: 1rem; font-weight: 600;">Agricultural Region Forecast</h3>
+                    <div id="forecastMap"></div>
+                </div>
+                
+                <div class="region-selector">
+                    <h3 style="color: #155724; margin-bottom: 1rem; font-weight: 600;">Agricultural Zones</h3>
+                    <div class="region-buttons">
+                        <button class="region-btn" data-region="ethiopia" onclick="selectRegion('ethiopia')">
+                            🇪🇹 Ethiopia (Highland/Arid)
+                        </button>
+                        <button class="region-btn" data-region="kenya" onclick="selectRegion('kenya')">
+                            🇰🇪 Kenya (Equatorial/Highland)
+                        </button>
+                        <button class="region-btn" data-region="nigeria" onclick="selectRegion('nigeria')">
+                            🇳🇬 Nigeria (Tropical/Sahel)
+                        </button>
+                        <button class="region-btn" data-region="bangladesh" onclick="selectRegion('bangladesh')">
+                            🇧🇩 Bangladesh (Monsoon/Delta)
+                        </button>
+                        <button class="region-btn" data-region="chile" onclick="selectRegion('chile')">
+                            🇨🇱 Chile (Mediterranean/Arid)
+                        </button>
+                    </div>
+                    
+                    <div class="region-info" id="region-info">
+                        <h4 style="color: #155724; margin-bottom: 0.5rem; font-weight: 600;">Selected Agricultural Zone</h4>
+                        <div id="region-details" class="climate-info"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="regional-metrics" style="display: none;">
+                <h3 style="color: #155724; margin-bottom: 1.5rem; font-weight: 600;">Local Performance Metrics</h3>
+                <div id="regional-metrics-display" class="metrics-grid">
+                    <!-- Regional metrics will be populated here -->
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <h3 class="footer-title">Agricultural Weather Intelligence Platform</h3>
+            <p style="margin-bottom: 2rem; color: #c3e6cb;">
+                This platform specializes in tuning weather AI models with local agricultural data to improve 
+                forecast accuracy for farming decisions. Supporting climate-resilient agriculture through 
+                precision weather intelligence.
+            </p>
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <h4>Local Datasets</h4>
+                    <p>Farm stations, soil sensors, crop records</p>
+                </div>
+                <div class="footer-section">
+                    <h4>AI Models</h4>
+                    <p>GraphCast, Pangu-Weather, FuXi, NeuralGCM</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Applications</h4>
+                    <p>Irrigation, planting, harvesting, risk management</p>
+                </div>
+                <div class="footer-section">
+                    <h4>Regions</h4>
+                    <p>Global agricultural zones and farming systems</p>
+                </div>
+            </div>
+            <p style="text-align: center; color: #6c757d; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #495057;">
+                Precision agriculture through AI-powered weather intelligence
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Agricultural weather model data
+        let agriculturalModelData = {
+            'graphcast': {
+                name: 'GraphCast (Tuned for Agriculture)',
+                performance: {
+                    'precipitation_accuracy': { rmse: 1.8, bias: 0.12, skill: 0.84 },
+                    'temperature_extremes': { rmse: 1.2, bias: -0.08, skill: 0.91 },
+                    'drought_prediction': { hit_rate: 0.87, false_alarm: 0.13, skill: 0.78 },
+                    'frost_detection': { hit_rate: 0.94, false_alarm: 0.08, skill: 0.92 }
+                },
+                tuning_time: '6 hours with local data',
+                improvement: '+15% accuracy over base model',
+                local_bias_correction: 'Enabled'
+            },
+            'pangu': {
+                name: 'Pangu-Weather (Agricultural Tuning)',
+                performance: {
+                    'precipitation_accuracy': { rmse: 2.1, bias: 0.18, skill: 0.79 },
+                    'temperature_extremes': { rmse: 1.4, bias: -0.12, skill: 0.88 },
+                    'drought_prediction': { hit_rate: 0.82, false_alarm: 0.16, skill: 0.73 },
+                    'frost_detection': { hit_rate: 0.89, false_alarm: 0.11, skill: 0.87 }
+                },
+                tuning_time: '4 hours with local data',
+                improvement: '+12% accuracy over base model',
+                local_bias_correction: 'Enabled'
+            }
+        };
+
+        function updateStatus(status, message) {
+            const statusDot = document.getElementById('statusDot');
+            const statusText = document.getElementById('statusText');
+            
+            statusText.textContent = message;
+            
+            const colors = {
+                'ready': '#28a745',
+                'tuning': '#20c997',
+                'validating': '#17a2b8'
+            };
+            
+            statusDot.style.backgroundColor = colors[status] || '#28a745';
+        }
+
+        function startTuning() {
+            const model = document.getElementById('ai-model').value;
+            const dataset = document.getElementById('local-dataset').value;
+            const region = document.getElementById('tuning-region').value;
+            
+            if (!model || !dataset || !region) {
+                alert('Please select a base model, local dataset, and target region before starting tuning.');
+                return;
+            }
+
+            updateStatus('tuning', 'Model Tuning in Progress');
+            showResults();
+            
+            const progressBar = document.getElementById('progress');
+            const progressText = document.getElementById('progress-text');
+            const metricsDisplay = document.getElementById('metrics-display');
+            
+            tuningProgress = 0;
+            progressText.textContent = 'Initializing model tuning with local data...';
+            metricsDisplay.innerHTML = '<p style="text-align: center; color: #6c757d;">Tuning model with agricultural data, please wait...</p>';
+            
+            const tuningInterval = setInterval(() => {
+                tuningProgress += Math.random() * 8 + 2;
+                progressBar.style.width = Math.min(tuningProgress, 100) + '%';
+                
+                if (tuningProgress < 25) {
+                    progressText.textContent = 'Loading local agricultural dataset...';
+                } else if (tuningProgress < 50) {
+                    progressText.textContent = 'Fine-tuning model parameters...';
+                } else if (tuningProgress < 75) {
+                    progressText.textContent = 'Applying bias correction...';
+                } else if (tuningProgress < 100) {
+                    progressText.textContent = 'Validating tuned model...';
+                }
+                
+                if (tuningProgress >= 100) {
+                    clearInterval(tuningInterval);
+                    progressText.textContent = 'Model tuning completed successfully!';
+                    updateStatus('ready', 'Tuning Complete - Model Ready');
+                    displayTuningResults();
+                    initializeTuningChart();
+                }
+            }, 200);
+        }
+
+        function validateTuning() {
+            const model = document.getElementById('ai-model').value;
+            const metrics = Array.from(document.getElementById('validation-metrics').selectedOptions).map(opt => opt.value);
+            
+            if (!model || metrics.length === 0) {
+                alert('Please select a model and at least one validation metric.');
+                return;
+            }
+
+            updateStatus('validating', 'Validating Tuned Model');
+            showResults();
+            
+            const progressText = document.getElementById('progress-text');
+            progressText.textContent = 'Running validation on local data...';
+            
+            setTimeout(() => {
+                updateStatus('ready', 'Validation Complete');
+                progressText.textContent = 'Validation completed successfully!';
+                displayValidationResults(metrics);
+            }, 3000);
+        }
+
+        function displayValidationResults(selectedMetrics) {
+            const model = document.getElementById('ai-model').value;
+            const region = document.getElementById('tuning-region').value;
+            const metricsDisplay = document.getElementById('metrics-display');
+            
+            let html = '';
+            
+            if (agriculturalModelData[model]) {
+                const modelData = agriculturalModelData[model];
+                const perf = modelData.performance;
+                
+                html += `<div style="grid-column: 1/-1; padding: 1rem; background: #d4edda; border-radius: 6px; margin-bottom: 1rem;">
+                    <strong style="color: #155724;">${modelData.name}</strong> validated for ${region || 'agricultural applications'}<br>
+                    <small style="color: #495057;">Improvement: ${modelData.improvement} | Tuning Time: ${modelData.tuning_time}</small>
+                </div>`;
+                
+                selectedMetrics.forEach(metric => {
+                    if (metric === 'rmse' && perf.precipitation_accuracy) {
+                        html += `
+                            <div class="metric-card">
+                                <div class="metric-name">Precipitation RMSE</div>
+                                <div class="metric-value">${perf.precipitation_accuracy.rmse}</div>
+                                <div class="metric-unit">mm/day</div>
+                            </div>`;
+                    } else if (metric === 'bias' && perf.temperature_extremes) {
+                        html += `
+                            <div class="metric-card">
+                                <div class="metric-name">Temperature Bias</div>
+                                <div class="metric-value">${perf.temperature_extremes.bias}</div>
+                                <div class="metric-unit">°C</div>
+                            </div>`;
+                    } else if (metric === 'skill-score' && perf.drought_prediction) {
+                        html += `
+                            <div class="metric-card">
+                                <div class="metric-name">Drought Skill Score</div>
+                                <div class="metric-value">${perf.drought_prediction.skill}</div>
+                                <div class="metric-unit">vs Climatology</div>
+                            </div>`;
+                    } else if (metric === 'hit-rate' && perf.frost_detection) {
+                        html += `
+                            <div class="metric-card">
+                                <div class="metric-name">Frost Hit Rate</div>
+                                <div class="metric-value">${perf.frost_detection.hit_rate}</div>
+                                <div class="metric-unit">Detection Rate</div>
+                            </div>`;
+                    }
+                });
+            } else {
+                // Generic metrics for models without specific data
+                const metricValues = {
+                    'rmse': (Math.random() * 1.5 + 1.0).toFixed(2),
+                    'mae': (Math.random() * 1.2 + 0.8).toFixed(2),
+                    'bias': (Math.random() * 0.4 - 0.2).toFixed(2),
+                    'skill-score': (0.7 + Math.random() * 0.2).toFixed(2)
+                };
+
+                selectedMetrics.forEach(metric => {
+                    if (metricValues[metric]) {
+                        html += `
+                            <div class="metric-card">
+                                <div class="metric-name">${metric.replace('-', ' ').toUpperCase()}</div>
+                                <div class="metric-value">${metricValues[metric]}</div>
+                                <div class="metric-unit">Agricultural Score</div>
+                            </div>
+                        `;
+                    }
+                });
+            }
+
+            metricsDisplay.innerHTML = html;
+        }
+
+        function showResults() {
+            const resultsSection = document.getElementById('results');
+            resultsSection.classList.add('active');
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function showForecastMaps() {
+            const forecastSection = document.getElementById('forecast-section');
+            forecastSection.style.display = 'block';
+            forecastSection.scrollIntoView({ behavior: 'smooth' });
+            
+            if (!window.forecastMap) {
+                initializeForecastMap();
+            }
+        }
+
+        function displayTuningResults() {
+            const model = document.getElementById('ai-model').value;
+            const metricsDisplay = document.getElementById('metrics-display');
+            
+            if (agriculturalModelData[model]) {
+                const modelData = agriculturalModelData[model];
+                const perf = modelData.performance;
+                
+                metricsDisplay.innerHTML = `
+                    <div style="grid-column: 1/-1; padding: 1rem; background: #d4edda; border-radius: 6px; margin-bottom: 1rem;">
+                        <h3 style="color: #155724; margin-bottom: 0.5rem;">${modelData.name} - Tuning Complete</h3>
+                        <p style="color: #495057; margin: 0;">
+                            Improvement: ${modelData.improvement} | Tuning Time: ${modelData.tuning_time}<br>
+                            🎯 Local Bias Correction: ${modelData.local_bias_correction} | 🌾 Agricultural Optimization: Enabled
+                        </p>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <div class="metric-name">Precipitation Accuracy</div>
+                        <div class="metric-value">${perf.precipitation_accuracy.skill}</div>
+                        <div class="metric-unit">Skill Score</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-name">Temperature Extremes</div>
+                        <div class="metric-value">${perf.temperature_extremes.skill}</div>
+                        <div class="metric-unit">Skill Score</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-name">Drought Prediction</div>
+                        <div class="metric-value">${perf.drought_prediction.hit_rate}</div>
+                        <div class="metric-unit">Hit Rate</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-name">Frost Detection</div>
+                        <div class="metric-value">${perf.frost_detection.hit_rate}</div>
+                        <div class="metric-unit">Hit Rate</div>
+                    </div>
+                `;
+            }
+        }
+
+        function initializeTuningChart() {
+            const chartContainer = document.getElementById('chart-container');
+            chartContainer.style.display = 'block';
+            
+            const ctx = document.getElementById('tuningChart').getContext('2d');
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Base Model', 'Tuned Model'],
+                    datasets: [{
+                        label: 'Accuracy Improvement (%)',
+                        data: [75, 90],
+                        backgroundColor: ['#6c757d', '#28a745'],
+                        borderColor: ['#495057', '#155724'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: '#495057'
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: '#495057'
+                            },
+                            grid: {
+                                color: 'rgba(73, 80, 87, 0.1)'
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                color: '#495057'
+                            },
+                            grid: {
+                                color: 'rgba(73, 80, 87, 0.1)'
+                            },
+                            beginAtZero: true,
+                            max: 100
+                        }
+                    }
+                }
+            });
+        }
+
+        function initializeForecastMap() {
+            const mapDiv = document.getElementById('forecastMap');
+            mapDiv.innerHTML = `
+                <div style="height: 100%; background: linear-gradient(135deg, #f8fffe, #e8f5e8); display: flex; align-items: center; justify-content: center; border-radius: 6px; color: #155724;">
+                    <div style="text-align: center;">
+                        🌾<br>
+                        Agricultural Weather Map<br>
+                        <small>(Interactive agricultural forecast map would load here)</small>
+                    </div>
+                </div>
+            `;
+        }
+
+        function selectRegion(region) {
+            document.querySelectorAll('.region-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            document.querySelector(`[data-region="${region}"]`).classList.add('active');
+            
+            const regionInfo = document.getElementById('region-info');
+            const regionDetails = document.getElementById('region-details');
+            
+            const regionData = {
+                'ethiopia': {
+                    name: 'Ethiopia',
+                    crops: 'Teff, maize, sorghum, wheat',
+                    challenges: 'Extreme elevation gradients, drought prediction, seasonal rainfall variability'
+                },
+                'kenya': {
+                    name: 'Kenya',
+                    crops: 'Maize, tea, coffee, wheat',
+                    challenges: 'Altitude effects, bimodal rainfall patterns, extreme weather events'
+                },
+                'nigeria': {
+                    name: 'Nigeria', 
+                    crops: 'Yam, cassava, maize, rice',
+                    challenges: 'Seasonal precipitation variability, dust storms, extreme temperatures'
+                },
+                'bangladesh': {
+                    name: 'Bangladesh',
+                    crops: 'Rice, jute, tea, wheat',
+                    challenges: 'Flooding, cyclones, high humidity, monsoon prediction'
+                },
+                'chile': {
+                    name: 'Chile',
+                    crops: 'Grapes, wheat, maize, fruits',
+                    challenges: 'Mountain-valley wind patterns, coastal influences, drought'
+                }
+            };
+            
+            if (regionData[region]) {
+                regionDetails.innerHTML = `
+                    <strong>${regionData[region].name}</strong><br>
+                    <strong>Primary Crops:</strong> ${regionData[region].crops}<br>
+                    <strong>Weather Challenges:</strong> ${regionData[region].challenges}
+                `;
+                regionInfo.classList.add('active');
+                
+                showRegionalMetrics(region);
+            }
+        }
+
+        function showRegionalMetrics(region) {
+            const regionalMetrics = document.getElementById('regional-metrics');
+            const metricsDisplay = document.getElementById('regional-metrics-display');
+            
+            const performanceData = {
+                'ethiopia': { precipitation: 2.9, temperature: 2.2, skill: 69.5 },
+                'kenya': { precipitation: 2.4, temperature: 1.8, skill: 74.8 },
+                'nigeria': { precipitation: 2.8, temperature: 1.9, skill: 71.2 },
+                'bangladesh': { precipitation: 3.1, temperature: 2.0, skill: 72.1 },
+                'chile': { precipitation: 2.1, temperature: 1.3, skill: 78.3 }
+            };
+            
+            const perf = performanceData[region];
+            
+            metricsDisplay.innerHTML = `
+                <div class="metric-card">
+                    <div class="metric-name">Precipitation RMSE</div>
+                    <div class="metric-value">${perf.precipitation}</div>
+                    <div class="metric-unit">mm/day</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name">Temperature RMSE</div>
+                    <div class="metric-value">${perf.temperature}</div>
+                    <div class="metric-unit">°C</div>
+                </div>
+                <div class="metric-card">
+                    <div class="metric-name">Agricultural Skill Score</div>
+                    <div class="metric-value">${perf.skill}</div>
+                    <div class="metric-unit">%</div>
+                </div>
+            `;
+            
+            regionalMetrics.style.display = 'block';
+        }
+
+        function generateForecastMaps() {
+            const mapDiv = document.getElementById('forecastMap');
+            const variable = document.getElementById('forecast-variable').value;
+            const day = document.getElementById('forecast-day').value;
+            
+            mapDiv.innerHTML = `
+                <div style="height: 100%; background: linear-gradient(135deg, #d4edda, #b8daff); display: flex; align-items: center; justify-content: center; border-radius: 6px; color: #155724;">
+                    <div style="text-align: center;">
+                        🌾<br>
+                        ${variable.charAt(0).toUpperCase() + variable.slice(1).replace('-', ' ')} Forecast<br>
+                        ${day === '30' ? 'Monthly Outlook' : `Day ${day}`}<br>
+                        <small>(Agricultural forecast visualization would display here)</small>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Initialize the platform
+        let tuningProgress = 0;
+        
+        // Set current date for forecast date input
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('forecast-date').value = today;
+        });
+    </script>
+</body>
+</html>

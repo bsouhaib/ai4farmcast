@@ -1,0 +1,1452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda - Aim for Scale Training Program</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1f2d3d;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 50%, #17a2b8 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #28a745;
+            height: 50px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 50px;
+            padding: 0rem 2rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-placeholder {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #2d5a27, #4a7c59);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #2d5a27;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #2d5a27;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: #4a7c59;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: #2d5a27;
+            color: white;
+        }
+
+        main {
+            margin-top: 90px;
+            padding: 2rem 0;
+        }
+
+        .page {
+            background: white;
+            border-radius: 15px;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #2d5a27 0%, #4a7c59 50%, #6b8e5a 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+            opacity: 0.1;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-content {
+            padding: 1rem 2rem;
+        }
+
+        .track-buttons {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .track-btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #4a7c59, #2d5a27);
+            color: white;
+        }
+
+        .track-btn:hover {
+            background:linear-gradient(135deg, #2d5a27, #1a3d1a);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(74, 124, 89, 0.3);
+        }
+
+        .track-btn.active {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            border-color: #2d5a27;
+        }
+
+        .day-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2em;
+            border-bottom: 2px solid #e8f5e8;
+            flex-wrap: wrap;
+            gap: 25px;
+        }
+
+        .day-tab {
+            padding: 1rem 3rem;
+            cursor: pointer;
+            background: #f8fdf8;
+            border: none;
+            border-radius: 8px 8px 0 0;
+            margin-right: 4px;
+            font-weight: 500;
+            color: #2d5a27;
+            transition: all 0.3s ease;
+        }
+
+        .day-tab:hover {
+            background: #e8f5e8;
+        }
+
+        .day-tab.active {
+            background: #4a7c59;
+            color: white;
+        }
+
+        .agenda-content {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .agenda-content.active {
+            display: block;
+        }
+
+        .session {
+            background: white;
+            margin: 1rem 0;
+            padding: 1.2rem;
+            border-radius: 10px;
+            border-left: 4px solid #6b8e5a;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(45, 90, 39, 0.08);
+        }
+
+        .session:hover {
+            transform: translateX(8px);
+            box-shadow: 0 8px 25px rgba(45, 90, 39, 0.15);
+            border-left-color: #2d5a27;
+        }
+
+        .session-time {
+            font-weight: bold;
+            color: #2d5a27;
+            font-size: 0.95rem;
+        }
+
+        .session-title {
+            font-size: 1.1rem;
+            margin: 0.5rem 0;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .session-speaker {
+            color: #4a7c59;
+            font-style: italic;
+        }
+        
+        .session.break {
+            background: #f9f9f9;
+            font-weight: 600;
+            color: #6c757d;
+        }
+        
+        .session.break:hover {
+            transform: none;
+            box-shadow: none;
+            border-left-color: #e0a800;
+        }
+
+        .session.break.lunch {
+            border-left-color: #fd7e14;
+            text-align: center;
+        }
+        
+        .split-tracks {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin: 1rem 0;
+        }
+
+        .track-column {
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            border: 2px solid #20c997;
+        }
+
+        .track-column h5 {
+            color: #155724;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+            padding: 0.5rem;
+            background: linear-gradient(135deg, #d4edda, #f8fffe);
+            border-radius: 8px;
+        }
+
+        .track-column .session {
+            margin: 0.5rem 0;
+            padding: 1rem;
+            border-left: 3px solid #28a745;
+        }
+
+        .joint-session {
+            grid-column: span 2;
+            background: white;
+            border-radius: 10px;
+            padding: 1rem;
+            border: 2px solid #17a2b8;
+        }
+
+        .joint-session h5 {
+            color: #155724;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            text-align: center;
+            padding: 0.5rem;
+            background: linear-gradient(135deg, #e1f5fe, #f0f9f0);
+            border-radius: 8px;
+        }
+
+        .weather-icon {
+            display: inline-block;
+            margin-right: 0.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .split-tracks {
+                grid-template-columns: 1fr;
+            }
+            
+            .joint-session {
+                grid-column: span 1;
+            }
+            
+            .day-tabs {
+                flex-direction: column;
+            }
+            
+            .day-tab {
+                border-radius: 8px;
+                margin-bottom: 4px;
+            }
+        }
+
+        .loading-spinner {
+            border: 3px solid #d4edda;
+            border-top: 3px solid #28a745;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body style="padding-top:160px;">
+   <header style="background:rgba(255,255,255,0.96); backdrop-filter:blur(10px); box-shadow:0 2px 20px rgba(0,0,0,0.15); position:fixed; width:100%; top:0; z-index:1000; border-bottom:3px solid #28a745; height:auto;">
+  <nav class="container" style="display:flex; justify-content:center; align-items:center; padding:8px 12px; height:auto;">
+    <ul class="nav-links"
+        style="display:flex; flex-direction:row; flex-wrap:wrap; list-style:none; gap:12px; justify-content:center; align-items:center; margin:0; padding:0;">
+      <li><a href="index.html" style="text-decoration:none; color:#155724; font-weight:500; padding:8px 12px; border-radius:25px; display:inline-block; ">Overview</a></li>
+      <li><a href="bios.html" style="text-decoration:none; color:#155724; font-weight:500; padding:8px 12px; border-radius:25px; display:inline-block;">Team</a></li>
+      <li><a href="speakers.html" style="text-decoration:none; color:#155724; font-weight:500; padding:8px 12px; border-radius:25px; display:inline-block;">Speakers</a></li>
+      <li><a href="participants.html" style="text-decoration:none; color:#155724; font-weight:500; padding:8px 12px; border-radius:25px; display:inline-block;">Participants</a></li>
+      <li><a href="agenda.html"  class="active" style="text-decoration:none; color:#155724; font-weight:500; padding:8px 12px; border-radius:25px; display:inline-block; background:#155724; color:#fff;">Agenda</a></li>
+      <li><a href="materials.html" style="text-decoration:none; color:#155724; font-weight:500; padding:8px 12px; border-radius:25px; display:inline-block;">Pre-Training Resources</a></li>
+    </ul>
+  </nav>
+</header>
+
+    <main class="container">
+        <section class="page">
+            <div class="page-header">
+                <h1><span class="weather-icon"></span>Training Program Schedule</h1>
+                <p>5-Day Intensive Workshop | September 22-26, 2025</p>
+            </div>
+            <div class="page-content">
+                <div class="track-buttons">
+                    <button class="track-btn active" onclick="showTrack('full')">
+                        <span class="weather-icon"></span>Full Program
+                    </button>
+                    <button class="track-btn" onclick="showTrack('technical')">
+                        <span class="weather-icon"></span>Technical Track
+                    </button>
+                    <button class="track-btn" onclick="showTrack('applied')">
+                        <span class="weather-icon"></span>Applied Track
+                    </button>
+                </div>
+
+                <div id="full-agenda" class="agenda-section">
+                    <div class="day-tabs">
+                        <button class="day-tab active" onclick="showDay('full', 1)">Day 1</button>
+                        <button class="day-tab" onclick="showDay('full', 2)">Day 2</button>
+                        <button class="day-tab" onclick="showDay('full', 3)">Day 3</button>
+                        <button class="day-tab" onclick="showDay('full', 4)">Day 4</button>
+                        <button class="day-tab" onclick="showDay('full', 5)">Day 5</button>
+                    </div>
+
+                    <div id="full-day-1" class="agenda-content active">
+                        <h3>Day 1 - September 22 | Foundation Setting & AI Overview | Location MBZUAI</h3>
+                        
+                        <!-- <h4><span class="weather-icon"></span>Morning Joint Session (9:00-12:00)</h4> -->
+                        <div class="session" onclick="showMaterials('intro-overview')">
+                            <div class="session-time">9:30 - 9:45</div>
+                            <div class="session-title">Welcome to MBZUAI</div>
+                            <div class="session-speaker">Tim Baldwin (MBZUAI) </div>
+                        </div>
+                        <div class="session" onclick="showMaterials('intro-overview')">
+                            <div class="session-time">9:45 - 10:00</div>
+                            <div class="session-title">Welcoming Remarks</div>
+                            <div class="session-speaker">Khalfan Al Matrooshi (UAE Presidential Court) </div>
+                        </div>
+                        <div class="session" onclick="showMaterials('intro-overview')">
+                            <div class="session-time">10:00 - 10:15</div>
+                            <div class="session-title">	Aim for Scale Initiative Overview</div>
+                            <div class="session-speaker">Imara Salas (AIM4Scale) | How training fits within larger agricultural innovation goals</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('intro-overview')">
+                            <div class="session-time">10:15 - 10:30</div>
+                            <div class="session-title">Goals for this week & Introduction of Trainers</div>
+                            <div class="session-speaker">Souhaib Ben Taieb (MBZUAI) | Week's objectives, learning tracks, and joint exercise.</div>
+                        </div>
+                        <div class="session break">
+                            <div class="session-time">10:30 - 10:45</div>
+                            <div class="session-title">☕ Coffee Break</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('climate-services')">
+                            <div class="session-time">10:45 - 11:10</div>
+                            <div class="session-title">Climate Services for Agricultural Sector</div>
+                            <div class="session-speaker">Tufa Dinku (IRI Columbia) | Crop decision-making examples & forecast utility</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('ai-advances')">
+                            <div class="session-time">11:10 - 11:30</div>
+                            <div class="session-title">AI Advances in Medium-range to S2S Forecasts</div>
+                            <div class="session-speaker">Katie Kowal (UChicago) | Opportunities & benchmarking for agriculture</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('ai-advances')">
+                            <div class="session-time">11:30 - 12:00</div>
+                            <div class="session-title">NCM’s Climate Services: Bridging Science and Society</div>
+                            <div class="session-speaker">Dr. Koteswararao Kundeti | Discussing the NCM’s services and the importance of AI from a weather/climate perspective</div>
+                        </div>
+                        <div class="session break lunch">
+                            <div class="session-time">12:00 - 13:00</div>
+                            <div class="session-title">🍴 Lunch Break</div>
+                        </div>
+                        <div class="session">
+                            <div class="session-time">13:00 - 13:15</div>
+                            <div class="session-title">AI Overview</div>
+                            <div class="session-speaker">Souhaib Ben Taieb | Overview of what AI is and how AI weather forecasting fits in</div>
+                        </div>
+
+                        <!-- <h4><span class="weather-icon"></span>Afternoon Split Sessions (13:00-17:00)</h4> -->
+                        
+                        <div class="split-tracks">
+                            <div class="track-column">
+                                <h5>Technical Track</h5>
+                                <div class="session" onclick="showMaterials('ai-vs-nwp')">
+                                    <div class="session-time">13:15 - 14:00</div>
+                                    <div class="session-title">AI vs. NWP and Available Models</div>
+                                    <div class="session-speaker">Pedram Hassanzadeh (UChicago) | Comparison of AI vs. NWP and overview of AI model internals</div>
+                                </div>
+                                <div class="session" onclick="showMaterials('demo1-setup')">
+                                    <div class="session-time">14:00 - 14:45</div>
+                                    <div class="session-title">Demo 1: Setting Up Your AI Weather Lab</div>
+                                    <div class="session-speaker">Tech team (UChicago/MBZUAI) | Hand out computers, check required libraries installation</div>
+                                </div>
+                                <div class="session break">
+                                    <div class="session-time">14:45 - 15:00</div>
+                                    <div class="session-title">☕ Coffee Break</div>
+                                </div>
+                                <div class="session" onclick="showMaterials('demo1-setup')">
+                                    <div class="session-time">15:00 - 15:30</div>
+                                    <div class="session-title">Continue Demo 1: Setting Up Your AI Weather Lab</div>
+                                    <div class="session-speaker">Tech team (UChicago/MBZUAI) | Hand out computers, check required libraries installation</div>
+                                </div>
+                            </div>
+                            <div class="track-column">
+                                <h5>Applied Track</h5>
+                                <div class="session" onclick="showMaterials('climate-101')">
+                                    <div class="session-time">13:15 - 14:45</div>
+                                    <div class="session-title">Climate Basics</div>
+                                    <div class="session-speaker">Tufa Dinku (IRI Columbia) | Foundational knowledge on weather, climate, and climate change concepts</div>
+                                </div>
+                                <div class="session break">
+                                    <div class="session-time">14:45 - 15:00</div>
+                                    <div class="session-title">☕ Coffee Break</div>
+                                </div>
+                                <div class="session" onclick="showMaterials('impact-based-forecasting')">
+                                    <div class="session-time">15:00 - 15:30</div>
+                                    <div class="session-title">Impact-based Forecasting</div>
+                                    <div class="session-speaker">Erkin Isaev (WMO) | Impact-based forecasting introduction</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="session" onclick="showMaterials('operational-example')">
+                            <div class="session-time">15:30 - 17:00</div>
+                            <div class="session-title">Operational Example: Blending AI Models for Indian Monsoon Onset</div>
+                            <div class="session-speaker">Pedram Hassanzadeh (UChicago) | AIFS/NCGM selection, blending & farmer messaging</div>
+                        </div>
+                    </div>
+
+                    <div id="full-day-2" class="agenda-content">
+                        <h3>Day 2 - September 23 | Hands-on Implementation & Benchmarking | Location NCM</h3>
+                        
+                        <!-- <h4><span class="weather-icon"></span>Morning Split Sessions (9:00-12:00)</h4> -->
+                        <div class="split-tracks">
+                            <div class="track-column">
+                                <h5>Technical Track</h5>
+                                <div class="session" onclick="showMaterials('current-models')">
+                                    <div class="session-time">9:00 - 10:15</div>
+                                    <div class="session-title">Current Weather Models Used at NMHS</div>
+                                    <div class="session-speaker">Country representatives, (template provided); facilitators Souhaib Ben Taieb, Katerine Kowal</div>
+                                </div>
+                                <div class="session break">
+                                    <div class="session-time">10:15 - 10:30</div>
+                                    <div class="session-title">☕ Coffee Break</div>
+                                </div>
+                                 <div class="session" onclick="showMaterials('demo2-first-forecast')">
+                                    <div class="session-time">10:30 - 12:00</div>
+                                    <div class="session-title">NCM Operational Tour</div>
+                                    <div class="session-speaker">Tour of NCM operational facilities</div>
+                                </div>
+                                
+                                
+                            </div>
+                            <div class="track-column">
+                                <h5>Applied Track</h5>
+                                <div class="session" onclick="showMaterials('refine-climate-talks')">
+                                    <div class="session-time">9:00 - 10:15</div>
+                                    <div class="session-title">Existing climate services </div>
+                                    <div class="session-speaker">Country representatives, (templates provided); facilitators Tufa, Amir | Participants share examples of climate services provided (e.g. agricultural bulletins, SMS texts) and summary of current SOPs</div>
+                                </div>
+                                <div class="session break">
+                                    <div class="session-time">10:15 - 10:30</div>
+                                    <div class="session-title">☕ Coffee Break</div>
+                                </div>
+                                <div class="session" onclick="showMaterials('existing-services-share')">
+                                    <div class="session-time">10:30 - 12:00</div>
+                                    <div class="session-title">NCM Operational Tour</div>
+                                    <div class="session-speaker">Tour of NCM operational facilities</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="session break lunch">
+                            <div class="session-time">12:00 - 13:00</div>
+                            <div class="session-title">🍴 Lunch Break</div>
+                        </div>
+                        <!-- <h4><span class="weather-icon"></span>Afternoon Sessions (13:00-17:00)</h4> -->
+                        <div class="session" onclick="showMaterials('benchmarking-intro')">
+                            <div class="session-time">13:00 - 13:30</div>
+                            <div class="session-title">Motivational case - benchmarking and using local data for operational success</div>
+                            <div class="session-speaker">Katie Kowal (UChicago) | Summary of how benchmarking often works today for AI-based models. Learning objective - highlight importance of validation data and metrics (for tech track), highlight importance of knowing which variables/thresholds matter (for applied track)</div>
+                        </div>
+                        <div class="split-tracks">
+                            <div class="track-column">
+                                <h5>Technical Track</h5>
+                                <div class="session" onclick="showMaterials('observational-data')">
+                                    <div class="session-time">13:30 - 14:00</div>
+                                    <div class="session-title">Considerations for running AI models yourself</div>
+                                    <div class="session-speaker">Adam Marchakitus (UChicago) | Some guidance on ways to run AI models, comparisons of local options vs. using an AI model output online</div>
+                                </div>
+                                <div class="session" onclick="showMaterials('demo2-first-forecast')">
+                                    <div class="session-time">14:00 - 15:00</div>
+                                    <div class="session-title">Demo 2: Running Your First AI Weather Forecast</div>
+                                    <div class="session-speaker">Tech team (UChicago/MBZUAI) | Hands-on experience with end-to-end AI weather model process</div>
+                                </div>
+                                <div class="session break">
+                                    <div class="session-time">15:00 - 15:15</div>
+                                    <div class="session-title">☕ Coffee Break</div>
+                                </div>
+                                <div class="session" onclick="showMaterials('demo3-scorecard')">
+                                    <div class="session-time">15:15 - 16:00</div>
+                                    <div class="session-title">Observational data quality and verification</div>
+                                    <div class="session-speaker">George Sserwadda (TAHMO) | Consider how the use of local observations and observational density can improve model skill</div>
+                                </div>
+                                <div class="session" onclick="showMaterials('demo3-scorecard')">
+                                    <div class="session-time">16:00 - 16:20</div>
+                                    <div class="session-title">Benchmarking platform overview</div>
+                                    <div class="session-speaker">Genevieve Flahspohler (Katie) | Introduce benchmarking platform – more on metrics</div>
+                                </div>
+
+                                <div class="session" onclick="showMaterials('demo4-forecast-test')">
+                                    <div class="session-time">16:20 - 17:00</div>
+                                    <div class="session-title">Demo 3 :  The AI Weather Model Scorecard </div>
+                                    <div class="session-speaker">
+                                        Tech team (UChicago/MBZUAI/TAHMO) | Choosing between models demo looking across evaluation metrics
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="track-column">
+                                <h5>Applied Track</h5>
+                                <div class="session" onclick="showMaterials('climate-sensitive-decisions')">
+                                    <div class="session-time">13:30 - 14:00</div>
+                                    <div class="session-title">Compare climate services practices</div>
+                                    <div class="session-speaker">Discussion; Facilitators Tufa Dinku, Amir Jina | Group identifies common practices across countries / differences</div>
+                                </div>
+                                <div class="session" onclick="showMaterials('converting-climate-info')">
+                                    <div class="session-time">14:00 - 14:30</div>
+                                    <div class="session-title">Climate sensitive agricultural decisions across timescales</div>
+                                    <div class="session-speaker">Tufa Dinku (Amir Jina) | How lead time affects decision-making context (e.g. medium-range to subseasonal)</div>
+                                </div>
+                                <div class="session" onclick="showMaterials('converting-climate-info')">
+                                    <div class="session-time">14:30 - 15:00</div>
+                                    <div class="session-title">Converting climatic information into decisions</div>
+                                    <div class="session-speaker">Example of converting climatic thresholds into relevant info for farmers</div>
+                                </div>
+                                <div class="session break">
+                                    <div class="session-time">15:00 - 15:15</div>
+                                    <div class="session-title">☕ Coffee Break</div>
+                                </div>
+                                <div class="session" onclick="showMaterials('info-gaps-convening')">
+                                    <div class="session-time">15:15 - 15:30</div>
+                                    <div class="session-title">Summary of Info Gaps in Convening</div>
+                                    <div class="session-speaker">Tufa Dinku (Amir) | Review  gaps identified at the Nairobi convening</div>
+                                </div>
+                                <div class="session" onclick="showMaterials('gaps-assessment')">
+                                    <div class="session-time">15:30 - 16:15</div>
+                                    <div class="session-title">Gaps in Information Needs Assessed</div>
+                                    <div class="session-speaker">Discussion; Facilitators Tufa Dinku, Amir Jina | List of recommendations/gaps of key information needs to get conveyed to farmers</div>
+                                </div>
+                                <div class="session" onclick="showMaterials('institutional-mapping')">
+                                    <div class="session-time">16:15 - 17:00</div>
+                                    <div class="session-title">Institutional Landscape Mapping exercise</div>
+                                    <div class="session-speaker">Discussion; Facilitators Tufa Dinku, Amir Jina | Each country rep lists all the key players in current agricultural context & info they provide</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="full-day-3" class="agenda-content">
+                        <h3>Day 3 - September 24 | Advanced Applications & Localization | Location MBZUAI</h3>
+                        <!-- <h4><span class="weather-icon"></span>Morning Split Sessions (9:00-12:00)</h4> -->
+                        <div class="split-tracks">
+                            <div class="track-column">
+                                <h5>Technical Track</h5>
+                                <div class="session" onclick="showMaterials('demo5-ground-truth')">
+                                    <div class="session-time">9:00 - 10:00</div>
+                                    <div class="session-title">Demo 4: Putting Your Forecast to the Test</div>
+                                    <div class="session-speaker">Tech team (UChicago/MBZUAI) | Perform a customized evaluation of the forecast generated in Demo 2, look at how local analysis can provide insights</div>
+                                </div>
+                                <div class="session" onclick="showMaterials('demo5-ground-truth')">
+                                    <div class="session-time">10:00 - 10:30</div>
+                                    <div class="session-title">Demo 5: Ground Truth Challenge - Validating Models with Your Data</div>
+                                    <div class="session-speaker">Tech team (UChicago/MBZUAI) | If data provided beforehand in usable format, countries can benchmark some models for their regional use cases, otherwise can explore how models perform for trigger thresholds with preloaded data - high/low rainfall events</div>
+                                </div>
+                                <div class="session break">
+                                    <div class="session-time">10:30 - 10:45</div>
+                                    <div class="session-title">☕ Coffee Break</div>
+                                </div>
+                                <div class="session" onclick="showMaterials('localization-deepmind')">
+                                    <div class="session-time">10:45 - 12:00</div>
+                                    <div class="session-title">Demos 4/5 continued</div>
+                                    <div class="session-speaker">Tech team (UChicago/MBZUAI)</div>
+                                </div>
+                            </div>
+                            <div class="track-column">
+                                <h5>Applied Track</h5>
+                                <div class="session" onclick="showMaterials('extension-systems-overview')">
+                                    <div class="session-time">9:00 - 9:15</div>
+                                    <div class="session-title">Experience from Extension Systems</div>
+                                    <div class="session-speaker">Tufa Dinku | Overview of extension systems in different countries</div>
+                                </div>
+                                <div class="session" onclick="showMaterials('discuss-extension')">
+                                    <div class="session-time">9:15 - 10:00</div>
+                                    <div class="session-title">Discuss Extension Systems</div>
+                                    <div class="session-speaker">Discussion on country extension systems</div>
+                                </div>
+                                <div class="session" onclick="showMaterials('comms-overview')">
+                                    <div class="session-time">10:00 - 10:15</div>
+                                    <div class="session-title">Communications Overview</div>
+                                    <div class="session-speaker">Tufa Dinku | Summarize communication practices</div>
+                                </div>
+                                <div class="session" onclick="showMaterials('brainstorm-comms')">
+                                    <div class="session-time">10:15 - 10:30</div>
+                                    <div class="session-title">Brainstorm Communications Pathways</div>
+                                    <div class="session-speaker">Draft recommendations for communication pathway support</div>
+                                </div>
+                                <div class="session break">
+                                    <div class="session-time">10:30 - 10:45</div>
+                                    <div class="session-title">☕ Coffee Break</div>
+                                </div>
+                                <div class="session" onclick="showMaterials('brainstorm-comms')">
+                                    <div class="session-time">10:45 - 11:15</div>
+                                    <div class="session-title">Brainstorm Communications Pathways</div>
+                                    <div class="session-speaker">Draft recommendations for communication pathway support</div>
+                                </div>
+                                <div class="session" onclick="showMaterials('empirical-testing')">
+                                    <div class="session-time">11:15 - 12:00</div>
+                                    <div class="session-title">Empirically Testing Communications</div>
+                                    <div class="session-speaker">A/B message testing in Indian monsoon onset</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="session break lunch">
+                            <div class="session-time">12:00 - 13:00</div>
+                            <div class="session-title">🍴 Lunch Break</div>
+                        </div>
+                        <!-- <h4><span class="weather-icon"></span>Afternoon Joint Sessions (13:00-17:00)</h4> -->
+                        
+                        <div class="session" onclick="showMaterials('downscaling-seminar')">
+                            <div class="session-time">13:00 - 14:00</div>
+                            <div class="session-title">Downscaling with Generative AI</div>
+                            <div class="session-speaker">Jonatan Mestres, Adah Jepkemoi Kibet (G42) | What is possible with NVIDIA technology for downscaling, consideration for downscaling model applications - discussion on considerations for high spatial resolution forecasts</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('modular-framework')">
+                            <div class="session-time">14:00 - 15:00</div>
+                            <div class="session-title">Localization seminar </div>
+                            <div class="session-speaker">Seminar on localization project AfriClimate AI  collaboration with Google Deepmind and vision for future work</div>
+                        </div>
+                        <div class="session break">
+                                    <div class="session-time">15:00 - 15:30</div>
+                                    <div class="session-title">☕ Coffee Break</div>
+                         </div>
+                          <div class="session" onclick="showMaterials('modular-framework')">
+                            <div class="session-time">15:30 - 16:30</div>
+                            <div class="session-title">Modular forecasting framework</div>
+                            <div class="session-speaker">Current ECMWF Forecast in a Box effort to create modular framework for AI model runs/evaluation - showcase current work with MET Norway to create high-resolution forecasts in Malawi (partnership with WMO)</div>
+                        </div>
+
+                    </div>
+                    
+
+                    <div id="full-day-4" class="agenda-content">
+                        <h3>Day 4 - September 25 | End-to-End System Design | Location NCM</h3>
+                        <div class="session" onclick="showMaterials('e2e-recommendations')">
+                            <div class="session-time">9:00 - 10:30</div>
+                            <div class="session-title">Applied track shares recommendations for forecast info/comms pathways </div>
+                            <div class="session-speaker">Applied track shares a list of recommendations on content needed for farmer decision-making support, initial diagram of the groups involved in an effective E2E system to start the brainstorming activity</div>
+                        </div>
+                        <div class="session break">
+                                <div class="session-time">10:30 - 10:45</div>
+                                <div class="session-title">☕ Coffee Break</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('technical-feasibility')">
+                            <div class="session-time">10:45 - 12:00</div>
+                            <div class="session-title">Technical track shares what is feasible to implement for forecasts</div>
+                            <div class="session-speaker">Technical track shares highlights of what they trialled with AI models and list of feasible content to produce to support an early warning system</div>
+                        </div>
+                        <div class="session break lunch">
+                            <div class="session-time">12:00 - 13:00</div>
+                            <div class="session-title">🍴 Lunch Break</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('conops-intro')">
+                            <div class="session-time">13:00 - 14:00</div>
+                            <div class="session-title">CONOPS Development Workshop</div>
+                            <div class="session-speaker">Erkin Isaev (WMO) | What it means to establish a concept of operations followed by Q/A. Focus on how mapping who/what/where/when/how can support integration</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('landscape-mapping')">
+                            <div class="session-time">14:00 - 15:30</div>
+                            <div class="session-title">Joint work on mapping out the landscape who/what/where/when/how</div>
+                            <div class="session-speaker">Countries work as a team to draft a CONOPS based on template, prepare to present takeaways to larger group on the players needed to support an E2E system, where they see opportunities to integrate new tools/collaborations</div>
+                        </div>
+                          <div class="session break">
+                                <div class="session-time">15:30 - 15:45</div>
+                                <div class="session-title">☕ Coffee Break</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('landscape-mapping')">
+                            <div class="session-time">15:45 - 16:45</div>
+                            <div class="session-title">Tour NCM facilities</div>
+                            <div class="session-speaker">NCM facilities tour</div>
+                        </div>
+
+                        
+                    </div>
+
+                    <div id="full-day-5" class="agenda-content">
+                    <h3>Day 5 - September 26 | Synthesis & Community Building | Location MBZUAI</h3>
+                    <div class="session">
+                        <div class="session-time">9:00 - 10:00</div>
+                        <div class="session-title">Countries refine E2E presentations</div>
+                        <div class="session-speaker">Working within countries, teams refine their final presentations on opportunities where they could possibly integrate AI, where more analysis is needed and broader opportunities they found for intervention in E2E landscape</div>
+                    </div>
+                    <div class="session">
+                        <div class="session-time">10:00 - 10:30</div>
+                        <div class="session-title">Final Presentations</div>
+                        <div class="session-speaker">15 minute presentations per country, 10 min. for questions</div>
+                    </div>
+                    <div class="session break">
+                        <div class="session-time">10:30 - 10:45</div>
+                        <div class="session-title">☕ Coffee Break</div>
+                    </div>
+                    <div class="session">
+                        <div class="session-time">10:45 - 12:00</div>
+                        <div class="session-title">Final Presentations (Continued)</div>
+                        <div class="session-speaker">15 minute presentations per country, 10 min. for questions</div>
+                    </div>
+                    <div class="session break lunch">
+                        <div class="session-time">12:00 - 13:00</div>
+                        <div class="session-title">🍴 Lunch Break</div>
+                    </div>
+                    <div class="session">
+                        <div class="session-time">13:00 - End</div>
+                        <div class="session-title">Building a Community of Practice and forward looking activities</div>
+                        <div class="session-speaker">Last session focused on building towards a community of practice - ideas for next steps to continue to share ideas. Followed by half-day excursion</div>
+                    </div>
+                    </div>
+                </div>
+
+                <div id="technical-agenda" class="agenda-section" style="display: none;">
+                    <div class="day-tabs">
+                        <button class="day-tab active" onclick="showDay('technical', 1)">Day 1</button>
+                        <button class="day-tab" onclick="showDay('technical', 2)">Day 2</button>
+                        <button class="day-tab" onclick="showDay('technical', 3)">Day 3</button>
+                        <button class="day-tab" onclick="showDay('technical', 4)">Day 4</button>
+                        <button class="day-tab" onclick="showDay('technical', 5)">Day 5</button>
+                    </div>
+
+                    <div id="technical-day-1" class="agenda-content active">
+                        <h3>Day 1 - September 22 | Foundation Setting & AI Overview | Location MBZUAI</h3>
+                        <!-- <h4><span class="weather-icon"></span>Morning Joint Sessions (9:30-12:00)</h4> -->
+
+                        <div class="session" onclick="showMaterials('intro-overview')">
+                            <div class="session-time">9:30 - 9:45</div>
+                            <div class="session-title">Welcome to MBZUAI</div>
+                            <div class="session-speaker">Tim Baldwin (MBZUAI)</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('intro-overview')">
+                            <div class="session-time">9:45 - 10:00</div>
+                            <div class="session-title">Welcoming Remarks</div>
+                            <div class="session-speaker">Khalfan Al Matrooshi (UAE Presidential Court)</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('intro-overview')">
+                            <div class="session-time">10:00 - 10:15</div>
+                            <div class="session-title">Aim for Scale Initiative Overview</div>
+                            <div class="session-speaker">Imara Salas (AIM4Scale) | How training fits within larger agricultural innovation goals</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('intro-overview')">
+                            <div class="session-time">10:15 - 10:30</div>
+                            <div class="session-title">Goals for this week & Introduction of Trainers</div>
+                            <div class="session-speaker">Souhaib Ben Taieb (MBZUAI) | Week's objectives, learning tracks, and joint exercise.</div>
+                        </div>
+                        <div class="session break">
+                            <div class="session-time">10:30 - 10:45</div>
+                            <div class="session-title">☕ Coffee Break</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('climate-services')">
+                            <div class="session-time">10:45 - 11:10</div>
+                            <div class="session-title">Climate Services for Agricultural Sector</div>
+                            <div class="session-speaker">Tufa Dinku (IRI Columbia) | Crop decision-making examples & forecast utility</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('ai-advances')">
+                            <div class="session-time">11:10 - 11:30</div>
+                            <div class="session-title">AI Advances in Medium-range to S2S Forecasts</div>
+                            <div class="session-speaker">Katie Kowal (UChicago) | Opportunities & benchmarking for agriculture</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('ai-advances')">
+                            <div class="session-time">11:30 - 12:00</div>
+                            <div class="session-title">NCM’s Climate Services: Bridging Science and Society</div>
+                            <div class="session-speaker">Dr. Koteswararao Kundeti | Discussing the NCM’s services and the importance of AI from a weather/climate perspective</div>
+                        </div>
+                        <div class="session break lunch">
+                            <div class="session-time">12:00 - 13:00</div>
+                            <div class="session-title">🍴 Lunch Break</div>
+                        </div>
+
+
+                        <!-- <h4><span class="weather-icon"></span>Afternoon Technical Deep Dive (13:00-17:00)</h4> -->
+
+                        <div class="session" onclick="showMaterials('ai-vs-nwp')">
+                            <div class="session-time">13:00 - 13:15</div>
+                            <div class="session-title">AI Overview</div>
+                            <div class="session-speaker">Souhaib Ben Taieb | Overview of what AI is and how AI weather forecasting fits in</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('demo1-setup')">
+                            <div class="session-time">13:15 - 14:00</div>
+                            <div class="session-title">AI vs. NWP and Available Models</div>
+                            <div class="session-speaker">Pedram Hassanzadeh (UChicago) | Comparison of AI vs. NWP and overview of AI model internals</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('ai-vs-nwp')">
+                            <div class="session-time">14:00 - 14:45</div>
+                            <div class="session-title">Demo 1: Setting Up Your AI Weather Lab</div>
+                            <div class="session-speaker">Tech team (UChicago/MBZUAI) | Hand out computers, check required libraries installation</div>
+                        </div>
+                        <div class="session break">
+                            <div class="session-time">14:45 - 15:00</div>
+                            <div class="session-title">☕ Coffee Break</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('demo1-setup')">
+                            <div class="session-time">15:00 - 15:30</div>
+                            <div class="session-title">Continue Demo 1: Setting Up Your AI Weather Lab</div>
+                            <div class="session-speaker">Tech team (UChicago/MBZUAI) | Hand out computers, check required libraries installation</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('operational-example')">
+                            <div class="session-time">15:30 - 17:00</div>
+                            <div class="session-title">Operational Example: Blending AI Models for Indian Monsoon Onset</div>
+                            <div class="session-speaker">Pedram Hassanzadeh (UChicago) | AIFS/NCGM selection, blending & farmer messaging</div>
+                        </div>
+                    </div>
+
+                    <div id="technical-day-2" class="agenda-content">
+                        <h3>Day 2 - September 23 | Hands-on Implementation & Benchmarking | Location NCM</h3>
+                        <!-- <h4><span class="weather-icon">🔧</span>Current Forecast Practice (9:00-10:30)</h4> -->
+
+                        <div class="session" onclick="showMaterials('current-models')">
+                            <div class="session-time">9:00 - 10:15</div>
+                            <div class="session-title">Current Weather Models Used at NMHS</div>
+                            <div class="session-speaker">Country representatives, (template provided); facilitators Souhaib Ben Taieb, Katerine Kowal</div>
+                        </div>
+                        <div class="session break">
+                            <div class="session-time">10:15 - 10:30</div>
+                            <div class="session-title">☕ Coffee Break</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('running-ai-models')">
+                            <div class="session-time">10:30 - 12:00</div>
+                            <div class="session-title">NCM Operational Tour</div>
+                            <div class="session-speaker">Tour of NCM operational facilities</div>
+                        </div>
+                       
+                        
+                        <div class="session break lunch">
+                            <div class="session-time">12:00 - 13:00</div>
+                            <div class="session-title">🍴 Lunch Break</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('running-ai-models')">
+                            <div class="session-time">13:00 - 13:30</div>
+                            <div class="session-title">Motivational case - benchmarking and using local data for operational success</div>
+                            <div class="session-speaker">Katie Kowal (UChicago) | Summary of how benchmarking often works today for AI-based models. Learning objective - highlight importance of validation data and metrics (for tech track), highlight importance of knowing which variables/thresholds matter (for applied track)</div>
+                        </div>
+
+                        <!-- <h4><span class="weather-icon"></span>Benchmarking & Data Quality (13:00-17:00)</h4> -->
+
+                        <div class="session" onclick="showMaterials('observational-data')">
+                            <div class="session-time">13:30 - 14:00</div>
+                            <div class="session-title">Considerations for running AI models yourself</div>
+                            <div class="session-speaker">Adam Marchakitus (UChicago) | Some guidance on ways to run AI models, comparisons of local options vs. using an AI model output online</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('running-ai-models')">
+                            <div class="session-time">14:00 - 15:00</div>
+                            <div class="session-title">Demo 2: Running Your First AI Weather Forecast</div>
+                            <div class="session-speaker">Tech team (UChicago/MBZUAI) | Hands-on experience with end-to-end AI weather model process</div>
+                        </div>
+                        <div class="session break">
+                            <div class="session-time">15:00 - 15:15</div>
+                            <div class="session-title">☕ Coffee Break</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('demo3-scorecard')">
+                            <div class="session-time">15:15 - 16:00</div>
+                            <div class="session-title">Observational data quality and verification</div>
+                            <div class="session-speaker">George Sserwadda (TAHMO) | Consider how the use of local observations and observational density can improve model skill</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('demo4-forecast-test')">
+                            <div class="session-time">16:00 - 16:20</div>
+                            <div class="session-title">Benchmarking platform overview</div>
+                            <div class="session-speaker">  Genevieve Flahspohler (Katie) | Introduce benchmarking platform – more on metrics</div>
+                        </div>
+
+                        <div class="session" onclick="showMaterials('demo4-forecast-test')">
+                            <div class="session-time">16:20 - 17:00</div>
+                            <div class="session-title">Demo 3 : The AI Weather Model Scorecard</div>
+                            <div class="session-speaker">
+                                Tech team (UChicago/MBZUAI/TAHMO) | Choosing between models demo looking across evaluation metrics
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="technical-day-3" class="agenda-content">
+                        <h3>Day 3 - September 24 | Advanced Applications & Localization | Location MBZUAI</h3>
+                            <div class="session" onclick="showMaterials('demo5-ground-truth')">
+                                <div class="session-time">9:00 - 10:00</div>
+                                <div class="session-title">Demo 4: Putting Your Forecast to the Test</div>
+                                <div class="session-speaker">Tech team (UChicago/MBZUAI) | Perform a customized evaluation of the forecast generated in Demo 2, look at how local analysis can provide insights</div>
+                            </div>
+                            <div class="session" onclick="showMaterials('demo5-ground-truth')">
+                                <div class="session-time">10:00 - 10:30</div>
+                                <div class="session-title">Demo 5: Ground Truth Challenge - Validating Models with Your Data</div>
+                                <div class="session-speaker">Tech team (UChicago/MBZUAI) | If data provided beforehand in usable format, countries can benchmark some models for their regional use cases, otherwise can explore how models perform for trigger thresholds with preloaded data - high/low rainfall events</div>
+                            </div>
+                            <div class="session break">
+                                <div class="session-time">10:30 - 10:45</div>
+                                <div class="session-title">☕ Coffee Break</div>
+                            </div>
+                            <div class="session" onclick="showMaterials('localization-deepmind')">
+                                <div class="session-time">10:45 - 12:00</div>
+                                <div class="session-title">Demos 4/5 continued</div>
+                                <div class="session-speaker">Tech team (UChicago/MBZUAI)</div>
+                            </div>
+
+                            <div class="session break lunch">
+                                <div class="session-time">12:00 - 13:00</div>
+                                <div class="session-title">🍴 Lunch Break</div>
+                            </div>
+
+                            <div class="session" onclick="showMaterials('downscaling-seminar')">
+                                <div class="session-time">13:00 - 14:00</div>
+                                <div class="session-title">Downscaling with Generative AI</div>
+                                <div class="session-speaker">Jonatan Mestres, Adah Jepkemoi Kibet (G42) | What is possible with NVIDIA technology for downscaling, consideration for downscaling model applications - discussion on considerations for high spatial resolution forecasts</div>
+                            </div>
+                            <div class="session" onclick="showMaterials('modular-framework')">
+                                <div class="session-time">14:00 - 15:00</div>
+                                <div class="session-title">Localization seminar</div>
+                                <div class="session-speaker">Seminar on localization project AfriClimate AI collaboration with Google Deepmind and vision for future work</div>
+                            </div>
+                            <div class="session break">
+                                <div class="session-time">15:00 - 15:30</div>
+                                <div class="session-title">☕ Coffee Break</div>
+                            </div>
+                            <div class="session" onclick="showMaterials('modular-framework')">
+                                <div class="session-time">15:30 - 16:30</div>
+                                <div class="session-title">Modular forecasting framework</div>
+                                <div class="session-speaker">Current ECMWF Forecast in a Box effort to create modular framework for AI model runs/evaluation - showcase current work with MET Norway to create high-resolution forecasts in Malawi (partnership with WMO)</div>
+                            </div>
+                    </div>
+
+                    <div id="technical-day-4" class="agenda-content">
+                        <h3>Day 4 - September 25 | End-to-End System Design | Location NCM</h3>
+                        <div class="session" onclick="showMaterials('e2e-recommendations')">
+                            <div class="session-time">9:00 - 10:30</div>
+                            <div class="session-title">Applied Track Recommendations Sharing</div>
+                            <div class="session-speaker">Applied Track | Forecast info & communication pathways for farmers</div>
+                        </div>
+                        <div class="session break">
+                                <div class="session-time">10:30 - 10:45</div>
+                                <div class="session-title">☕ Coffee Break</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('technical-feasibility')">
+                            <div class="session-time">10:45 - 12:00</div>
+                            <div class="session-title">Technical track shares what is feasible to implement for forecasts</div>
+                            <div class="session-speaker">Technical track shares highlights of what they trialled with AI models and list of feasible content to produce to support an early warning system</div>
+                        </div>
+                        <div class="session break lunch">
+                            <div class="session-time">12:00 - 13:00</div>
+                            <div class="session-title">🍴 Lunch Break</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('conops-intro')">
+                            <div class="session-time">13:00 - 14:00</div>
+                            <div class="session-title">CONOPS Development Workshop</div>
+                            <div class="session-speaker">Erkin Isaev (WMO) | Concept of operations framework</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('landscape-mapping')">
+                            <div class="session-time">14:00 - 15:30</div>
+                            <div class="session-title">Joint work on mapping out the landscape who/what/where/when/how</div>
+                            <div class="session-speaker">Country Teams | Who/what/where/when/how for E2E systems</div>
+                        </div>
+                        <div class="session break">
+                                <div class="session-time">15:30 - 15:45</div>
+                                <div class="session-title">☕ Coffee Break</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('ncm-tour')">
+                            <div class="session-time">15:45 - 16:45</div>
+                            <div class="session-title">Tour NCM facilities</div>
+                            <div class="session-speaker">NCM | Regional climate center resources</div>
+                        </div>
+                    </div>
+
+                    <div id="technical-day-5" class="agenda-content">
+                        <h3>Day 5 - September 26 | Synthesis & Community Building | Location MBZUAI</h3>
+                        <div class="session">
+                            <div class="session-time">9:00 - 10:00</div>
+                            <div class="session-title">Countries refine E2E presentations</div>
+                            <div class="session-speaker">Working within countries, teams refine their final presentations on opportunities where they could possibly integrate AI, where more analysis is needed and broader opportunities they found for intervention in E2E landscape</div>
+                        </div>
+                        <div class="session">
+                            <div class="session-time">10:00 - 10:30</div>
+                            <div class="session-title">Final Presentations</div>
+                            <div class="session-speaker">15 minute presentations per country, 10 min for questions</div>
+                        </div>
+                        <div class="session break">
+                            <div class="session-time">10:30 - 10:45</div>
+                            <div class="session-title">☕ Coffee Break</div>
+                        </div>
+                        <div class="session">
+                            <div class="session-time">10:45 - 12:00</div>
+                            <div class="session-title">Final Presentations (Continued)</div>
+                            <div class="session-speaker">15 minute presentations per country, 10 min. for questions</div>
+                        </div>
+                        <div class="session break lunch">
+                            <div class="session-time">12:00 - 13:00</div>
+                            <div class="session-title">🍴 Lunch Break</div>
+                        </div>
+                        <div class="session">
+                            <div class="session-time">13:00 - End</div>
+                            <div class="session-title">Building a Community of Practice and forward looking activities</div>
+                            <div class="session-speaker">Last session focused on building towards a community of practice - ideas for next steps to continue to share ideas. Followed by half-day excursion</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="applied-agenda" class="agenda-section" style="display: none;">
+                    <div class="day-tabs">
+                        <button class="day-tab active" onclick="showDay('applied', 1)">Day 1</button>
+                        <button class="day-tab" onclick="showDay('applied', 2)">Day 2</button>
+                        <button class="day-tab" onclick="showDay('applied', 3)">Day 3</button>
+                        <button class="day-tab" onclick="showDay('applied', 4)">Day 4</button>
+                        <button class="day-tab" onclick="showDay('applied', 5)">Day 5</button>
+                    </div>
+
+                    <div id="applied-day-1" class="agenda-content active">
+                        <h3>Day 1 - September 22 | Foundation Setting & AI Overview | Location MBZUAI</h3>
+                            <!-- <h4><span class="weather-icon"></span>Morning Joint Sessions (9:30-12:00)</h4> -->
+
+                        <div class="session" onclick="showMaterials('intro-overview')">
+                            <div class="session-time">9:30 - 9:45</div>
+                            <div class="session-title">Welcome to MBZUAI</div>
+                            <div class="session-speaker">Tim Baldwin (MBZUAI) </div>
+                        </div>
+                        <div class="session" onclick="showMaterials('intro-overview')">
+                            <div class="session-time">9:45 - 10:00</div>
+                            <div class="session-title">Welcoming Remarks</div>
+                            <div class="session-speaker">Khalfan Al Matrooshi (UAE Presidential Court) </div>
+                        </div>
+                        <div class="session" onclick="showMaterials('intro-overview')">
+                            <div class="session-time">10:00 - 10:15</div>
+                            <div class="session-title">	Aim for Scale Initiative Overview</div>
+                            <div class="session-speaker">Imara Salas (AIM4Scale) | How training fits within larger agricultural innovation goals</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('intro-overview')">
+                            <div class="session-time">10:15 - 10:30</div>
+                            <div class="session-title">Goals for this week & Introduction of Trainers</div>
+                            <div class="session-speaker">Souhaib Ben Taieb (MBZUAI) | Week's objectives, learning tracks, and joint exercise.</div>
+                        </div>
+                        <div class="session break">
+                            <div class="session-time">10:30 - 10:45</div>
+                            <div class="session-title">☕ Coffee Break</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('climate-services')">
+                            <div class="session-time">10:45 - 11:10</div>
+                            <div class="session-title">Climate Services for Agricultural Sector</div>
+                            <div class="session-speaker">Tufa Dinku (IRI Columbia) | Crop decision-making examples & forecast utility</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('ai-advances')">
+                            <div class="session-time">11:10 - 11:30</div>
+                            <div class="session-title">AI Advances in Medium-range to S2S Forecasts</div>
+                            <div class="session-speaker">Katie Kowal (UChicago) | Opportunities & benchmarking for agriculture</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('ai-advances')">
+                            <div class="session-time">11:30 - 12:00</div>
+                            <div class="session-title">NCM’s Climate Services: Bridging Science and Society</div>
+                            <div class="session-speaker">Dr. Koteswararao Kundeti | Discussing the NCM’s services and the importance of AI from a weather/climate perspective</div>
+                        </div>
+                        <div class="session break lunch">
+                            <div class="session-time">12:00 - 13:00</div>
+                            <div class="session-title">🍴 Lunch Break</div>
+                        </div>
+                        <div class="session">
+                            <div class="session-time">13:00 - 13:15</div>
+                            <div class="session-title">AI Overview</div>
+                            <div class="session-speaker">Souhaib Ben Taieb | Overview of what AI is and how AI weather forecasting fits in</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('impact-based-forecasting')">
+                            <div class="session-time">13:15 - 14:45</div>
+                            <div class="session-title">Climate Basics</div>
+                            <div class="session-speaker">Tufa Dinku (IRI Columbia) | Foundational knowledge on weather, climate, and climate change concepts</div>
+                        </div>
+                        <div class="session break">
+                            <div class="session-time">14:45 - 15:00</div>
+                            <div class="session-title">☕ Coffee Break</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('operational-example')">
+                            <div class="session-time">15:00 - 15:30</div>
+                            <div class="session-title">Impact-based Forecasting</div>
+                            <div class="session-speaker">Erkin Isaev (WMO) | Impact-based forecasting introduction</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('operational-example')">
+                            <div class="session-time">15:30 - 17:00</div>
+                            <div class="session-title">Operational Example: Blending AI Models for Indian Monsoon Onset</div>
+                            <div class="session-speaker">Pedram Hassanzadeh (UChicago) | AIFS/NCGM selection, blending & farmer messaging</div>
+                        </div>
+                    </div>
+
+                    <div id="applied-day-2" class="agenda-content">
+                        <h3>Day 2 - September 23 | Hands-on Implementation & Benchmarking | Location NCM</h3>
+                        <!-- <h4><span class="weather-icon"></span>Existing Climate Services (9:00-12:00)</h4> -->
+                        <div class="session" onclick="showMaterials('refine-climate-talks')">
+                            <div class="session-time">9:00 - 10:15</div>
+                            <div class="session-title">Existing climate services</div>
+                            <div class="session-speaker">Country representatives, (templates provided); facilitators Tufa, Amir | Participants share examples of climate services provided (e.g. agricultural bulletins, SMS texts) and summary of current SOPs</div>
+                        </div>
+                        <div class="session break">
+                            <div class="session-time">10:15 - 10:30</div>
+                            <div class="session-title">☕ Coffee Break</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('existing-services-share')">
+                            <div class="session-time">10:30 - 12:00</div>
+                            <div class="session-title">NCM Operational Tour</div>
+                            <div class="session-speaker">Tour of NCM operational facilities</div>
+                        </div>
+
+                        <div class="session break lunch">
+                            <div class="session-time">12:00 - 13:00</div>
+                            <div class="session-title">🍴 Lunch Break</div>
+                        </div>
+
+                        <!-- <h4><span class="weather-icon"></span>Framing Farmer Decision Context (13:00-17:00)</h4> -->
+
+                        <div class="session" onclick="showMaterials('benchmarking-intro')">
+                            <div class="session-time">13:00 - 13:30</div>
+                            <div class="session-title">Motivational case - benchmarking and using local data for operational success</div>
+                            <div class="session-speaker">Katie Kowal (UChicago) | Summary of how benchmarking often works today for AI-based models. Learning objective - highlight importance of validation data and metrics (for tech track), highlight importance of knowing which variables/thresholds matter (for applied track)</div>
+                        </div>
+
+                        <div class="session" onclick="showMaterials('climate-sensitive-decisions')">
+                            <div class="session-time">13:30 - 14:00</div>
+                            <div class="session-title">Compare climate services practices</div>
+                            <div class="session-speaker">Discussion; Facilitators Tufa Dinku, Amir Jina | Group identifies common practices across countries / differences</div>
+                        </div>
+                        
+                        
+                        <div class="session" onclick="showMaterials('info-gaps-convening')">
+                            <div class="session-time">14:00 - 14:30</div>
+                            <div class="session-title">Climate sensitive agricultural decisions across timescales</div>
+                            <div class="session-speaker">Tufa Dinku (Amir Jina) | How lead time affects decision-making context (e.g. medium-range to subseasonal)</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('gaps-assessment')">
+                            <div class="session-time">14:30 - 15:00</div>
+                            <div class="session-title">Converting climatic information into decisions</div>
+                            <div class="session-speaker">Example of converting climatic thresholds into relevant info for farmers</div>
+                        </div>
+                        <div class="session break">
+                            <div class="session-time">15:00 - 15:15</div>
+                            <div class="session-title">☕ Coffee Break</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('institutional-mapping')">
+                            <div class="session-time">15:15 - 15:30</div>
+                            <div class="session-title">Summary of Info Gaps in Convening</div>
+                            <div class="session-speaker">Tufa Dinku (Amir) | Review gaps identified at the Nairobi convening</div>
+                        </div>
+                         <div class="session" onclick="showMaterials('institutional-mapping')">
+                            <div class="session-time">15:30 - 16:15</div>
+                            <div class="session-title">Gaps in Information Needs Assessed</div>
+                            <div class="session-speaker">Discussion; Facilitators Tufa Dinku, Amir Jina | List of recommendations/gaps of key information needs to get conveyed to farmers</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('institutional-mapping')">
+                            <div class="session-time">16:15 - 17:00</div>
+                            <div class="session-title">Institutional Landscape Mapping exercise</div>
+                            <div class="session-speaker">Discussion; Facilitators Tufa Dinku, Amir Jina | Each country rep lists all the key players in current agricultural context & info they provide</div>
+                        </div>
+                    </div>
+
+                    <div id="applied-day-3" class="agenda-content">
+                        <h3>Day 3 - September 24 | Advanced Applications & Localization | Location MBZUAI</h3>
+                        <!-- <h4><span class="weather-icon"></span>Who Communicates — Extension Agent Systems (9:00-10:00)</h4> -->
+
+                        <div class="session" onclick="showMaterials('extension-systems-overview')">
+                            <div class="session-time">9:00 - 9:15</div>
+                            <div class="session-title">Experience from Extension Systems</div>
+                            <div class="session-speaker">Tufa Dinku | Overview of extension systems in different countries</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('discuss-extension')">
+                            <div class="session-time">9:15 - 10:00</div>
+                            <div class="session-title">Discuss Extension Systems</div>
+                            <div class="session-speaker">Discussion on country extension systems</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('comms-overview')">
+                            <div class="session-time">10:00 - 10:15</div>
+                            <div class="session-title">Communications Overview</div>
+                            <div class="session-speaker">Tufa Dinku | Summarize communication practices</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('brainstorm-comms')">
+                            <div class="session-time">10:15 - 10:30</div>
+                            <div class="session-title">Brainstorm Communications Pathways</div>
+                            <div class="session-speaker">Draft recommendations for communication pathway support</div>
+                        </div>
+                        <div class="session break">
+                            <div class="session-time">10:30 - 10:45</div>
+                            <div class="session-title">☕ Coffee Break</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('brainstorm-comms')">
+                            <div class="session-time">10:45 - 11:15</div>
+                            <div class="session-title">Brainstorm Communications Pathways</div>
+                            <div class="session-speaker">Draft recommendations for communication pathway support</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('empirical-testing')">
+                            <div class="session-time">11:15 - 12:00</div>
+                            <div class="session-title">Empirically Testing Communications</div>
+                            <div class="session-speaker">A/B message testing in Indian monsoon onset</div>
+                        </div>
+
+                        <div class="session break lunch">
+                            <div class="session-time">12:00 - 13:00</div>
+                            <div class="session-title">🍴 Lunch Break</div>
+                        </div>
+
+                            <!-- <h4><span class="weather-icon"></span>Afternoon Joint Sessions (13:00-17:00)</h4> -->
+
+                        
+                        <div class="session" onclick="showMaterials('downscaling-seminar')">
+                                <div class="session-time">13:00 - 14:00</div>
+                                <div class="session-title">Downscaling with Generative AI</div>
+                                <div class="session-speaker">Jonatan Mestres, Adah Jepkemoi Kibet (G42) | What is possible with NVIDIA technology for downscaling, consideration for downscaling model applications - discussion on considerations for high spatial resolution forecasts</div>
+                            </div>
+                            <div class="session" onclick="showMaterials('modular-framework')">
+                                <div class="session-time">14:00 - 15:00</div>
+                                <div class="session-title">Localization seminar</div>
+                                <div class="session-speaker">Seminar on localization project AfriClimate AI collaboration with Google Deepmind and vision for future work</div>
+                            </div>
+                            <div class="session break">
+                                <div class="session-time">15:00 - 15:30</div>
+                                <div class="session-title">☕ Coffee Break</div>
+                            </div>
+                            <div class="session" onclick="showMaterials('modular-framework')">
+                                <div class="session-time">15:30 - 16:30</div>
+                                <div class="session-title">Modular forecasting framework</div>
+                                <div class="session-speaker">Current ECMWF Forecast in a Box effort to create modular framework for AI model runs/evaluation - showcase current work with MET Norway to create high-resolution forecasts in Malawi (partnership with WMO)</div>
+                            </div>
+                    </div>
+
+                    <div id="applied-day-4" class="agenda-content">
+                        <h3>Day 4 - September 25 | End-to-End System Design | Location NCM</h3>
+                       <div class="session" onclick="showMaterials('e2e-recommendations')">
+                            <div class="session-time">9:00 - 10:30</div>
+                            <div class="session-title">Applied Track Recommendations Sharing</div>
+                            <div class="session-speaker">Applied Track | Forecast info & communication pathways for farmers</div>
+                        </div>
+                        <div class="session break">
+                                <div class="session-time">10:30 - 10:45</div>
+                                <div class="session-title">☕ Coffee Break</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('technical-feasibility')">
+                            <div class="session-time">10:45 - 12:00</div>
+                            <div class="session-title">Technical track shares what is feasible to implement for forecasts</div>
+                            <div class="session-speaker">Technical track shares highlights of what they trialled with AI models and list of feasible content to produce to support an early warning system</div>
+                        </div>
+                        <div class="session break lunch">
+                            <div class="session-time">12:00 - 13:00</div>
+                            <div class="session-title">🍴 Lunch Break</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('conops-intro')">
+                            <div class="session-time">13:00 - 14:00</div>
+                            <div class="session-title">CONOPS Development Workshop</div>
+                            <div class="session-speaker">Erkin Isaev (WMO) | Concept of operations framework</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('landscape-mapping')">
+                            <div class="session-time">14:00 - 15:30</div>
+                            <div class="session-title">Joint work on mapping out the landscape who/what/where/when/how</div>
+                            <div class="session-speaker">Country Teams | Who/what/where/when/how for E2E systems</div>
+                        </div>
+                        <div class="session break">
+                                <div class="session-time">15:30 - 15:45</div>
+                                <div class="session-title">☕ Coffee Break</div>
+                        </div>
+                        <div class="session" onclick="showMaterials('ncm-tour')">
+                            <div class="session-time">15:45 - 16:45</div>
+                            <div class="session-title">Tour NCM facilities</div>
+                            <div class="session-speaker">NCM | Regional climate center resources</div>
+                        </div>
+                    </div>
+
+                    <div id="applied-day-5" class="agenda-content">
+                        <h3>Day 5 - September 26 | Synthesis & Community Building | Location MBZUAI</h3>
+                        <div class="session">
+                            <div class="session-time">9:00 - 10:00</div>
+                            <div class="session-title">Countries refine E2E presentations</div>
+                            <div class="session-speaker">Working within countries, teams refine their final presentations on opportunities where they could possibly integrate AI, where more analysis is needed and broader opportunities they found for intervention in E2E landscape</div>
+                        </div>
+                        <div class="session">
+                            <div class="session-time">10:00 - 10:30</div>
+                            <div class="session-title">Final Presentations</div>
+                            <div class="session-speaker">15 minute presentations per country, 10 min for questions</div>
+                        </div>
+                        <div class="session break">
+                            <div class="session-time">10:30 - 10:45</div>
+                            <div class="session-title">☕ Coffee Break</div>
+                        </div>
+                        <div class="session">
+                            <div class="session-time">10:45 - 12:00</div>
+                            <div class="session-title">Final Presentations (Continued)</div>
+                            <div class="session-speaker">15 minute presentations per country, 10 min. for questions</div>
+                        </div>
+                        <div class="session break lunch">
+                            <div class="session-time">12:00 - 13:00</div>
+                            <div class="session-title">🍴 Lunch Break</div>
+                        </div>
+                        <div class="session">
+                            <div class="session-time">13:00 - End</div>
+                            <div class="session-title">Building a Community of Practice and forward looking activities</div>
+                            <div class="session-speaker">Last session focused on building towards a community of practice - ideas for next steps to continue to share ideas. Followed by half-day excursion</div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script>
+        function showTrack(trackType) {
+            document.querySelectorAll('.track-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+
+            document.querySelectorAll('.agenda-section').forEach(section => {
+                section.style.display = 'none';
+            });
+
+            if (trackType === 'full') {
+                document.getElementById('full-agenda').style.display = 'block';
+
+                showDay('full', 1);
+            } else if (trackType === 'technical') {
+                document.getElementById('technical-agenda').style.display = 'block';
+                showDay('technical', 1);
+            } else if (trackType === 'applied') {
+                document.getElementById('applied-agenda').style.display = 'block';
+                showDay('applied', 1);
+            }
+        }
+
+        function showDay(track, dayNumber) {
+            const agendaSection = document.getElementById(`${track}-agenda`);
+            
+            const dayTabs = agendaSection.querySelectorAll('.day-tab');
+            dayTabs.forEach((tab, index) => {
+                if (index + 1 === dayNumber) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+            
+            const dayContents = agendaSection.querySelectorAll('.agenda-content');
+            dayContents.forEach((content, index) => {
+                if (index + 1 === dayNumber) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        }
+
+        function showMaterials(sessionId) {
+            // const originalText = event.target.innerHTML;
+            // event.target.innerHTML = originalText + '<span class="loading-spinner"></span>';
+            
+            // setTimeout(() => {
+            //     event.target.innerHTML = originalText;
+            //     alert(`📁 Loading materials for: ${sessionId}\n\n🔗 This will connect to your Google Drive folder with:\n• Session slides & recordings\n• Hands-on tutorial materials\n• Additional reading resources\n• Interactive demos & tools`);
+            // }, 1000);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const fullBtn = document.querySelector('.track-btn[data-track="full"]') || document.querySelector('.track-btn.active');
+            if (fullBtn) {
+                fullBtn.click();
+            }
+        });
+    </script>
+</body>
+</html>

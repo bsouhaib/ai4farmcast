@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Weather AI Platform</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: #f8fffe;
+            color: #1f2d3d;
+            line-height: 1.6;
+        }
+
+        .header {
+            background-color: #ffffff;
+            border-bottom: 1px solid #d4edda;
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 1px 3px rgba(40, 167, 69, 0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #155724;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .logo::before {
+            content: "🌱";
+            font-size: 1.2rem;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .nav-link {
+            color: #495057;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            transition: all 0.2s;
+            position: relative;
+        }
+
+        .nav-link:hover,
+        .nav-link.active {
+            color: #155724;
+            background-color: #d4edda;
+        }
+
+        .nav-link::before {
+            content: attr(data-number);
+            background: #28a745;
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 600;
+            padding: 2px 6px;
+            border-radius: 10px;
+            margin-right: 8px;
+        }
+
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .hero-section {
+            padding: 6rem 0;
+            text-align: center;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 50%, #17a2b8 100%);
+            color: white;
+            margin-bottom: 4rem;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1.5rem;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-subtitle {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto 3rem;
+            font-weight: 400;
+            line-height: 1.7;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background-color: white;
+            color: #28a745;
+        }
+
+        .btn-primary:hover {
+            background-color: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-secondary:hover {
+            background-color: white;
+            color: #28a745;
+            transform: translateY(-2px);
+        }
+
+        .features-section {
+            padding: 4rem 0;
+        }
+
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 1px 3px rgba(40, 167, 69, 0.1);
+            border: 1px solid #d4edda;
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #155724;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: white;
+            border: 1px solid #d4edda;
+            border-radius: 12px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.15);
+            border-color: #28a745;
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #155724;
+            margin-bottom: 1rem;
+        }
+
+        .feature-description {
+            color: #495057;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-link {
+            color: #28a745;
+            text-decoration: none;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border: 1px solid #28a745;
+            border-radius: 6px;
+            transition: all 0.2s;
+        }
+
+        .feature-link:hover {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .overview-section {
+            background: linear-gradient(135deg, #f8fffe 0%, #e8f5e8 100%);
+            border-radius: 12px;
+            padding: 3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+        }
+
+        .overview-title {
+            font-size: 2rem;
+            font-weight: 600;
+            color: #155724;
+            margin-bottom: 1.5rem;
+        }
+
+        .overview-text {
+            font-size: 1.1rem;
+            color: #495057;
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.7;
+        }
+
+        .regions-showcase {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .region-tag {
+            background: white;
+            border: 1px solid #d4edda;
+            border-radius: 20px;
+            padding: 0.75rem 1.5rem;
+            color: #155724;
+            font-weight: 500;
+            text-align: center;
+            transition: all 0.2s;
+        }
+
+        .region-tag:hover {
+            background: #d4edda;
+            transform: scale(1.05);
+        }
+
+        .footer {
+            background: #155724;
+            color: white;
+            padding: 3rem 0 2rem;
+            margin-top: 4rem;
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .footer-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #b8daff;
+        }
+
+        .footer-text {
+            color: #c3e6cb;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 0 1rem;
+            }
+
+            .nav-links {
+                gap: 1rem;
+            }
+
+            .main-container {
+                padding: 0 1rem;
+            }
+
+            .hero-title {
+                font-size: 2.2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .regions-showcase {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-container">
+            <div class="logo">Weather AI Platform</div>
+            <nav class="nav-links">
+                <a href="evaluation.html" class="nav-link" data-number="1">Evaluate & Compare Models</a>
+                <a href="tuning.html" class="nav-link" data-number="2">Tune with Local Data</a>
+                <a href="forecasts.html" class="nav-link" data-number="3">Generate Forecasts</a>
+            </nav>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <div class="main-container">
+            <h1 class="hero-title">Testing AI Weather Models for Agricultural Applications</h1>
+            <p class="hero-subtitle">
+                Compare, validate, and tune AI models for different regions.
+            </p>
+            <div class="cta-buttons">
+                <a href="evaluation.html" class="btn btn-primary">Evaluate & Compare Models</a>
+                <a href="tuning.html" class="btn btn-secondary">Tune Models</a>
+            </div>
+        </div>
+    </section>
+
+    <main class="main-container">
+        <div class="overview-section">
+            <h2 class="overview-title">Agricultural Weather Intelligence</h2>
+            <p class="overview-text">
+                Our platform provides comprehensive tools for testing AI weather models specifically 
+                for agricultural applications. Evaluate model performance, tune with local data, and generate forecasts with publicly available AI weather models.
+            </p>
+            
+            <h3 style="color: #155724; margin: 2rem 0 1rem 0; font-weight: 600;">Target Regions</h3>
+            <div class="regions-showcase">
+                <div class="region-tag">🇪🇹 Ethiopia</div>
+                <div class="region-tag">🇰🇪 Kenya</div>
+                <div class="region-tag">🇳🇬 Nigeria</div>
+                <div class="region-tag">🇧🇩 Bangladesh</div>
+                <div class="region-tag">🇨🇱 Chile</div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Platform Features</h2>
+            
+            <div class="features-grid">
+                <div class="feature-card" onclick="window.location.href='evaluation.html'">
+                    <span class="feature-icon">📊</span>
+                    <h3 class="feature-title">Evaluate & Compare Models</h3>
+                    <p class="feature-description">
+                        Evaluation and comparison of AI weather models against agricultural benchmarks. 
+                    </p>
+                    <a href="evaluation.html" class="feature-link">Evaluate & Compare</a>
+                </div>
+
+                <div class="feature-card" onclick="window.location.href='tuning.html'">
+                    <span class="feature-icon">🔧</span>
+                    <h3 class="feature-title">Model Tuning</h3>
+                    <p class="feature-description">
+                        Fine-tune state-of-the-art weather prediction models with local data.
+                    </p>
+                    <a href="tuning.html" class="feature-link">Tune Models</a>
+                </div>
+
+                <div class="feature-card" onclick="window.location.href='forecasts.html'">
+                    <span class="feature-icon">🌍</span>
+                    <h3 class="feature-title">Weather Forecasts</h3>
+                    <p class="feature-description">
+                        Generate AI-powered weather forecasts.
+                    </p>
+                    <a href="./forecasts.html" class="feature-link">Generate Forecasts</a>
+                </div>
+
+                <div class="feature-card">
+                    <span class="feature-icon">📚</span>
+                    <h3 class="feature-title">Documentation</h3>
+                    <p class="feature-description">
+                        Access guides, tutorials, for AI-driven forecasting.
+                    </p>
+                    <a href="#" class="feature-link">View Docs</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2 class="section-title">Why Agricultural Weather AI?</h2>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                <div style="text-align: center; padding: 1.5rem;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🌾</div>
+                    <h4 style="color: #155724; margin-bottom: 0.5rem;">Crop-Specific Insights</h4>
+                    <p style="color: #6c757d;">Tailored predictions for different agricultural systems and crop types.</p>
+                </div>
+                <div style="text-align: center; padding: 1.5rem;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🎯</div>
+                    <h4 style="color: #155724; margin-bottom: 0.5rem;">Local Accuracy</h4>
+                    <p style="color: #6c757d;">Enhanced performance through regional tuning and local data integration.</p>
+                </div>
+                <div style="text-align: center; padding: 1.5rem;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">⚡</div>
+                    <h4 style="color: #155724; margin-bottom: 0.5rem;">Real-Time Processing</h4>
+                    <p style="color: #6c757d;">Fast AI-powered forecasts for timely agricultural decision-making.</p>
+                </div>
+                <div style="text-align: center; padding: 1.5rem;">
+                    <div style="font-size: 2.5rem; margin-bottom: 1rem;">🔬</div>
+                    <h4 style="color: #155724; margin-bottom: 0.5rem;">Scientific Rigor</h4>
+                    <p style="color: #6c757d;">Built on established benchmarks and validated methodologies.</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <h3 class="footer-title">Weather AI Platform</h3>
+            <p class="footer-text">
+                Testing AI weather models to support climate-resilient farming across diverse global regions.
+            </p>
+            <p style="color: #6c757d; margin-top: 2rem; padding-top: 2rem; border-top: 1px solid #495057;">
+                Training program to test AI weather models
+            </p>
+        </div>
+    </footer>
+</body>
+</html>

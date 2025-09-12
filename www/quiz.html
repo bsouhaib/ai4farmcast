@@ -1,0 +1,477 @@
+<!doctype html>
+<html lang="fr">
+    
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>AI Weather Forecasting Pre-Training – Summary Quiz</title>
+  <style>
+    :root{--card-bg:#ffffff;--muted:#6b7280;--accent:#0f62fe}
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        line-height: 1.6;
+        color: #1f2d3d;
+        background: linear-gradient(135deg, #28a745 0%, #20c997 50%, #17a2b8 100%);
+        min-height: 100vh;
+    }
+    .back-button {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background: #2d5a27;
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: bold;
+        transition: background 0.3s ease;
+    }
+    .back-button:hover {
+      background: #4a7c59;
+    }
+    .template-card{background:var(--card-bg); border-radius:12px; padding:20px; box-shadow:0 6px 18px rgba(16,24,40,0.06); max-width:900px; margin:0 auto}
+    h1{font-size:20px;margin:0 0 6px}
+    p.lead{color:var(--muted); margin-top:0}
+    .download-links{margin:14px 0}
+    .download-btn{display:inline-block;padding:10px 14px;border-radius:8px;background:var(--accent);color:#fff;text-decoration:none;font-weight:600}
+    form{margin-top:10px}
+    fieldset{border:1px solid #e6e9ef;padding:12px;border-radius:8px;margin-bottom:14px}
+    legend{font-weight:700}
+    label{display:block;margin:8px 0}
+    .hint{color:var(--muted);font-size:13px}
+    .short-answer{width:100%;padding:8px;border-radius:6px;border:1px solid #d1d5db}
+    .btn{padding:10px 14px;border-radius:8px;background:#111827;color:#fff;border:none;font-weight:700;cursor:pointer}
+    .results{margin-top:12px;padding:12px;border-radius:8px;background:#eef2ff;color:#1f2937}
+    .correct{color:green;font-weight:700}
+    .incorrect{color:red;font-weight:700}
+    .answer-key{background:#f8fafc;border:1px dashed #e2e8f0;padding:10px;margin-top:8px;border-radius:6px}
+    .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:700px){.grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+    <header>
+      <a href="materials.html" class="back-button">← Back</a>
+  </header>
+
+  <div class="template-card">
+    <h1>Pre-workshop Preparation Quiz</h1>
+    <p class="lead">Test your understanding of the foundational concepts covered in the pre-training videos.</p>
+    <form id="quiz" aria-live="polite">
+      <fieldset>
+        <legend>Climate and Forecasting</legend>
+
+        <div>
+          <label><strong>1.</strong> Which of the following makes weather forecasting challenging? <span class="hint">(Choose all that apply)</span></label>
+          <label><input type="checkbox" name="q1" value="a"> The atmosphere is chaotic</label>
+          <label><input type="checkbox" name="q1" value="b"> Not enough observational coverage across the globe</label>
+          <label><input type="checkbox" name="q1" value="c"> Measurement errors in data</label>
+          <label><input type="checkbox" name="q1" value="d"> Complex processes like cloud formation</label>
+        </div>
+
+        <div style="margin-top:12px">
+          <label><strong>2.</strong> Match each forecast type to its lead time:</label>
+          <div class="grid">
+            <div>
+              <label>Nowcasting
+                <select name="q2_nowcasting">
+                  <option value="">-- select --</option>
+                  <option value="up72">up to 72 hours ahead</option>
+                  <option value="cur2">Current weather parameters to 2 hours ahead</option>
+                  <option value="72to240">from 72 to 240 hours ahead</option>
+                  <option value="10to30">From 10 to 30 days ahead</option>
+                  <option value="30to2y">From 30 days up to two years</option>
+                </select>
+              </label>
+            </div>
+            <div>
+              <label>Short-range
+                <select name="q2_short">
+                  <option value="">-- select --</option>
+                  <option value="up72">up to 72 hours ahead</option>
+                  <option value="cur2">Current weather parameters to 2 hours ahead</option>
+                  <option value="72to240">from 72 to 240 hours ahead</option>
+                  <option value="10to30">From 10 to 30 days ahead</option>
+                  <option value="30to2y">From 30 days up to two years</option>
+                </select>
+              </label>
+            </div>
+            <div>
+              <label>Medium-range
+                <select name="q2_med">
+                  <option value="">-- select --</option>
+                  <option value="up72">up to 72 hours ahead</option>
+                  <option value="cur2">Current weather parameters to 2 hours ahead</option>
+                  <option value="72to240">from 72 to 240 hours ahead</option>
+                  <option value="10to30">From 10 to 30 days ahead</option>
+                  <option value="30to2y">From 30 days up to two years</option>
+                </select>
+              </label>
+            </div>
+            <div>
+              <label>Subseasonal (S2S)
+                <select name="q2_s2s">
+                  <option value="">-- select --</option>
+                  <option value="up72">up to 72 hours ahead</option>
+                  <option value="cur2">Current weather parameters to 2 hours ahead</option>
+                  <option value="72to240">from 72 to 240 hours ahead</option>
+                  <option value="10to30">From 10 to 30 days ahead</option>
+                  <option value="30to2y">From 30 days up to two years</option>
+                </select>
+              </label>
+            </div>
+            <div>
+              <label>Seasonal
+                <select name="q2_seasonal">
+                  <option value="">-- select --</option>
+                  <option value="up72">up to 72 hours ahead</option>
+                  <option value="cur2">Current weather parameters to 2 hours ahead</option>
+                  <option value="72to240">from 72 to 240 hours ahead</option>
+                  <option value="10to30">From 10 to 30 days ahead</option>
+                  <option value="30to2y">From 30 days up to two years</option>
+                </select>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px">
+          <label><strong>3.</strong> In an agricultural advisory, why is impact-based forecasting more useful than just reporting raw weather data?</label>
+          <label><input type="radio" name="q3" value="a"> It’s faster to produce</label>
+          <label><input type="radio" name="q3" value="b"> It focuses on what the weather means for people and decisions</label>
+          <label><input type="radio" name="q3" value="c"> It removes uncertainty from forecasts</label>
+          <label><input type="radio" name="q3" value="d"> It’s more accurate for all timescales</label>
+        </div>
+
+        <div style="margin-top:12px">
+          <label><strong>4.</strong> Give one example of how forecast lead time can change the possible actions a farmer can take. <span class="hint">(Short answer)</span></label>
+          <textarea name="q4" class="short-answer" rows="3"></textarea>
+        </div>
+
+      </fieldset>
+
+      <fieldset>
+        <legend>Basics of AI for Science</legend>
+
+        <div>
+          <label><strong>5.</strong> Which of the following is <em>NOT</em> true about AI weather models?</label>
+          <label><input type="radio" name="q5" value="a"> Requires high-quality, well-prepared data</label>
+          <label><input type="radio" name="q5" value="b"> May need local validation</label>
+          <label><input type="radio" name="q5" value="c"> Can work without any observational data</label>
+          <label><input type="radio" name="q5" value="d"> Needs expert interpretation</label>
+        </div>
+
+        <div style="margin-top:12px">
+          <label><strong>6.</strong> Name one potential use of AI in weather forecasting besides generating a forecast. <span class="hint">(Short answer)</span></label>
+          <input name="q6" class="short-answer">
+        </div>
+
+        <div style="margin-top:12px">
+          <label><strong>7.</strong> Which is an example of a hybrid AI model that combines a dynamical core with machine learning?</label>
+          <label><input type="radio" name="q7" value="a"> Pangu-Weather</label>
+          <label><input type="radio" name="q7" value="b"> Graphcast</label>
+          <label><input type="radio" name="q7" value="c"> NeuralGCM</label>
+          <label><input type="radio" name="q7" value="d"> AIFS</label>
+        </div>
+
+      </fieldset>
+
+      <fieldset>
+        <legend>Forecast Model Historical Evolution</legend>
+
+        <div>
+          <label><strong>8.</strong> Arrange these in the correct historical order of forecasting methods (1 = earliest):</label>
+          <p class="hint">Enter the number (1–4) next to each method to indicate order.</p>
+
+          <!-- <label>Pattern recognition from direct observation: <input name="q8_pat" size="2" placeholder="e.g., 1"></label> -->
+          <label>Numerical Weather Prediction (NWP): <input name="q8_nwp" size="2" placeholder="e.g., 1"></label>
+          <label>Ensemble forecasting: <input name="q8_ens" size="2" placeholder="e.g., 2"></label>
+          <label>AI-based models: <input name="q8_ai" size="2" placeholder="e.g., 3"></label>
+        </div>
+
+        <div style="margin-top:12px">
+          <label><strong>9.</strong> What is the main reason ensemble forecasting became an important step in forecast evolution?</label>
+          <label><input type="radio" name="q9" value="a"> It increases computational cost</label>
+          <label><input type="radio" name="q9" value="b"> It removes the need for satellites</label>
+          <label><input type="radio" name="q9" value="c"> It captures uncertainty by running multiple simulations</label>
+          <label><input type="radio" name="q9" value="d"> It eliminates the need for human interpretation</label>
+        </div>
+
+        <div style="margin-top:12px">
+          <label><strong>10.</strong> True or False: AI models today are trained only on real-time observational data, not on reanalysis datasets like ERA5.</label>
+          <label><input type="radio" name="q10" value="true"> True</label>
+          <label><input type="radio" name="q10" value="false"> False</label>
+        </div>
+
+      </fieldset>
+
+      <fieldset>
+        <legend>Forecasting Across Timescales</legend>
+
+        <div>
+          <label><strong>11.</strong> Which timescale is typically the hardest to predict because atmospheric memory fades before oceanic memory takes over?</label>
+          <label><input type="radio" name="q11" value="a"> Short-range</label>
+          <label><input type="radio" name="q11" value="b"> Medium-range</label>
+          <label><input type="radio" name="q11" value="c"> Subseasonal</label>
+          <label><input type="radio" name="q11" value="d"> Seasonal</label>
+        </div>
+
+        <div style="margin-top:12px">
+          <label><strong>12.</strong> Why do probabilistic forecasts become more useful than deterministic forecasts at longer lead times?</label>
+          <label><input type="radio" name="q12" value="a"> They are faster to compute</label>
+          <label><input type="radio" name="q12" value="b"> They provide a range of possible outcomes and their probabilities</label>
+          <label><input type="radio" name="q12" value="c"> They guarantee accuracy</label>
+          <label><input type="radio" name="q12" value="d"> They remove the need for data assimilation</label>
+        </div>
+
+      </fieldset>
+
+      <fieldset>
+        <legend>Preparing for Running AI Models</legend>
+
+        <div>
+          <label><strong>13.</strong> Which of the following is <em>NOT</em> required to run an AI weather model effectively?</label>
+          <label><input type="radio" name="q13" value="a"> High-quality data</label>
+          <label><input type="radio" name="q13" value="b"> Understanding of model outputs</label>
+          <label><input type="radio" name="q13" value="c"> GPUs or computing resources</label>
+          <label><input type="radio" name="q13" value="d"> Eliminating all ensemble members</label>
+        </div>
+
+        <div style="margin-top:12px">
+          <label><strong>14.</strong> Before using an AI model in forecasting, which question is part of good benchmarking practice?</label>
+          <label><input type="radio" name="q14" value="a"> “Do I have enough clean, relevant data?”</label>
+          <label><input type="radio" name="q14" value="b"> “Can I run the model without electricity?”</label>
+          <label><input type="radio" name="q14" value="c"> “Can I skip model validation?”</label>
+          <label><input type="radio" name="q14" value="d"> “Will the model give me 100% certainty?”</label>
+        </div>
+
+        <div style="margin-top:12px">
+          <label><strong>15.</strong> Why is regional validation important before using AI forecasts for agricultural decisions? <span class="hint">(Short answer)</span></label>
+          <textarea name="q15" class="short-answer" rows="3"></textarea>
+        </div>
+
+        <div style="margin-top:12px">
+          <label><strong>16.</strong> What does ConOps stand for, and what is its main purpose in forecasting systems? <span class="hint">(Short answer)</span></label>
+          <input name="q16" class="short-answer">
+        </div>
+
+        <div style="margin-top:12px">
+          <label><strong>17.</strong> Why is post-processing (bias correction) important for AI model outputs?</label>
+          <label><input type="radio" name="q17" value="a"> It makes it faster to produce forecasts</label>
+          <label><input type="radio" name="q17" value="b"> It improves the alignment of outputs with local conditions</label>
+          <label><input type="radio" name="q17" value="c"> It replaces ensemble forecasts entirely</label>
+          <label><input type="radio" name="q17" value="d"> It removes the need for observational data</label>
+        </div>
+
+      </fieldset>
+
+      <div style="display:flex;gap:10px;align-items:center">
+        <button type="button" class="btn" id="check">Check Answers</button>
+        <button type="button" class="btn" id="reset" style="background:#ef4444">Reset</button>
+        <div id="score" style="margin-left:12px;font-weight:700"></div>
+      </div>
+
+      <div id="feedback" aria-live="polite"></div>
+
+    </form>
+
+  </div>
+
+  <script>
+    // Answers key
+    const answers = {
+      q1: ['a','b','c','d'],
+      q2_nowcasting: 'cur2',
+      q2_short: 'up72',
+      q2_med: '72to240',
+      q2_s2s: '10to30',
+      q2_seasonal: '30to2y',
+      q3: 'b',
+      // q4 open-ended
+      q5: 'c',
+      // q6 open-ended
+      q7: 'c',
+      // q8_pat: '1',
+      q8_nwp: '2',
+      q8_ens: '3',
+      q8_ai: '4',
+      q9: 'c',
+      q10: 'false',
+      q11: 'c',
+      q12: 'b',
+      q13: 'd',
+      q14: 'a',
+      // q15 open
+      // q16 open
+      q17: 'b'
+    };
+
+    function escapeHtml(str){
+      if(!str && str!=="") return '';
+      return String(str)
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#039;');
+    }
+
+    function getCheckedValues(name){
+      return Array.from(document.querySelectorAll('input[name="'+name+'"]:checked')).map(i=>i.value);
+    }
+
+    document.getElementById('check').addEventListener('click', ()=>{
+        const feedback = document.getElementById('feedback'); feedback.innerHTML='';
+        let correctCount = 0; let possible = 0; let details = [];
+
+        // Q1
+        possible++; const q1vals = getCheckedValues('q1');
+        const q1Correct = arraysEqualNoOrder(q1vals, answers.q1);
+        if(q1Correct){ correctCount++; details.push('<div class="correct">Q1: Correct</div>'); } else { details.push('<div class="incorrect">Q1: Incorrect — correct answer: All options</div>'); }
+
+        // Q2
+        const q2fields = ['q2_nowcasting','q2_short','q2_med','q2_s2s','q2_seasonal'];
+        possible++;
+        let q2ok = q2fields.every(f => document.querySelector('[name="'+f+'"]').value === answers[f]);
+        if(q2ok){ correctCount++; details.push('<div class="correct">Q2: Correct</div>'); } else { details.push('<div class="incorrect">Q2: Incorrect — correct mapping: Nowcasting=current to 2h; Short-range=up to 72h; Medium-range=72–240h; Subseasonal=10–30d; Seasonal=30d–2y</div>'); }
+
+        // Q3
+        possible++; const q3v = (document.querySelector('input[name="q3"]:checked')||{}).value;
+        if(q3v === answers.q3){ correctCount++; details.push('<div class="correct">Q3: Correct</div>'); } else { details.push('<div class="incorrect">Q3: Incorrect — correct: It focuses on what the weather means for people and decisions</div>'); }
+
+        // Q4
+        possible++;
+        const q4v = (document.querySelector('[name="q4"]').value||'').toLowerCase().trim();
+        const q4raw = (document.querySelector('[name="q4"]').value||'').trim();
+        const q4keywords = ["forecast lead time","planting","harvesting","irrigation","fertilization","pesticide","spraying","risk management","crop protection","harvest","irrigate","plant"]; 
+        let q4found = q4keywords.filter(kw => q4v.includes(kw));
+
+        if(q4found.length > 0){
+        correctCount++;
+        details.push('<div class="correct">Q4: Good answer — e.g: A 2-hour heavy rainfall nowcast can trigger immediate harvesting or sheltering; a 10-day dry spell allows irrigation scheduling.' + '</em><br>Your answer: <strong>' + escapeHtml(q4raw) + '</strong></div>');
+        } else {
+        details.push('<div class="incorrect">Q4:Incorrect. e.g: A 2-hour heavy rainfall nowcast can trigger immediate harvesting or sheltering; a 10-day dry spell allows irrigation scheduling."<br>Your answer: <strong>' + escapeHtml(q4raw) + '</strong></div>');
+        }
+
+        // Q5
+        possible++; const q5v = (document.querySelector('input[name="q5"]:checked')||{}).value;
+        if(q5v === answers.q5){ correctCount++; details.push('<div class="correct">Q5: Correct</div>'); } else { details.push('<div class="incorrect">Q5: Incorrect — correct: Can\'t work without observational data</div>'); }
+
+        // Q6
+        possible++;
+        const q6v = (document.querySelector('[name="q6"]').value||'').toLowerCase().trim();
+        const q6raw = (document.querySelector('[name="q6"]').value||'').trim();
+        const q6keywords = ["bias","correction","downscaling","assimilation","detection","anomaly","post-process","postprocessing","verification","calibration"];
+        let q6found = q6keywords.filter(kw => q6v.includes(kw));
+        if(q6found.length > 0){
+        correctCount++;
+        details.push('<div class="correct">Q6: Good answer — e.g: bias correction, downscaling, data assimilation, anomaly detection.' + '</em><br>Your answer: <strong>' + escapeHtml(q6raw) + '</strong></div>');
+        } else {
+        details.push('<div class="incorrect">Q6: Incorrect — e.g: bias correction, downscaling, data assimilation, anomaly detection.<br>Your answer: <strong>' + escapeHtml(q6raw) + '</strong></div>');
+        }
+
+        // Q7
+        possible++; const q7v = (document.querySelector('input[name="q7"]:checked')||{}).value;
+        if(q7v === answers.q7){ correctCount++; details.push('<div class="correct">Q7: Correct</div>'); } else { details.push('<div class="incorrect">Q7: Incorrect — correct: NeuralGCM</div>'); }
+
+        // Q8
+        possible++; 
+        // const q8_pat = (document.querySelector('[name="q8_pat"]').value||'').trim();
+        const q8_nwp = (document.querySelector('[name="q8_nwp"]').value||'').trim();
+        const q8_ens = (document.querySelector('[name="q8_ens"]').value||'').trim();
+        const q8_ai = (document.querySelector('[name="q8_ai"]').value||'').trim();
+        if(q8_nwp===answers.q8_nwp && q8_ens===answers.q8_ens && q8_ai===answers.q8_ai){ correctCount++; details.push('<div class="correct">Q8: Correct</div>'); } else { details.push('<div class="incorrect">Q8: Incorrect — correct order: NWP (1), Ensemble (2), AI (3)</div>'); }
+
+        // Q9
+        possible++; const q9v = (document.querySelector('input[name="q9"]:checked')||{}).value;
+        if(q9v === answers.q9){ correctCount++; details.push('<div class="correct">Q9: Correct</div>'); } else { details.push('<div class="incorrect">Q9: Incorrect — correct: captures uncertainty</div>'); }
+
+        // Q10
+        possible++; const q10v = (document.querySelector('input[name="q10"]:checked')||{}).value;
+        if(q10v === answers.q10){ correctCount++; details.push('<div class="correct">Q10: Correct</div>'); } else { details.push('<div class="incorrect">Q10: Incorrect — correct: False (models also use reanalysis datasets)</div>'); }
+
+        // Q11
+        possible++; const q11v = (document.querySelector('input[name="q11"]:checked')||{}).value;
+        if(q11v === answers.q11){ correctCount++; details.push('<div class="correct">Q11: Correct</div>'); } else { details.push('<div class="incorrect">Q11: Incorrect — correct: Subseasonal</div>'); }
+
+        // Q12
+        possible++; const q12v = (document.querySelector('input[name="q12"]:checked')||{}).value;
+        if(q12v === answers.q12){ correctCount++; details.push('<div class="correct">Q12: Correct</div>'); } else { details.push('<div class="incorrect">Q12: Incorrect — correct: They provide a range of possible outcomes and their probabilities</div>'); }
+
+        // Q13
+        possible++; const q13v = (document.querySelector('input[name="q13"]:checked')||{}).value;
+        if(q13v === answers.q13){ correctCount++; details.push('<div class="correct">Q13: Correct</div>'); } else { details.push('<div class="incorrect">Q13: Incorrect — correct: Eliminating all ensemble members is NOT required</div>'); }
+
+        // Q14
+        possible++; const q14v = (document.querySelector('input[name="q14"]:checked')||{}).value;
+        if(q14v === answers.q14){ correctCount++; details.push('<div class="correct">Q14: Correct</div>'); } else { details.push('<div class="incorrect">Q14: Incorrect — correct: "Do I have enough clean, relevant data?"</div>'); }
+
+        // Q15
+        possible++;
+        const q15v = (document.querySelector('[name="q15"]').value||'').toLowerCase().trim();
+        const q15raw = (document.querySelector('[name="q15"]').value||'').trim();
+        const q15keywords = ["regional","validation","bias","correction","calibration","local","opportunities","decision-making"];
+        let q15found = q15keywords.filter(kw => q15v.includes(kw));
+        if(q15found.length > 0){
+        correctCount++;
+        details.push('<div class="correct">Q15: Good answer  — To decide what works best and create opportunities to see how bias-correcting model outputs can improve model results for your local context and particular decision-making needs.' + '</em><br>Your answer: <strong>' + escapeHtml(q15raw) + '</strong></div>');
+        } else {
+        details.push('<div class="incorrect">Q15: Incorrect — e.g: To decide what works best and create opportunities to see how bias-correcting model outputs can improve model results for your local context and particular decision-making needs.<br>Your answer: <strong>' + escapeHtml(q15raw) + '</strong></div>');
+        }
+
+        // Q16
+        possible++;
+        const q16v = (document.querySelector('[name="q16"]').value||'').toLowerCase().trim();
+        const q16raw = (document.querySelector('[name="q16"]').value||'').trim();
+        const q16keywords = ["concept of operations","conops","concept of operations.","defines who","who, what, when, where, why","end-to-end"];
+        let q16found = q16keywords.filter(kw => q16v.includes(kw));
+        if(q16found.length > 0){
+        correctCount++;
+        details.push('<div class="correct">Q16: Good answer — Concept of Operations. Defines who, what, when, where, why and how for an end-to-end system. <em>' + '</em><br>Your answer: <strong>' + escapeHtml(q16raw) + '</strong></div>');
+        } else {
+        details.push('<div class="incorrect">Q16: Incorrect — e.g: "Concept of Operations. Defines who, what, when, where, why and how for an end-to-end system."<br>Your answer: <strong>' + escapeHtml(q16raw) + '</strong></div>');
+        }
+
+        // Q17
+        possible++; 
+        const q17v = (document.querySelector('input[name="q17"]:checked')||{}).value;
+        const q17labels = {a: 'It makes it faster to produce forecasts', b: 'It improves the alignment of outputs with local conditions', c: 'It replaces ensemble forecasts entirely', d: 'It removes the need for observational data'};
+        const q17selectedText = q17labels[q17v] || '';
+        if(q17v === answers.q17){ correctCount++; details.push('<div class="correct">Q17: Correct </div>'); } else { details.push('<div class="incorrect">Q17: Incorrect — correct: It improves the alignment with local conditions</div>'); }
+
+      const scoreEl = document.getElementById('score');
+      scoreEl.textContent = `Score: ${correctCount} / ${possible}`;
+
+      feedback.innerHTML = '<div class="results"><strong>Feedback</strong><div class="answer-key">' + details.join('') + '</div></div>';
+
+      function arraysEqualNoOrder(a,b){ if(!a) return false; if(a.length!==b.length) return false; const aa = a.slice().sort(); const bb = b.slice().sort(); return aa.every((v,i)=>v===bb[i]); }
+    });
+
+    document.getElementById('reset').addEventListener('click', ()=>{
+      const form = document.getElementById('quiz');
+      if(!form) return;
+
+      try{ form.reset(); }catch(e){}
+
+      Array.from(form.elements).forEach(el => {
+        if(!el) return;
+        const tag = el.tagName.toLowerCase();
+        if(tag === 'input'){
+          const t = (el.type || '').toLowerCase();
+          if(t === 'checkbox' || t === 'radio') el.checked = false;
+          else el.value = '';
+        } else if(tag === 'textarea'){
+          el.value = '';
+        } else if(tag === 'select'){
+          el.selectedIndex = 0;
+        }
+      });
+
+      const fb = document.getElementById('feedback'); if(fb) fb.innerHTML = '';
+      const scoreEl = document.getElementById('score'); if(scoreEl) scoreEl.textContent = '';
+
+      const first = form.querySelector('input, textarea, select, button');
+      if(first) first.focus();
+    });
+
+  </script>
+</body>
+</html>
