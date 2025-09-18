@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Participants - Aim for Scale AI Weather Training Program</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      line-height: 1.6;
+      color: #1f2d3d;
+      background: linear-gradient(135deg, #28a745 0%, #20c997 50%, #17a2b8 100%);
+      min-height: 100vh;
+    }
+
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+
+    header {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+      position: fixed; width: 100%; top: 0; z-index: 1000;
+      border-bottom: 3px solid #28a745; height: 50px;
+    }
+
+    nav { display: flex; justify-content: center; align-items: center; height: 50px; padding: 0 20px; }
+    .nav-links { display: flex; list-style: none; gap: 12px; flex-wrap: wrap; }
+    .nav-links a {
+      text-decoration: none; color: #155724; font-weight: 500;
+      padding: 8px 12px; border-radius: 25px; transition: all .2s; display:inline-block;
+    }
+    .nav-links a:hover { background: #28a745; color: #fff; transform: translateY(-1px); }
+    .nav-links a.active { background: #155724; color: #fff; }
+
+    main { margin-top: 90px; padding: 2rem 0; }
+
+    .page {
+      background: white; border-radius: 15px; margin: 2rem 0;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15); overflow: hidden;
+    }
+    .page-header {
+      background: linear-gradient(135deg, #2d5a27 0%, #4a7c59 50%, #6b8e5a 100%);
+      color: white; padding: 3rem 2rem; text-align: center; position: relative;
+    }
+    .page-header::before{
+      content: ''; position: absolute; inset: 0;
+      background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat; opacity: .1;
+    }
+    .page-header h1 { font-size: 3rem; position: relative; z-index: 1; }
+
+    /* Toggle pills */
+    .pill-toggle{
+      display:flex; gap:20px; justify-content:center; align-items:center;
+      margin:28px 0 8px; flex-wrap:wrap;
+    }
+    .pill-toggle button{
+      border:none; cursor:pointer; border-radius:9999px; padding:16px 36px;
+      font-size:20px; font-weight:700; letter-spacing:.2px;
+      background:linear-gradient(135deg,#34d399 0%,#166534 100%);
+      color:#fff; box-shadow:0 10px 28px rgba(0,0,0,.18);
+      transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease; opacity:.95;
+    }
+    .pill-toggle button[aria-selected="true"]{ transform:translateY(-1px); box-shadow:0 14px 34px rgba(0,0,0,.22); opacity:1; }
+
+    /* GRID OF COUNTRY GROUPS */
+    .group-grid { display: grid; grid-template-columns: 1fr; gap: 26px; margin: 26px 0; }
+
+    /* Country group card (big white box, soft shadow) */
+    .country-group{
+      background:#fff;
+      border-radius:16px;
+      box-shadow:0 10px 30px rgba(0,0,0,0.12);
+      padding:22px;
+      display:grid;
+      grid-template-columns: 300px 1fr; /* left flag, right people list */
+      gap:28px;
+      align-items:start;
+    }
+
+    /* Single country flag (left) */
+    .country-flag{
+      width:100%; max-width:300px; height:180px;
+      border-radius:12px; overflow:hidden;
+      box-shadow:0 6px 16px rgba(0,0,0,0.12);
+      background:transparent;
+    }
+    .country-flag img{
+      width:110%; height:110%;
+      object-fit:cover; transform:translate(-5%,-5%); /* crop away built-in white edges */
+      display:block;
+    }
+
+    /* Right column = people grid (SIDE-BY-SIDE cards) */
+    .people-list{
+      display:grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap:16px;
+    }
+
+    .person-card{
+      background:#fff;
+      border-radius:15px;
+      padding:16px 18px;
+      box-shadow:0 5px 15px rgba(21,87,36,0.1);
+    }
+    .person-card h3{
+      margin:0 0 6px 0;
+      font-size:24px; line-height:1.2; color:#132d19;
+    }
+    .person-card p{ margin:0; font-size:16px; color:#29583a; }
+
+    @media (max-width: 900px){
+      .country-group{ grid-template-columns:1fr; }
+      .country-flag{ max-width:none; width:100%; height:180px; }
+    }
+  </style>
+</head>
+<body style="padding-top:160px;">
+  <header>
+    <nav class="container">
+      <ul class="nav-links">
+        <li><a href="index.html">Overview</a></li>
+        <li><a href="bios.html">Team</a></li>
+        <li><a href="speakers.html">Speakers</a></li>
+        <li><a class="active" href="participants.html">Participants</a></li>
+        <li><a href="agenda.html">Agenda</a></li>
+        <li><a href="materials.html">Pre-Training Resources</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="page">
+      <div class="page-header">
+        <h1>Meet the Participants</h1>
+      </div>
+    </section>
+
+    <!-- Pills -->
+    <div class="pill-toggle">
+      <button id="tab-tech" role="tab" aria-selected="true" aria-controls="Technical-Participants"
+              style="background:linear-gradient(135deg,#4ade80 0%,#16a34a 100%);box-shadow:0 14px 34px rgba(0,0,0,.22),0 0 0 3px rgba(34,197,94,.45);">
+        Technical Track
+      </button>
+      <button id="tab-applied" role="tab" aria-selected="false" aria-controls="Applied-Participants"
+              style="background:linear-gradient(135deg,#166534 0%,#065f46 100%);box-shadow:0 10px 28px rgba(0,0,0,.18);">
+        Applied Track
+      </button>
+    </div>
+
+    <!-- ===================== TECHNICAL (grouped by country) ===================== -->
+    <div id="Technical-Participants" style="display:block;">
+      <div class="group-grid">
+
+        <!-- Chile -->
+        <section class="country-group">
+          <div class="country-flag">
+            <img src="assets/logos/chilie.jpg" alt="Chile flag">
+          </div>
+          <div class="people-list">
+            <article class="person-card">
+              <h3>Marcel Fuentes</h3>
+              <p><strong>Researcher</strong></p>
+              <p><strong>Instituto de Investigaciones Agropecuarias (INIA)</strong></p>
+            </article>
+            <article class="person-card">
+              <h3>Tamara Venegas Yurazeck</h3>
+              <p><strong>Meteorologist</strong></p>
+              <p><strong>Dirección Meteorológica de Chile</strong></p>
+            </article>
+          </div>
+        </section>
+
+        <!-- Nigeria -->
+        <section class="country-group">
+          <div class="country-flag">
+            <img src="assets/logos/Nigeria.jpg" alt="Nigeria flag">
+          </div>
+          <div class="people-list">
+            <article class="person-card">
+              <h3>Ikenna Camelius Orisakwe</h3>
+              <p><strong>Senior Meteorologist</strong></p>
+              <p><strong>NiMet</strong></p>
+            </article>
+            <article class="person-card">
+              <h3>Felix Olabamiji Ajibola</h3>
+              <p><strong>Senior Researcher</strong></p>
+              <p><strong>NiMet</strong></p>
+            </article>
+          </div>
+        </section>
+
+        <!-- Kenya -->
+        <section class="country-group">
+          <div class="country-flag">
+            <img src="assets/logos/kenya.jpg" alt="Kenya flag">
+          </div>
+          <div class="people-list">
+            <article class="person-card">
+              <h3>Ezekiel Muigai</h3>
+              <p><strong>Acting Deputy Director, Forecasting</strong></p>
+              <p><strong>Kenya Meteorological Department</strong></p>
+            </article>
+            <article class="person-card">
+              <h3>Japheth Migiro</h3>
+              <p><strong>Kenya Meteorological Department</strong></p>
+              <p><strong>NiMet</strong></p>
+            </article>
+          </div>
+        </section>
+
+        <!-- Ethiopia -->
+        <section class="country-group">
+          <div class="country-flag">
+            <img src="assets/logos/ethiopia.jpg" alt="Ethiopia flag">
+          </div>
+          <div class="people-list">
+            <article class="person-card">
+              <h3>Asaminew Teshome</h3>
+              <p><strong>Deputy Director General Meteorogical Forecast & Advisory Services</strong></p>
+              <p><strong>Ethiopian Meteorological Institute (EMI)</strong></p>
+            </article>
+            <article class="person-card">
+              <h3>Melkamu Diriba</h3>
+              <p><strong>PhD Student</strong></p>
+              <p><strong>EMI</strong></p>
+            </article>
+          </div>
+        </section>
+
+        <!-- Bangladesh -->
+        <section class="country-group">
+          <div class="country-flag">
+            <img src="assets/logos/bangladesh.jpg" alt="Bangladesh flag">
+          </div>
+          <div class="people-list">
+            <article class="person-card">
+              <h3>Mr. A. K. M Nazmul Hoque</h3>
+              <p><strong>Meteorologist</strong></p>
+              <p><strong>Bangladesh Meteorological Department (BMD)</strong></p>
+            </article>
+          </div>
+        </section>
+
+        <!-- UAE -->
+        <section class="country-group">
+          <div class="country-flag">
+            <img src="assets/logos/uae.jpg" alt="UAE flag">
+          </div>
+          <div class="people-list">
+            <article class="person-card">
+              <h3>Alyaa Ali Ahmed Alhantoobi</h3>
+              <p><strong>Senior Numerical Forecasting Specialist</strong></p>
+              <p><strong>NCM UAE</strong></p>
+            </article>
+            <article class="person-card">
+              <h3>Esra Waleed Khamis Alnaqbi</h3>
+              <p><strong>Aviation Meteorology Forecaster</strong></p>
+              <p><strong>NCM UAE</strong></p>
+            </article>
+            <article class="person-card">
+              <h3>Aya Rashid Mohamed Alrashdi</h3>
+              <p><strong>Forecaster</strong></p>
+              <p><strong>NCM UAE</strong></p>
+            </article>
+            <article class="person-card">
+              <h3>Alreem Saad Nasser Saeed Almaskari</h3>
+              <p><strong>Forecaster</strong></p>
+              <p><strong>NCM UAE</strong></p>
+            </article>
+            <article class="person-card">
+              <h3>Sultan Tariq Mohmed Karama Alkatheeri</h3>
+              <p><strong>Forecaster</strong></p>
+              <p><strong>NCM UAE</strong></p>
+            </article>
+          </div>
+        </section>
+
+      </div>
+    </div>
+    <!-- ===================== /TECHNICAL ===================== -->
+
+    <!-- ===================== APPLIED (grouped by country) ===================== -->
+    <div id="Applied-Participants" style="display:none;">
+      <div class="group-grid">
+
+        <!-- Chile -->
+        <section class="country-group">
+          <div class="country-flag">
+            <img src="assets/logos/chilie.jpg" alt="Chile flag">
+          </div>
+          <div class="people-list">
+            <article class="person-card">
+              <h3>Jose Abel Echeverria Morales</h3>
+              <p><strong>Head of the Department of Sustainability and Risk Management</strong></p>
+              <p><strong>Instituto de Desarrollo Agropecuario (INDAP)</strong></p>
+            </article>
+          </div>
+        </section>
+
+        <!-- Nigeria -->
+        <section class="country-group">
+          <div class="country-flag">
+            <img src="assets/logos/Nigeria.jpg" alt="Nigeria flag">
+          </div>
+          <div class="people-list">
+            <article class="person-card">
+              <h3>Temitope Banjo</h3>
+              <p><strong>Agriculture Extension Officer</strong></p>
+              <p><strong>Federal Ministry of Agriculture and Rural Development</strong></p>
+            </article>
+          </div>
+        </section>
+
+        <!-- Kenya -->
+        <section class="country-group">
+          <div class="country-flag">
+            <img src="assets/logos/kenya.jpg" alt="Kenya flag">
+          </div>
+          <div class="people-list">
+            <article class="person-card">
+              <h3>Janet Ngesa</h3>
+              <p><strong>ITC Professional</strong></p>
+              <p><strong>Kenya Agricultural & Livestock Research Organization</strong></p>
+            </article>
+            <article class="person-card">
+              <h3>John Juma Katana</h3>
+              <p><strong>Senior Agricultural Officer</strong></p>
+              <p><strong>Ministry of Agriculture and Livestock Development</strong></p>
+            </article>
+          </div>
+        </section>
+
+        <!-- Bangladesh -->
+        <section class="country-group">
+          <div class="country-flag">
+            <img src="assets/logos/bangladesh.jpg" alt="Bangladesh flag">
+          </div>
+          <div class="people-list">
+            <article class="person-card">
+              <h3>Boni Amin Khan</h3>
+              <p><strong>Additional Deputy Director</strong></p>
+              <p><strong>Department of Agricultural Extension (DEA)</strong></p>
+            </article>
+          </div>
+        </section>
+
+        <!-- Ethiopia -->
+        <section class="country-group">
+          <div class="country-flag">
+            <img src="assets/logos/ethiopia.jpg" alt="Ethiopia flag">
+          </div>
+          <div class="people-list">
+            <article class="person-card">
+              <h3>Addisu Dabale</h3>
+              <p><strong>Agricultural Engineer</strong></p>
+              <p><strong>Ministry of Agriculture</strong></p>
+            </article>
+          </div>
+        </section>
+
+        <!-- UAE -->
+        <section class="country-group">
+          <div class="country-flag">
+            <img src="assets/logos/uae.jpg" alt="UAE flag">
+          </div>
+          <div class="people-list">
+            <article class="person-card">
+              <h3>Patrick Kinyua Gikunda</h3>
+              <p><strong>AI & Impact-Based Forecasting Expert</strong></p>
+              <p><strong>ACMAD</strong></p>
+            </article>
+          </div>
+        </section>
+
+      </div>
+    </div>
+    <!-- ===================== /APPLIED ===================== -->
+
+  </main>
+
+  <script>
+    (function () {
+      // Toggle tabs
+      const ACTIVE_BG = 'linear-gradient(135deg,#4ade80 0%,#16a34a 100%)';
+      const INACTIVE_BG = 'linear-gradient(135deg,#166534 0%,#065f46 100%)';
+      const ACTIVE_SHADOW = '0 14px 34px rgba(0,0,0,.22), 0 0 0 3px rgba(34,197,94,.45)';
+      const INACTIVE_SHADOW = '0 10px 28px rgba(0,0,0,.18)';
+
+      const tech = document.getElementById('Technical-Participants');
+      const applied = document.getElementById('Applied-Participants');
+      const btnTech = document.getElementById('tab-tech');
+      const btnApplied = document.getElementById('tab-applied');
+
+      function setBtn(btn, active){
+        btn.setAttribute('aria-selected', active ? 'true' : 'false');
+        btn.style.background = active ? ACTIVE_BG : INACTIVE_BG;
+        btn.style.boxShadow = active ? ACTIVE_SHADOW : INACTIVE_SHADOW;
+      }
+      function show(which){
+        const isTech = which === 'tech';
+        tech.style.display    = isTech ? 'block' : 'none';
+        applied.style.display = isTech ? 'none'  : 'block';
+        setBtn(btnTech, isTech);
+        setBtn(btnApplied, !isTech);
+      }
+      btnTech.addEventListener('click',   () => show('tech'));
+      btnApplied.addEventListener('click',() => show('applied'));
+    })();
+  </script>
+</body>
+</html>

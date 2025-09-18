@@ -1,0 +1,1387 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Team - Aim for Scale AI Weather Training Program</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #1f2d3d;
+            background: linear-gradient(135deg, #28a745 0%, #20c997 50%, #17a2b8 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 20px rgba(0,0,0,0.15);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            border-bottom: 3px solid #28a745;
+            height: 50px;
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 50px;
+            padding: 0rem 2rem;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo-placeholder {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #155724, #28a745);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #155724;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #155724;
+            font-weight: 500;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            background: #28a745;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .nav-links a.active {
+            background: #155724;
+            color: white;
+        }
+
+        main {
+            margin-top: 90px;
+            padding: 2rem 0;
+        }
+
+        .page {
+            background: white;
+            border-radius: 15px;
+            margin: 2rem 0;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            overflow: hidden;
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .page-header {
+            background: linear-gradient(135deg, #2d5a27 0%, #4a7c59 50%, #6b8e5a 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+            opacity: 0.1;
+        }
+
+        .page-header h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .page-content {
+            padding: 3rem 2rem;
+        }
+
+        .section {
+            margin-bottom: 1.00rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            margin: 1.25rem 0 0.25rem;
+            text-align: left;
+            color: #155724;
+            font-weight: 700;
+            display: block;
+        }
+
+        .section-logos {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 12px;
+            margin-top: 0.25rem;
+            flex-wrap: wrap;
+        }
+
+        .section-logos img {
+            max-height: 110px;
+            max-width: 1000px;
+            height: auto;
+            width: auto;
+            display: inline-block;
+            object-fit: contain;
+            vertical-align: middle;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 8px 12px;
+            border-radius: 8px;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+        .section.organizers .section-logos img {
+            max-height: 120px;
+            margin: 0 20px;
+        }
+        .section.collaborators .section-logos { 
+            justify-content: center; 
+            flex-wrap: wrap; 
+            gap: 4px; 
+            margin-top: 0.85rem; 
+        }
+        .section.collaborators .section-logos img { 
+            max-height: 80px; 
+            flex: 0.1 0.1 19%; 
+            object-fit: contain; 
+        }
+        .bios-header {
+            padding: 1.5rem;
+            display: none;
+        }
+        .bio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .bio-card {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 1rem;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(21, 87, 36, 0.1);
+            position: relative;
+        }
+
+        .bio-avatar {
+            flex: 0 0 auto; 
+            width: 96px;
+            height: 96px;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            background: #f6f6f6;
+        }
+
+        .bio-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+
+
+        .bio-content {
+            flex: 1 1 auto;
+            padding: 0;
+            color: #155724;
+        }
+
+        @media (max-width: 600px) {
+        .bio-card {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .bio-avatar {
+            width: 72px;
+            height: 72px;
+        }
+        }
+
+        .watermark::after {
+        z-index: 0;
+        opacity: 0.12;
+        }
+        .bio-content, .bio-avatar {
+        position: relative;
+        z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { flex-direction: column; gap: 1rem; }
+            .logo-section { flex-direction: column; gap: 8px; text-align: center; }
+            .page-header h1 { font-size: 2rem; }
+
+            .section-logos img { max-height: 56px; }
+        }
+        
+  /* BIG pill toggle buttons */
+  .pill-toggle{
+    display:flex; gap:20px; justify-content:center; align-items:center;
+    margin:28px 0 8px; flex-wrap:wrap;
+  }
+  .pill-toggle button{
+    border:none; cursor:pointer; border-radius:9999px;
+    /* bigger size */
+    padding:16px 36px; 
+    font-size:20px; line-height:1; font-weight:700; letter-spacing:.2px;
+    /* gradient like your screenshot but brighter */
+    background:linear-gradient(135deg,#34d399 0%,#166534 100%);
+    color:#fff;
+    box-shadow:0 10px 28px rgba(0,0,0,.18);
+    transition:transform .15s ease, box-shadow .15s ease, opacity .15s ease;
+    opacity:.95;
+  }
+  .pill-toggle button[aria-selected="true"]{
+    transform:translateY(-1px);
+    box-shadow:0 14px 34px rgba(0,0,0,.22);
+    opacity:1;
+  }
+  /* utility for hiding when toggling */
+  .is-hidden{ display:none !important; }
+
+    </style>
+</head>
+<body style="padding-top:160px;">
+   <header style="background:rgba(255,255,255,0.96); backdrop-filter:blur(10px); box-shadow:0 2px 20px rgba(0,0,0,0.15); position:fixed; width:100%; top:0; z-index:1000; border-bottom:3px solid #28a745; height:auto;">
+  <nav class="container" style="display:flex; justify-content:center; align-items:center; padding:8px 12px; height:auto;">
+    <ul class="nav-links"
+        style="display:flex; flex-direction:row; flex-wrap:wrap; list-style:none; gap:12px; justify-content:center; align-items:center; margin:0; padding:0;">
+      <li><a href="index.html"  style="text-decoration:none; color:#155724; font-weight:500; padding:8px 12px; border-radius:25px; display:inline-block; ">Overview</a></li>
+      <li><a href="bios.html" style="text-decoration:none; color:#155724; font-weight:500; padding:8px 12px; border-radius:25px; display:inline-block;">Team</a></li>
+      <li><a href="speakers.html" class="active" style="text-decoration:none; color:#155724; font-weight:500; padding:8px 12px; border-radius:25px; display:inline-block; background:#155724; color:#fff;">Speakers</a></li>
+      <li><a href="participants.html" style="text-decoration:none; color:#155724; font-weight:500; padding:8px 12px; border-radius:25px; display:inline-block;">Participants</a></li>
+      <li><a href="agenda.html" style="text-decoration:none; color:#155724; font-weight:500; padding:8px 12px; border-radius:25px; display:inline-block;">Agenda</a></li>
+      <li><a href="materials.html" style="text-decoration:none; color:#155724; font-weight:500; padding:8px 12px; border-radius:25px; display:inline-block;">Pre-Training Resources</a></li>
+    </ul>
+  </nav>
+</header>
+
+    <main class="container">
+        <section class="page">
+            <div class="page-header">
+                <h1><span class="weather-icon"></span>Meet the Speakers</h1>
+                <p style="color: #FFFF00; font-weight: bold; margin-top: 0.5rem;">
+                    🚧 UNDER CONSTRUCTION 🚧
+                </p>
+            </div>
+        </section>
+        <!-- Toggle pills -->
+<div style="display:flex;gap:20px;justify-content:center;align-items:center;margin:28px 0 8px;flex-wrap:wrap;">
+  <button id="tab-program"
+          role="tab" aria-selected="true" aria-controls="program-speakers"
+          style="border:none;cursor:pointer;border-radius:9999px;padding:16px 36px;font-size:20px;font-weight:700;letter-spacing:.2px;color:#fff;background:linear-gradient(135deg,#4ade80 0%,#16a34a 100%);box-shadow:0 14px 34px rgba(0,0,0,.22),0 0 0 3px rgba(34,197,94,.45);">
+    Program Speakers
+  </button>
+
+  <button id="tab-opening"
+          role="tab" aria-selected="false" aria-controls="opening-remarks"
+          style="border:none;cursor:pointer;border-radius:9999px;padding:16px 36px;font-size:20px;font-weight:700;letter-spacing:.2px;color:#fff;background:linear-gradient(135deg,#166534 0%,#065f46 100%);box-shadow:0 10px 28px rgba(0,0,0,.18);">
+    Opening Remarks
+  </button>
+</div>
+
+       <div id="program-speakers" class="section Program Speakers">
+                    
+  <!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets/people/pedram.jpeg" alt="Katie Kowal"
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+        
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> <a href="https://geosci.uchicago.edu/people/pedram-hassanzadeh/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            Pedram Hassanzadeh</h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;">
+        <a href="https://humancenteredforecasts.climate.uchicago.edu/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+        The University Of Chicago
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+        <a href="https://geosci.uchicago.edu/people/pedram-hassanzadeh/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            <strong>Pedram Hassanzadeh</strong>
+          </a>
+is an Associate Professor at the University of Chicago’s Department of Geophysical Sciences, the Committee on Computational and Applied Mathematics, and the Data Science Institute. He received his Ph.D. in geophysical turbulence and his M.A. in applied mathematics from UC Berkeley in 2013. From 2013 to 2016, he was a Ziff Environmental Fellow at the Harvard University Center for the Environment and the Department of Earth and Planetary Sciences. He received a CAREER Award from the NSF in 2021 and a Young Investigator Award from the Office of Naval Research in 2020.
+
+He leads the Climate Extremes Theory and Data (CeTD) group, which focuses on integrating theory, simulations, observations, and machine learning techniques to understand the dynamics and future changes of extreme weather events in a changing climate. He also leads the AI for Climate (AICE) Initiative, a joint program of the Data Science Institute and the Institute for Climate and Sustainable Growth (ICSG). This initiative emphasizes interdisciplinary integration of AI with fundamental domain knowledge to accelerate and transform climate research, with a focus on both scientific advances and societal impacts. Together with Michael Kremer and Amir Jina, he co-directs ICSG’s Human-Centered Weather Forecasts (HCF) Initiative, which leverages the power of AI to innovate, benchmark, and democratize weather forecasts tailored to what citizens on the ground need to know.
+      </p>
+    </div>
+  </div>
+</div>
+<!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets/people/souhaib.jpg" alt="Katie Kowal"
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+        
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> <a href="https://souhaib-bentaieb.com/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            Souhaib Ben Taieb</h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;">
+        <a href="https://mbzuai.ac.ae/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+        Mohamed bin Zayed University of Artificial Intelligence
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+        <a href="https://souhaib-bentaieb.com/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            <strong>Souhaib Ben Taieb</strong>
+          </a>
+is an Associate Professor at Mohamed bin Zayed University of Artificial Intelligence (MBZUAI) in Abu Dhabi, United Arab Emirates. His research spans artificial intelligence and statistics, including probabilistic machine learning, uncertainty quantification, model calibration, scoring rules, time series forecasting, and anomaly detection.
+
+Previously, he was an Associate Professor of Machine Learning at the University of Mons (UMONS) in Belgium. Prior to that, he served as a Lecturer (Assistant Professor) in Business Analytics in the Department of Econometrics and Business Statistics at Monash University in Melbourne, Australia. He was also a postdoctoral research fellow in the Spatio-Temporal Statistics and Data Science group at KAUST in Saudi Arabia. Souhaib holds a Ph.D. in Computer Science (Machine Learning) from the Free University of Brussels (ULB), where he also earned his B.Sc. and M.Sc. in Computer Science.
+
+He has secured competitive research funding from both academic institutions and industrial partners, including collaborations with Huawei, John Cockerill, and Ion Beam Applications. He received a Doctoral Research Fellowship from the Belgian National Fund for Scientific Research (FNRS) and was awarded the Solvay Award for the best Ph.D. thesis. He currently serves as an Associate Editor for the International Journal of Forecasting and regularly reviews for leading conferences and journals in machine learning and statistics.
+      </p>
+    </div>
+  </div>
+</div>
+  <!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets/people/amirjina.png" alt="Katie Kowal"
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+        
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> <a href="https://harris.uchicago.edu/directory/amir-jina" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            Amir Jina</h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;">
+        <a href="https://humancenteredforecasts.climate.uchicago.edu/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+        The University Of Chicago
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+        <a href="https://harris.uchicago.edu/directory/amir-jina" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            <strong>Amir Jina</strong>
+          </a>
+ is an Assistant Professor at Harris Public Policy and a Senior Fellow at the Energy Policy Institute of Chicago (EPIC). Amir's research in environmental and development economics focuses on the role of the environment in shaping how societies develop. This research combines economics with methods from climate science and remote sensing to understand the impacts of climate in both rich and poor countries, and has involved fieldwork related to climate change adaptation with communities in India, Bangladesh, Kenya, and Uganda.
+
+Prior to University of Chicago, Amir was a visiting scholar at the University of California, Berkeley, working on the economic analysis of the Risky Business initiative, an independent assessment of the economic risks posed by a changing climate in the US. Amir is a founding member of the Climate Impact Lab - an interdisciplinary collaboration examining the socioeconomic impacts of climate change around the world - and was also a Postdoctoral Scholar at the Economics Department of University of Chicago.
+
+Amir received a Ph.D. in Sustainable Development and M.A. in Climate and Society both from Columbia University, B.A.s in Mathematics and Theoretical Physics from Trinity College, Dublin, and previously worked with the Red Cross/Red Crescent in South Asia.
+      </p>
+    </div>
+  </div>
+</div>
+<!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets/people/Katie.jpg" alt="Katie Kowal"
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+        
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> <a href="https://datascience.uchicago.edu/people/katie-kowal/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            Katie Kowal</h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;">
+        <a href="https://humancenteredforecasts.climate.uchicago.edu/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+        The University Of Chicago
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+        <a href="https://datascience.uchicago.edu/people/katie-kowal/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            <strong>Katie Kowal</strong>
+          </a>
+is the Weather Forecast Lead for the Human Centered Weather Forecasts Initiative Indian Monsoon Onset project at the University of Chicago, where she manages the operational deployment of the Indian monsoon onset forecasts and leads curriculum development for AIM for Scale’s AI weather training program. Previously, she was a scientist at the National Oceanic and Atmospheric Administration (NOAA) Climate Prediction Center International Desk, supporting multiple national meteorological services in Latin America and the Pacific Islands with operational forecasts and research on improving subseasonal to seasonal forecasts. She holds a DPhil in Hydrology and an MSc in Environmental Change and Management from the University of Oxford as a Rhodes Scholar and a BA in Physics and Political Science from Lewis & Clark College. Earlier in her career, she was a science policy fellow at the Science and Technology Policy Institute, supporting the White House Office of Science and Technology Policy to develop national policy on regulating nuclear space launch approvals and improving critical infrastructure resilience to extreme events including space weather.
+      </p>
+    </div>
+  </div>
+  </div>
+   <!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets/people/tufa_profile.jpg" alt="Katie Kowal"
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+        
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> <a href="https://globalcenters.columbia.edu/content/tufa-dinku" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            Tufa Dinku</h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;">
+        <a href="https://globalcenters.columbia.edu/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+        Columbia University
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+        <a href="https://globalcenters.columbia.edu/content/tufa-dinku" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            <strong>Dr. Tufa Dinku</strong>
+          </a> is a Senior Research Scientist at the International Research Institute for Climate and Society (IRI), Columbia University, with over three decades of experience in climate science, climate data, and climate information services — including 12 years as an operational meteorologist in Ethiopia and 20 years as a climate scientist at IRI.
+His research focuses on developing and evaluating methods and tools that leverage remote sensing and reanalysis products to address the challenges posed by inadequate climate datasets, particularly in Africa. Beyond research, Dr. Dinku has made significant contributions to applying climate science for societal benefit through the development and implementation of the transformative ENACTS (Enhancing National Climate Services) approach. Implemented in over 20 developing countries, ENACTS is a multi-faceted initiative designed to integrate climate knowledge into national decision-making. It delivers spatially and temporally complete climate datasets extending over 40 years, co-produced climate information products accessible via online “maprooms,” and capacity-building programs that enable users to interpret and apply these products in diverse sectors.
+Dr. Dinku collaborates extensively with National Meteorological Services and with governmental and non-governmental organizations across Africa on projects that enhance the generation, dissemination, and use of climate information for decision-making in agriculture, food security, health, and disaster risk management. He has also been leading the development and implementation of training curricula on the use of climate information climate risk management in the different sectors
+      </p>
+    </div>
+  </div>
+</div>
+  <!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets/people/adam.jpeg" alt="Katie Kowal"
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+        
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> <a href="https://humancenteredforecasts.climate.uchicago.edu/people/adam-marchakitus/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            Adam Marchakitus</h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;">
+        <a href="https://humancenteredforecasts.climate.uchicago.edu/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+        The University Of Chicago
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+        <a href="" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            <strong></strong>
+          </a>
+      </p>
+    </div>
+  </div>
+  </div>
+  <!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets\people/kundeti.jpeg" alt=""
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+        
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> <a href="https://www.linkedin.com/in/koteswararao-b9538a29/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+             Koteswararao Kundeti </h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;">
+         <a href="https://www.ncm.gov.ae/maps-radars/gcc-radars-network?lang=en" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+        NCM 
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+        <a href="https://www.linkedin.com/in/koteswararao-b9538a29/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            <strong>Dr. Koteswararao Kundeti </strong>
+          </a>has been working as a Senior Climate Analyst at NCM in Abu Dhabi since January 2023. His research focuses on Climate Variability and Change, Weather/Climate Extremes, and Renewable Energy Studies. Prior to joining the NCM, Kundeti was an Assistant Professor at Azim Premji University in India. Moreover, he spent five years to his role as a Research Scientist at the Indian Institute of Tropical Meteorology (IITM) in Pune, India, and also worked as a postdoctoral researcher at Seoul National University in South Korea.
+Kundeti holds both his Master’s and Ph.D. degrees in Meteorology from Andhra University, India.
+Dr. Kundeti was a contributed author for the IPCC 5th Assessment Report, for chapter 14 of the Working Group 1: Climate phenomena and their relevance for future regional climate change. Also, contributed author for WMO reports on State of the Climate in Asia (2022, 2023 and 2024). Furthermore, he was one of the lead authors for the Climate Change report concerning the Indian Region, published by the Ministry of Earth Sciences, Government of India.
+Dr. Kundeti has over 45 publications in various National/International journals and has also contributed to book chapters.
+  </div>
+</div>
+</div>
+ <!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets/people/gene.JPG" alt=""
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> <a href="https://geflaspohler.com/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+             Genevieve Flaspohler  </h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;">
+        <a href="https://rhizaresearch.org/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+        Rhiza Research
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+        <a href="https://geflaspohler.com/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            <strong>Genevieve Flaspohler </strong>
+          </a>  is the Executive Director and co-founder of Rhiza Research, a nonprofit developing open technology to close global gaps in climate, energy, and environmental data. She leads the SheerWater Program, a Gates Foundation–funded initiative focused on improving equity in weather intelligence by partnering with national meteorological agencies to deliver actionable forecasts across timescales—from short-term to subseasonal—to smallholder farmers in East Africa. Genevieve holds a PhD in Electrical Engineering and Computer Science from MIT & Woods Hole Oceanographic Institution Joint Program, where she developed scientific machine learning models for weather, climate, and environmental sensing.
+</div>
+</div></div>
+ <!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets/people/photo_Jonathan.jpg" alt="Katie Kowal"
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+        
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> <a href="https://developer.nvidia.com/blog/author/jonatanmestres/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            Jonathan Mestres</h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;">
+        <a href="https://www.g42.ai/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+        G42
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+        <a href="https://developer.nvidia.com/blog/author/jonatanmestres/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            <strong>Jonathan Mestres</strong>
+          </a>
+ is a lead AI scientist at G42, where he leads the technical development of the Climate Tech Lab. With over a decade of experience, he has a strong theoretical foundation in AI and a proven track record of applying novel AI and ML methods to real-world challenges. He specializes in generative AI-driven weather and climate solutions, developing high-resolution weather forecasts for the Middle East. His expertise spans multiple domains, including climate, transport logistics, supply chain resilience, biosecurity, and investment decisions. Jonathan has extensive experience working with both government and private industry. Before joining G42, he was a research scientist at CSIRO, Australia. He holds a Ph.D. in artificial intelligence and machine learning and is committed to using AI for positive social and environmental impact, driving sustainability through cutting-edge technology.
+      </p>
+    </div>
+  </div>
+</div>
+ <!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets/people/Adah_Kibet.jpg" alt="Katie Kowal"
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+        
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> <a href="" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            Adah Jepkemoi Kibet</h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;">
+        <a href="https://www.g42.ai/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+        G42
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+        <a href=" "target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            <strong></strong>
+          </a>
+      </p>
+    </div>
+  </div>
+</div>
+  <!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets/people/george.jpeg" alt="Katie Kowal"
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+        
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> <a href="https://tahmo.org/george-sserwadda/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            George Sserwadda</h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;">
+        <a href="https://tahmo.org/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+       TAHMO
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+        <a href="https://tahmo.org/george-sserwadda/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            <strong>George Sserwadda</strong>
+          </a>
+is a dedicated TAHMO Field Engineer in Uganda with background in engineering and geo-information science. He holds a BSc in Computer Engineering from Makerere University and is currently pursuing an MSc in Geo-Information Science at the same institution, focusing his research on utilizing deep learning models to enhance weather forecasting in the Lake Victoria Basin. Since officially joining TAHMO in 2017, George has leveraged his 4 years of experience as a radio frequency planning and optimization engineer in the telecommunications industry to bring valuable expertise to his role, where he also currently supports the Quality Assurance and Quality Control (QAQC) team. 
+    </div>
+  </div>
+  </div>
+
+<!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets/people/erkin.jpeg" alt=""
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> 
+             Erkin Isaev  </h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;">
+        <a href="https://wmo.int/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+        WMO
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+        
+            <strong>Dr. Erkin Isaev  </strong>
+          </a>  is a project officer at the World Meteorological Organization (WMO). With over 11 years of experience in both national and international roles, he has held various positions, including hydrometeorologist, chief specialist in agrometeorology, and head of the Modeling Department at the Agency for Hydrometeorology of Kyrgyzstan. He has also worked as a consultant in numerical weather prediction, climate modeling, drought and flood modeling for the World Bank Group, the UN Food and Agriculture Organization, and the UN Economic and Social Commission for Asia and the Pacific. He has developed applied, interdisciplinary solutions in disaster risk management, integrated water management, extreme weather and climate impact-based forecasting, and the application of AI/ML in early warning and anticipatory actions within the agriculture sector. Erkin holds a PhD in agrometeorology, meteorology, and climatology, as well as a bachelor’s degree in hydrometeorological modeling.
+</div>
+</div></div>
+
+
+
+<!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets/people/rendani.jpeg" alt="Katie Kowal"
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+        
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> <a href="https://rendanimbuvha.com/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            Rendani Mbuvha</h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;">
+         <a href="https://africlimate.ai/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+        AfriClimate AI
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+        <a href="https://rendanimbuvha.com/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            <strong>Rendani Mbuvha</strong>
+          </a>is Co-Founder of AfriClimate AI and Associate Professor of Actuarial Science at the University of Manchester. AfriClimate AI is a grassroots research community advancing artificial intelligence for climate resilience in Africa, with its flagship project Forecast4Africa, supported by Google.org focused on co-developing localised AI-based weather models for the African continent in partnership with National Meteorological Services. Rendani also holds honorary research positions at the United Nations University Institute for Water, Environment and Health (UNU‑INWEH) and University College London (UCL). Previously, He was the Google DeepMind Academic Fellow at Queen Mary University of London and an Associate Professor at the University of Witwatersrand, Johannesburg. His research spans probabilistic inference in machine learning, renewable energy modeling, and computational finance. He is a Fellow of the Institute and Faculty of Actuaries (UK) and a Chartered Enterprise Risk Actuary (CERA).
+      </p>
+    </div>
+  </div>
+</div>
+
+
+   <!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets/people/olivia.jpeg" alt=""
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> <a href="https://www.linkedin.com/in/oliviaserenagraham/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+             Olivia Graham  </h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;">
+        Google 
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+        <a href="https://www.linkedin.com/in/oliviaserenagraham/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            <strong>Olivia Graham  </strong>
+          </a> is a Product Manager at Google, where she leads initiatives that leverage artificial intelligence for social impact. Her current work focuses on developing advanced AI models to address critical environmental challenges, including weather forecasting in data-sparse regions, tropical cyclone prediction, and geospatial analysis through computer vision.
+</div>
+</div></div>
+  
+ <!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets\people/Vegard.png" alt=""
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> 
+             Vegard Bønes </h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;"> <a href="https://www.met.no/en" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+         Met Norway
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+       
+            <strong>Vegard Bønes </strong></a>
+is an IT developer at Met Norway, where he works with Met Norway’s weather web site, yr.no. He also works with capacity building projects and disaster preparedness systems.
+</div>
+</div></div>
+   
+<!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets/people/corentin.jpg" alt=""
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> 
+             Corentin Carton de Wiart  </h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;">
+        <a href="https://www.ecmwf.int/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+        ECMWF
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+        
+            <strong>Corentin Carton de Wiart </strong>
+          </a>  leads the Data Processing Services Team at the European Centre for Medium-Range Weather Forecasts (ECMWF), focusing on the development of post-processing frameworks for operational weather forecasting. With more than 15 years of experience, his expertise spans scientific and operational software architecture, high-performance computing, computational fluid dynamics, and Earth sciences. Before joining ECMWF in 2018, he worked as a Postdoctoral Researcher at NASA Ames on turbulence modelling and as a Senior Research Engineer at Cenaero, where he earned his PhD in Computational Fluid Mechanics in collaboration with UCLouvain.
+</div>
+</div></div></div>
+
+
+<div id="opening-remarks" class="section Opening Remarks" style="display:none;">
+
+          <!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets/people/tim.jpg" alt="Katie Kowal"
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+        
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> <a href="https://mbzuai.ac.ae/study/faculty/timothy-baldwin/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            Timothy Baldwin</h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;">
+        <a href="https://mbzuai.ac.ae/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+        Mohamed bin Zayed University of Artificial Intelligence
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+        <a href="https://mbzuai.ac.ae/study/faculty/timothy-baldwin/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            <strong>Tim Baldwin</strong>
+          </a>is Provost and Professor of Natural Language Processing at Mohamed bin Zayed University of Artificial Intelligence, in addition to being a Melbourne Laureate Professor in the School of Computing and Information Systems, The University of Melbourne, and Chief Scientist of LibrAI, a start-up focused on AI safety.
+
+Professor Baldwin is the author of around 500 peer-reviewed publications across diverse topics in natural language processing and AI, with over 25,000 citations, in addition to being the recipient of a number of prestigious awards at top NLP conferences. He is also a co-developer of widely used LLMs for languages including Arabic, English, and Indonesian, with over 1m downloads on Huggingface. He has been featured in media outlets including MIT Tech Review, Bloomberg, Reuters, The Economist, CNN, Financial Times, IEEE Spectrum, The Times, and ABC News, and his research has been funded by organizations including the National Science Foundation, Australian Research Council, Google, Microsoft, Xerox, ByteDance, NTT, and Fujitsu.
+      </p>
+    </div>
+  </div>
+</div>
+<!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets/people/khalfan.jpg" alt="Katie Kowal"
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+        
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> <a href="" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            Khalfan Al Matrooshi </h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;">
+        <a href="" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+        UAE Presidential Court
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+        <a href="" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            <strong></strong>
+          </a>
+      </p>
+    </div>
+  </div>
+</div>          
+<!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets/people/imara.jpeg" alt="Katie Kowal"
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+        
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> <a href="https://www.linkedin.com/in/imara-salas-93398a32/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            Imara Salas</h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;">
+        <a href="https://weather.aimforscale.org/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+        AIM4Scale
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+        <a href="https://www.linkedin.com/in/imara-salas-93398a32/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            <strong>Imara Salas</strong>
+          </a>
+          is a Senior Manager at DEC, where she manages the Secretariat of the Innovation Commission for Climate Change, Food Security and Agriculture. Previously, she worked at the Center for Public Policy in Chile, where she evaluated government programs focused on innovation and agriculture. She has worked as a consultant with the World Bank and the IDB on projects related to agriculture and digital government. Imara holds an MPP from the Harvard Kennedy School and a BSFS from Georgetown University.
+      </p>
+    </div>
+  </div>
+</div>
+<!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets/people/souhaib.jpg" alt="Katie Kowal"
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+        
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> <a href="https://souhaib-bentaieb.com/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            Souhaib Ben Taieb</h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;">
+        <a href="https://mbzuai.ac.ae/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+        Mohamed bin Zayed University of Artificial Intelligence
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+        <a href="https://souhaib-bentaieb.com/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            <strong>Souhaib Ben Taieb</strong>
+          </a>
+is an Associate Professor at Mohamed bin Zayed University of Artificial Intelligence (MBZUAI) in Abu Dhabi, United Arab Emirates. His research spans artificial intelligence and statistics, including probabilistic machine learning, uncertainty quantification, model calibration, scoring rules, time series forecasting, and anomaly detection.
+
+Previously, he was an Associate Professor of Machine Learning at the University of Mons (UMONS) in Belgium. Prior to that, he served as a Lecturer (Assistant Professor) in Business Analytics in the Department of Econometrics and Business Statistics at Monash University in Melbourne, Australia. He was also a postdoctoral research fellow in the Spatio-Temporal Statistics and Data Science group at KAUST in Saudi Arabia. Souhaib holds a Ph.D. in Computer Science (Machine Learning) from the Free University of Brussels (ULB), where he also earned his B.Sc. and M.Sc. in Computer Science.
+
+He has secured competitive research funding from both academic institutions and industrial partners, including collaborations with Huawei, John Cockerill, and Ion Beam Applications. He received a Doctoral Research Fellowship from the Belgian National Fund for Scientific Research (FNRS) and was awarded the Solvay Award for the best Ph.D. thesis. He currently serves as an Associate Editor for the International Journal of Forecasting and regularly reviews for leading conferences and journals in machine learning and statistics.
+      </p>
+    </div>
+  </div>
+</div>
+<!-- Speaker card -->
+<div class="speaker-card"
+     style="background:#fff; border:1px solid rgba(0,0,0,0.08); border-radius:18px; padding:18px; box-shadow:0 6px 20px rgba(0,0,0,0.06); margin:18px 0;">
+
+  <!-- Layout row (wraps on small screens without media queries) -->
+  <div style="display:flex; align-items:flex-start; gap:18px; flex-wrap:wrap;">
+
+    <!-- Photo (left) -->
+    <div style="flex:0 0 140px; display:flex; justify-content:center;">
+      <img src="assets/people/Katie.jpg" alt="Katie Kowal"
+           style="width:140px; height:140px; border-radius:50%; object-fit:cover; display:block;">
+    </div>
+
+    <!-- Text content (right) -->
+    <div style="flex:1 1 280px; min-width:260px;">
+      <div style="font-size:12px; letter-spacing:.08em; color:#a0a7a3; font-weight:700; text-transform:uppercase; margin-top:6px;">
+        
+      </div>
+
+      <h2 style="margin:6px 0 6px; font-size:32px; line-height:1.2; color:#132d19;"> <a href="https://datascience.uchicago.edu/people/katie-kowal/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            Katie Kowal</h2>
+
+      <div style="font-size:18px; color:#4a6a54; margin-bottom:14px;">
+        <a href="https://humancenteredforecasts.climate.uchicago.edu/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+        The University Of Chicago
+      </div>
+
+      <!-- dotted separator -->
+      <div style="border-top:1px dashed rgba(0,0,0,0.15); margin:12px 0 14px;"></div>
+
+      <p style="margin:0; font-size:16px; line-height:1.7; color:#243b2b;">
+        <a href="https://datascience.uchicago.edu/people/katie-kowal/" target="_blank"
+             style="text-decoration:none; color:inherit;"
+             onmouseover="this.style.textDecoration='underline'"
+             onmouseout="this.style.textDecoration='none'">
+            <strong>Katie Kowal</strong>
+          </a>
+is the Weather Forecast Lead for the Human Centered Weather Forecasts Initiative Indian Monsoon Onset project at the University of Chicago, where she manages the operational deployment of the Indian monsoon onset forecasts and leads curriculum development for AIM for Scale’s AI weather training program. Previously, she was a scientist at the National Oceanic and Atmospheric Administration (NOAA) Climate Prediction Center International Desk, supporting multiple national meteorological services in Latin America and the Pacific Islands with operational forecasts and research on improving subseasonal to seasonal forecasts. She holds a DPhil in Hydrology and an MSc in Environmental Change and Management from the University of Oxford as a Rhodes Scholar and a BA in Physics and Political Science from Lewis & Clark College. Earlier in her career, she was a science policy fellow at the Science and Technology Policy Institute, supporting the White House Office of Science and Technology Policy to develop national policy on regulating nuclear space launch approvals and improving critical infrastructure resilience to extreme events including space weather.
+      </p>
+    </div>
+  </div>
+  </div>
+ </div>
+    </main>
+    <script>
+(function () {
+  const ACTIVE_BG = 'linear-gradient(135deg,#4ade80 0%,#16a34a 100%)';
+  const INACTIVE_BG = 'linear-gradient(135deg,#166534 0%,#065f46 100%)';
+  const ACTIVE_SHADOW = '0 14px 34px rgba(0,0,0,.22), 0 0 0 3px rgba(34,197,94,.45)';
+  const INACTIVE_SHADOW = '0 10px 28px rgba(0,0,0,.18)';
+
+  const program = document.getElementById('program-speakers');
+  const opening = document.getElementById('opening-remarks');
+  const tabProgram = document.getElementById('tab-program');
+  const tabOpening = document.getElementById('tab-opening');
+
+  function setActive(btn, isActive){
+    btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    btn.style.background = isActive ? ACTIVE_BG : INACTIVE_BG;
+    btn.style.boxShadow = isActive ? ACTIVE_SHADOW : INACTIVE_SHADOW;
+  }
+
+  function activate(which){
+    const showProgram = (which === 'program');
+
+    // show/hide sections (inline)
+    program.style.display = showProgram ? 'block' : 'none';
+    opening.style.display = showProgram ? 'none' : 'block';
+
+    // update pills (inline)
+    setActive(tabProgram, showProgram);
+    setActive(tabOpening, !showProgram);
+
+    // keep header in view (optional)
+    const header = document.querySelector('.page-header');
+    window.scrollTo({ top: (header?.offsetTop || 0), behavior: 'smooth' });
+  }
+
+  tabProgram.addEventListener('click', () => activate('program'));
+  tabOpening.addEventListener('click', () => activate('opening'));
+
+  // keyboard support
+  [tabProgram, tabOpening].forEach(btn=>{
+    btn.addEventListener('keydown', e=>{
+      if(e.key === 'Enter' || e.key === ' ') btn.click();
+      if(e.key === 'ArrowRight' || e.key === 'ArrowLeft')
+        (btn === tabProgram ? tabOpening : tabProgram).focus();
+    });
+  });
+})();
+</script>
+
+
+</body>
+</html>
